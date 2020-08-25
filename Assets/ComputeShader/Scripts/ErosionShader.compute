@@ -1,0 +1,263 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+//static params need to matchup with the C#
+static const int HeightMapSize = 512;
+static const int P_maxPatStep = 128;
+static const int MaxRadius = 4;
+static const int MaxInfluencedPoints = (MaxRadius*2) * (MaxRadius*2);
+//General params
+float P_inertia;
+float P_minslope;
+float P_capacity;
+float P_evaporation;
+float P_deposition;
+float P_erosion;
+float P_eradius;
+float P_dradius;
+float P_gravity;
+//return offset buffer
+struct OffsetPair
+{
+    int index;
+    float offset;
+};
+//RWStructuredBuffer<OffsetPair> OffsetBuffer;
+//Random position buffer
+StructuredBuffer<float> RPosBuffer;
+//Height Buffer
+RWStructuredBuffer<float> HeightData;
+//Water drop struct
+struct WaterDrop
+{
+    float2 Pos;
+    float Vel;
+    float2 Dir;
+    float Water;
+    float Sediment;
+};
+//indexd weight for erosion and deposition
+struct IndexedWeight
+{
+    int index;
+    float weight;
+};
+
+WaterDrop CreateAWaterDrop(uint ThreadID)
+{
+    WaterDrop wd;
+    wd.Pos = float2(RPosBuffer[ThreadID*2],RPosBuffer[ThreadID*2+1]);
+    wd.Vel = 0.1f;
+    wd.Dir = float2(1.0f, 0.0f);
+    wd.Water = 1.0f;
+    wd.Sediment = 0.0f;
+
+    return wd;
+}
+
+float GetHeight(float2 Pos)
+{
+    int top = floor(Pos.x);
+    int left = floor(Pos.y);
+
+    float HTL = HeightData[top * HeightMapSize + left];
+    float HTR = HeightData[top * HeightMapSize + left + 1];
+    float HBL = HeightData[(top + 1) * HeightMapSize + left];
+    float HBR = HeightData[(top + 1) * HeightMapSize + left + 1];
+
+    return lerp(lerp(HTL, HTR, Pos.y - left), lerp(HBL, HBR, Pos.y - left), Pos.x - top);
+}
+
+float2 GetSlopDir(float2 Pos)
+{
+    int top = floor(Pos.x);
+    int left = floor(Pos.y);
+
+    float HTL = HeightData[top * HeightMapSize + left];
+    float HTR = HeightData[top * HeightMapSize + left + 1];
+    float HBL = HeightData[(top + 1) * HeightMapSize + left];
+    float HBR = HeightData[(top + 1) * HeightMapSize + left + 1];
+
+    float2 Dir =  - float2((HBL - HTL) * (left + 1 - Pos.y) + (HBR - HTR) * (Pos.y - left),
+                                  (HTR - HTL) * (top + 1 - Pos.x) + (HBR - HBL) * (Pos.x - top));
+    return normalize(Dir);
+}
+
+void GetErDeWeights(float2 Pos, float radius, out IndexedWeight PWs[MaxInfluencedPoints])
+{
+    int top = floor(Pos.x - (radius-1));
+    int left = floor(Pos.y - (radius-1));
+
+    IndexedWeight PointWeights[MaxInfluencedPoints];
+    float WeightSum = 0;
+    int counter = 0;
+    //Always initialize a half write variable. 
+    for (int x = 0; x < MaxInfluencedPoints; x++) 
+    {
+        PointWeights[x].index = 0;
+        PointWeights[x].weight =0.0f;
+    }
+    for (int i = top; i < top + radius * 2; i++)
+    {
+        
+        for (int n = left; n < left + radius * 2; n++)
+        {
+            vector distV = vector(i,n,0,0) - vector(Pos.x, Pos.y, 0,0);
+            //float dist = distV/normalize(distV);
+            float dist = length(distV);
+            if(dist < radius && dist >= 0)
+            //if(true)
+            {
+                PointWeights[counter].index = i * HeightMapSize + n;
+                PointWeights[counter].weight = radius - dist;
+                WeightSum += PointWeights[counter].weight;
+                counter++;
+            }
+        }
+        
+        
+    }
+    
+
+    for (int i = 0; i < MaxInfluencedPoints; i++)
+    {
+        PointWeights[i].weight = PointWeights[i].weight/WeightSum;
+    }
+
+    PWs =  PointWeights;
+}
+
+void WriteOffset(uint ThreadID, uint address, int Heightindex, float offset)
+{
+    HeightData[Heightindex] += offset;
+    
+    //OffsetBuffer[ThreadID * P_maxPatStep * MaxInfluencedPoints + address].index = Heightindex;
+    //OffsetBuffer[ThreadID * P_maxPatStep * MaxInfluencedPoints + address].offset = offset;
+    
+}
+
+[numthreads(1024,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID, uint Tid : SV_GroupIndex)
+{
+    uint Address = 0;
+
+    WaterDrop wd = CreateAWaterDrop(id.x);
+
+    for(int i=0;i<P_maxPatStep;i++)
+    {
+        if (wd.Pos.x + MaxRadius > HeightMapSize || wd.Pos.y + MaxRadius > HeightMapSize
+                || wd.Pos.x - MaxRadius < 0 || wd.Pos.y - MaxRadius < 0)
+        { break; }
+
+        float2 gSlope = GetSlopDir(wd.Pos);
+        float2 Dir_new = normalize(wd.Dir * P_inertia + gSlope * (1 - P_inertia));
+        float2 Pos_new = wd.Pos + Dir_new;
+        float Sediment_new = 0.0f;
+
+        float H_dif = GetHeight(Pos_new) - GetHeight(wd.Pos);
+
+        IndexedWeight PointWeights[MaxInfluencedPoints];
+        float sedimentExchangeMount = 0.0f;
+
+        if (H_dif >= 0)
+        {
+            //We just run over a pit, fill it with sediment
+            //float droppedSediment = min(H_dif, wd.Sediment);
+            sedimentExchangeMount =  min(H_dif, wd.Sediment);
+
+            //IndexedWeight PointWeights[MaxInfluencedPoints];
+            GetErDeWeights(wd.Pos, P_dradius, PointWeights);
+            /*
+            for(int i = 0; i < MaxInfluencedPoints; i++)
+            {
+                WriteOffset(id.x,Address,PointWeights[i].index, PointWeights[i].weight *  droppedSediment);
+                Address++;
+            }*/
+
+            //Sediment_new = wd.Sediment - sedimentExchangeMount;
+        }
+        else
+        {
+            //DownHill
+            float CurrentCapacity = max(-H_dif, P_minslope) * wd.Vel * wd.Water * P_capacity;
+            if (wd.Sediment > CurrentCapacity)
+            {
+                //Carry to much, dropping.
+                //float droppedSediment = (wd.Sediment - CurrentCapacity) * P_deposition;
+                sedimentExchangeMount = (wd.Sediment - CurrentCapacity) * P_deposition;
+
+                //IndexedWeight PointWeights[MaxInfluencedPoints];
+                GetErDeWeights(wd.Pos, P_dradius, PointWeights);
+                /*
+                for(int i = 0; i < MaxInfluencedPoints; i++)
+                {
+                    WriteOffset(id.x,Address,PointWeights[i].index, PointWeights[i].weight *  droppedSediment);
+                    Address++;
+                }*/
+
+                //Sediment_new = wd.Sediment - sedimentExchangeMount;
+            }
+            else
+            {
+                //Not full capacity yet
+                //float carrySediment = min((CurrentCapacity - wd.Sediment) * P_erosion, -H_dif);
+                sedimentExchangeMount = -min((CurrentCapacity - wd.Sediment) * P_erosion, -H_dif);
+                
+                //IndexedWeight PointWeights[MaxInfluencedPoints];
+                GetErDeWeights(wd.Pos, P_eradius, PointWeights);
+                /*
+                for(int i = 0; i < MaxInfluencedPoints; i++)
+                {
+                    WriteOffset(id.x,Address,PointWeights[i].index, PointWeights[i].weight *  -carrySediment);
+                    Address++;
+                }*/
+
+                //Sediment_new = wd.Sediment - sedimentExchangeMount;
+            }
+        }
+        for(int i = 0; i < MaxInfluencedPoints; i++)
+        {
+            WriteOffset(id.x,Address,PointWeights[i].index, PointWeights[i].weight *  sedimentExchangeMount);
+            Address++;
+        }
+
+        Sediment_new = wd.Sediment - sedimentExchangeMount;
+
+        float Vel_new = sqrt(wd.Vel * wd.Vel + H_dif * P_gravity);
+        float Water_new = wd.Water * (1 - P_evaporation);
+            
+        wd.Pos = Pos_new;
+        wd.Vel = Vel_new;
+        wd.Dir = Dir_new;
+        wd.Water = Water_new;
+        wd.Sediment = Sediment_new;
+    }
+
+    /*
+    int top = floor(wd.Pos.x - (4-1));
+    int left = floor(wd.Pos.y - (4-1));
+    int index = top*HeightMapSize + left;
+    WriteOffset(id.x,Address,index, wd.Pos.x);
+    
+    //float height = GetHeight(wd.Pos.xy);
+    float2 Dir = GetSlopDir(wd.Pos.xy);
+    float disp = 0.0f;
+    if(Dir.y > 0.5)
+        disp = 0.0f;
+    else
+        disp = 1.0f;
+    IndexedWeight PointWeights[MaxInfluencedPoints];
+    GetErDeWeights(wd.Pos, 4.0f, PointWeights);
+    
+    for(int i = 0; i < MaxInfluencedPoints; i++)
+    {
+        WriteOffset(id.x,Address,PointWeights[i].index, PointWeights[i].weight * disp);
+        Address++;
+    }
+    */
+    // TODO: insert actual code here
+    
+    //Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+}
