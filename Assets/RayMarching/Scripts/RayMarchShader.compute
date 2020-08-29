@@ -1,0 +1,60 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+float4x4 _CameraToWorld;
+float4x4 _CameraInverseProjection;
+
+struct Ray
+{
+    float3 origin;
+    float3 direction;
+    //float length;
+};
+
+struct ObjData
+{
+    int type;
+    float3 origin;
+    float3 upvector;
+    float Size;
+};
+StructuredBuffer<ObjData> RayObjectsBuffer;
+StructuredBuffer<float> TestBuffer;
+
+Ray CreateRay(float3 origin, float3 direction)
+{
+    Ray ray;
+    ray.origin = origin;
+    ray.direction = direction;
+    ///ray.length = length;
+    return ray;
+}
+
+Ray CreateCameraRay(float2 uv)
+{
+    float3 CameraWS = mul(_CameraToWorld, float4(0.0f, 0.0f, 0.0f, 1.0f)).rgb;
+    //here we are using the center if a pixel as sample point, so we add (0.5, 0.5) to uv 
+    float3 directionCS = mul(_CameraInverseProjection, float4((uv + float2(0.5f,0.5f)) * 2.0f - 1.0f, 0.0f, 1.0f)).rgb;
+    float3 direction = normalize(mul(_CameraToWorld, float4(directionCS, 1.0f))).rgb;
+
+    return CreateRay(CameraWS, direction);
+}
+
+[numthreads(16,16,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    uint width, height;
+    Result.GetDimensions(width, height);
+
+    float2 uv = id.xy / float2(width, height);
+
+    Ray ray = CreateCameraRay(uv);
+
+    float3 pos = RayObjectsBuffer[0].origin;
+
+    //Result[id.xy] = float4(TestBuffer[0], TestBuffer[1], 0.0f, 1.0f);
+    Result[id.xy] = float4(float(RayObjectsBuffer[0].type), 0.0f, 0.0f, 1.0f);
+}
