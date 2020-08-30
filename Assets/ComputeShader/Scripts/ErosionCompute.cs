@@ -44,17 +44,18 @@ public class ErosionCompute : MonoBehaviour
     public float P_dradius = 4.0f;
     public float P_gravity = -9.8f;
 
-    int Counter = 0;
-    float Timer = 0.0f;
-    bool Finished = false;
+    //int Counter = 0;
+    //float Timer = 0.0f;
+    //bool Finished = false;
 
+    /*
     [SerializeField]
     struct OffsetPair
     {
         public int Index;
         public float Offset;
     };
-
+    */
     
     float[] HeightData1d = new float[HeightMapSize * HeightMapSize];
     float[] RandomDropPos = new float[ThreadGroup * ThresdNum * 2];

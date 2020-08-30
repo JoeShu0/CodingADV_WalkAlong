@@ -6,6 +6,11 @@
 RWTexture2D<float4> Result;
 float4x4 _CameraToWorld;
 float4x4 _CameraInverseProjection;
+int MaxMarchStep;
+int RenderMode;
+float DepthScale;
+int ObjectCount;
+float4 LightPI;
 
 struct Ray
 {
@@ -19,10 +24,65 @@ struct ObjData
     int type;
     float3 origin;
     float3 upvector;
-    float Size;
+    float3 size;
+    float4 mat;
 };
 StructuredBuffer<ObjData> RayObjectsBuffer;
-StructuredBuffer<float> TestBuffer;
+//StructuredBuffer<float> TestBuffer;
+
+float SDstToSphere(float3 P, float3 SOrigin, float3 SRadius)
+{
+    return length(SOrigin - P) - SRadius.x;
+}
+
+float SDstToBox(float3 P, float3 BOrigin, float3 BSize)
+{
+    float3 offset = abs(P - BOrigin) - BSize;
+    float unsignedDst = length(max(offset, 0));
+    float3 InsideV = min(offset, 0);
+    float InsideDst = max(max(InsideV.x, InsideV.y), InsideV.z);
+    return unsignedDst + InsideDst;
+}
+
+
+
+void GetObjMaterialProperty(int CIndex, inout float4 _basecolor)
+{
+    _basecolor =  RayObjectsBuffer[CIndex].mat;
+}
+
+
+float3 GetObjectNormal(Ray ray, int CIndex)
+{
+    switch (RayObjectsBuffer[CIndex].type)
+        {
+            case 0:
+            {
+                return float3(0.0f,0.0f,0.0f);
+                break;
+            }
+            case 1:
+            {
+                //Sphere
+                return normalize(ray.origin - RayObjectsBuffer[CIndex].origin);
+                break;
+            }
+            case 2:
+            {
+                //box
+                float3 pointVec = normalize(ray.origin - RayObjectsBuffer[CIndex].origin) / RayObjectsBuffer[CIndex].size;
+                float longAxislength = max(max(abs(pointVec.x),abs(pointVec.y)),abs(pointVec.z));
+                if(pointVec.x == longAxislength || pointVec.x == -longAxislength)
+                    return normalize(pointVec * float3(1.0f,0.0f,0.0f));
+                else if(pointVec.y == longAxislength || pointVec.y == -longAxislength)
+                    return normalize(pointVec * float3(0.0f,1.0f,0.0f));
+                else
+                    return normalize(pointVec * float3(0.0f,0.0f,1.0f));
+                break;
+            }
+        }
+    return float3(0.0f,0.0f,0.0f);
+}
 
 Ray CreateRay(float3 origin, float3 direction)
 {
@@ -37,10 +97,69 @@ Ray CreateCameraRay(float2 uv)
 {
     float3 CameraWS = mul(_CameraToWorld, float4(0.0f, 0.0f, 0.0f, 1.0f)).rgb;
     //here we are using the center if a pixel as sample point, so we add (0.5, 0.5) to uv 
-    float3 directionCS = mul(_CameraInverseProjection, float4((uv + float2(0.5f,0.5f)) * 2.0f - 1.0f, 0.0f, 1.0f)).rgb;
-    float3 direction = normalize(mul(_CameraToWorld, float4(directionCS, 1.0f))).rgb;
+    float3 directionCS = mul(_CameraInverseProjection, float4((uv) * 2.0f - 1.0f, 0.0f, 1.0f)).rgb;
+    //wy when doing cam to world the last element of float4 has to be 0.0f? No translation?
+    float3 direction = normalize(mul(_CameraToWorld, float4(directionCS, 0.0f))).rgb;
 
     return CreateRay(CameraWS, direction);
+}
+
+float GetSceneSDst(Ray ray, inout int CIndex)
+{
+    float CloseDst = 10000000000000000.0f ;
+    CIndex = -1;
+    for(int i = 0; i < ObjectCount; i++)
+    {
+        float Dst = CloseDst;
+        float3 objorigin = (float3)RayObjectsBuffer[i].origin;
+        float3 objsize = (float3)RayObjectsBuffer[i].size;
+        switch (RayObjectsBuffer[i].type)
+        {
+            case 0:
+                break;
+            case 1:
+                Dst = SDstToSphere((float3)ray.origin, objorigin, objsize * 0.5);
+                break;
+            case 2:
+                Dst = SDstToBox((float3)ray.origin, objorigin, objsize * 0.5f);
+                break;
+        }
+        if(Dst < CloseDst)
+        {
+            CIndex = i;
+            CloseDst = Dst;
+        }
+    }
+    return CloseDst;
+}
+
+bool GetSceneRenderData(Ray ray, inout float4 _color, inout float3 _normal)
+{
+    int CIndex = -1;
+    float SDst = GetSceneSDst(ray, CIndex);
+    if(SDst<0.05f)
+    {
+        GetObjMaterialProperty(CIndex, _color);
+        _normal = GetObjectNormal(ray, CIndex);
+        return true;
+    }
+    else
+    {
+        _color = float4(0.0f,0.0f,0.0f,0.0f);
+        _normal = float3(0.0f,0.0f,0.0f);
+        return false;
+    }
+        
+}
+
+bool MarchRay(inout Ray ray)
+{
+    int CIndex = -1;
+    float SDst = GetSceneSDst(ray, CIndex);
+
+    ray = CreateRay(ray.origin+ray.direction*SDst, ray.direction);
+
+    return SDst>0.01f ? true : false;
 }
 
 [numthreads(16,16,1)]
@@ -49,12 +168,29 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     uint width, height;
     Result.GetDimensions(width, height);
 
-    float2 uv = id.xy / float2(width, height);
-
+    float2 uv = (id.xy + float2(0.5f,0.5f)) / float2(width, height);
     Ray ray = CreateCameraRay(uv);
+    Ray EndRay = ray;
+    for(int i = 0; i < MaxMarchStep; i++)
+    {
+        if (! MarchRay(EndRay))
+            break;
+    }
 
-    float3 pos = RayObjectsBuffer[0].origin;
+    float Depth = length(EndRay.origin - ray.origin);
+
+    float4 _color; 
+    float3 _normal;
+    if(GetSceneRenderData(EndRay, _color, _normal))
+    {
+        Result[id.xy] = float4((_normal+float3(1.0f,1.0f,1.0f))*0.5f,1.0f);
+    }
+    else
+        Result[id.xy] = float4(0.0f, 0.0f, 0.0f ,1.0f);
+
+    //float Dst = SDstToSphere(ray.origin, RayObjectsBuffer[1].origin, RayObjectsBuffer[1].size);
+    //float Dst01 = SDstToBox(ray.origin, RayObjectsBuffer[0].origin, RayObjectsBuffer[0].size);
 
     //Result[id.xy] = float4(TestBuffer[0], TestBuffer[1], 0.0f, 1.0f);
-    Result[id.xy] = float4(float(RayObjectsBuffer[0].type), 0.0f, 0.0f, 1.0f);
+    
 }

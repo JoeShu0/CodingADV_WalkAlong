@@ -7,13 +7,19 @@ using UnityEngine;
 public class RayMarchRender : MonoBehaviour
 {
     public ComputeShader RayMarchShader;
-    
+    public int MaxRayMarchStep = 50;
+    public enum RenderMode { depth, NormalWS, phong };
+    public RenderMode RMode = RenderMode.depth;
+    public float depthScaleInverse = 50.0f;
+
     private RenderTexture _target;
 
     private Camera _camera;
+    private Light _light;
 
     private GameObject[] LRayMarchObjects;
     private RayMarchObject[] LRayMarchobjProperties;
+    Vector4 LightPI;
 
     [SerializeField]
     struct ObjData
@@ -21,7 +27,8 @@ public class RayMarchRender : MonoBehaviour
         public int type;
         public Vector3 origin;
         public Vector3 upvector;
-        public float size;
+        public Vector3 size;
+        public Vector4 material;
     };
 
     private List<ObjData> MarchData = new List<ObjData>();
@@ -41,7 +48,17 @@ public class RayMarchRender : MonoBehaviour
         RayMarchShader.SetMatrix("_CameraToWorld", _camera.cameraToWorldMatrix);
         RayMarchShader.SetMatrix("_CameraInverseProjection", _camera.projectionMatrix.inverse);
 
+        RayMarchShader.SetInt("MaxMarchStep", MaxRayMarchStep);
+        RayMarchShader.SetInt("RenderMode", (int)RMode);
+        RayMarchShader.SetFloat("DepthScale", depthScaleInverse);
+
+        //LightData
+        LightPI = new Vector4(_light.transform.position.x, _light.transform.position.y, _light.transform.position.z, _light.intensity);
+        RayMarchShader.SetVector("LightPI", LightPI);
+
         GatherRenderObject();
+
+        RayMarchShader.SetInt("ObjectCount", MarchData.Count);
 
         if (MarchData.Count == 0)
         {
@@ -49,7 +66,9 @@ public class RayMarchRender : MonoBehaviour
             return;
         }
 
-        ComputeBuffer DataBuffer = new ComputeBuffer(MarchData.Count, 32);
+        //print(MarchData.Count);
+
+        ComputeBuffer DataBuffer = new ComputeBuffer(MarchData.Count, 56);
         DataBuffer.SetData(MarchData);
         RayMarchShader.SetBuffer(0, "RayObjectsBuffer", DataBuffer);
         
@@ -91,6 +110,7 @@ public class RayMarchRender : MonoBehaviour
     void Awake()
     {
         _camera = gameObject.GetComponent<Camera>();
+        _light = (Light)FindObjectOfType(typeof(Light));
     }
     void Start()
     {
@@ -112,16 +132,19 @@ public class RayMarchRender : MonoBehaviour
         }
 
 
-
+        MarchData.Clear();
         for (int i = 0; i < LRayMarchObjects.Length; i++)
         {
             ObjData OD = new ObjData();
             OD.type = (int)LRayMarchobjProperties[i].Type;
+            OD.material = LRayMarchobjProperties[i].baseColor;
             OD.origin = LRayMarchObjects[i].transform.position;
             OD.upvector = LRayMarchObjects[i].transform.up;
-            OD.size = LRayMarchObjects[i].transform.localScale.x;
+            OD.size = LRayMarchObjects[i].transform.localScale;
+            OD.size = LRayMarchObjects[i].transform.localScale;
 
-            MarchData.Clear();
+            
+            
             MarchData.Add(OD);
         }
 
