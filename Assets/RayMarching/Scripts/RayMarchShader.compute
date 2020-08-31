@@ -11,6 +11,8 @@ int RenderMode;
 float DepthScale;
 int ObjectCount;
 float4 LightPI;
+float SmoothFactor;
+
 
 struct Ray
 {
@@ -22,6 +24,7 @@ struct Ray
 struct ObjData
 {
     int type;
+    int OpType;
     float3 origin;
     float3 upvector;
     float3 size;
@@ -46,9 +49,59 @@ float SDstToBox(float3 P, float3 BOrigin, float3 BSize)
 
 
 
-void GetObjMaterialProperty(int CIndex, inout float4 _basecolor)
+void GetObjMaterialProperty(Ray ray, inout float4 _basecolor)
 {
-    _basecolor =  RayObjectsBuffer[CIndex].mat;
+    float TotalDst = -1.0f;
+    for (int i = 0; i < ObjectCount; i++)
+    {
+        float Dst = TotalDst;
+        float3 objorigin = (float3)RayObjectsBuffer[i].origin;
+        float3 objsize = (float3)RayObjectsBuffer[i].size;
+        switch (RayObjectsBuffer[i].type)
+        {
+        case 0:
+            break;
+        case 1:
+            Dst = SDstToSphere((float3)ray.origin, objorigin, objsize * 0.5);
+            break;
+        case 2:
+            Dst = SDstToBox((float3)ray.origin, objorigin, objsize * 0.5f);
+            break;
+        }
+        if (i == 0)
+        {
+            TotalDst = Dst;
+            _basecolor = RayObjectsBuffer[i].mat;
+        }
+        switch (RayObjectsBuffer[i].OpType)
+        {
+        case 0:
+        {
+
+            //TotalDst = min(TotalDst, Dst);
+            //SmoothUnion
+            float h = clamp(0.5 + 0.5 * (TotalDst - Dst) / SmoothFactor, 0.0f, 1.0f);
+            _basecolor = lerp(_basecolor, RayObjectsBuffer[i].mat, h);
+            break;
+        }
+        case 1:
+        {
+            //TotalDst = max(TotalDst, -Dst);
+            float h = clamp(0.5 - 0.5 * (TotalDst + Dst) / SmoothFactor, 0.0f, 1.0f);
+            _basecolor = lerp(_basecolor, RayObjectsBuffer[i].mat, h);
+            break;
+        }
+        case 2:
+        {
+            //TotalDst = max(TotalDst, Dst);
+            float h = clamp(0.5 - 0.5 * (TotalDst - Dst) / SmoothFactor, 0.0f, 1.0f);
+            _basecolor = lerp(_basecolor, RayObjectsBuffer[i].mat, h);
+            break;
+        }
+
+        }
+
+    }
 }
 
 
@@ -64,7 +117,9 @@ float3 GetObjectNormal(Ray ray, int CIndex)
             case 1:
             {
                 //Sphere
-                return normalize(ray.origin - RayObjectsBuffer[CIndex].origin);
+                float3 Normal;
+                Normal = normalize(ray.origin - RayObjectsBuffer[CIndex].origin);
+                return RayObjectsBuffer[CIndex].OpType == 1 ? -Normal : Normal;
                 break;
             }
             case 2:
@@ -72,17 +127,21 @@ float3 GetObjectNormal(Ray ray, int CIndex)
                 //box
                 float3 pointVec = normalize(ray.origin - RayObjectsBuffer[CIndex].origin) / RayObjectsBuffer[CIndex].size;
                 float longAxislength = max(max(abs(pointVec.x),abs(pointVec.y)),abs(pointVec.z));
+                float3 Normal;
                 if(pointVec.x == longAxislength || pointVec.x == -longAxislength)
-                    return normalize(pointVec * float3(1.0f,0.0f,0.0f));
+                    Normal = normalize(pointVec * float3(1.0f,0.0f,0.0f));
                 else if(pointVec.y == longAxislength || pointVec.y == -longAxislength)
-                    return normalize(pointVec * float3(0.0f,1.0f,0.0f));
+                    Normal = normalize(pointVec * float3(0.0f,1.0f,0.0f));
                 else
-                    return normalize(pointVec * float3(0.0f,0.0f,1.0f));
+                    Normal = normalize(pointVec * float3(0.0f,0.0f,1.0f));
+                return RayObjectsBuffer[CIndex].OpType == 1 ? -Normal : Normal;
                 break;
             }
         }
     return float3(0.0f,0.0f,0.0f);
 }
+
+
 
 Ray CreateRay(float3 origin, float3 direction)
 {
@@ -104,13 +163,12 @@ Ray CreateCameraRay(float2 uv)
     return CreateRay(CameraWS, direction);
 }
 
-float GetSceneSDst(Ray ray, inout int CIndex)
+float GetSceneSDst(Ray ray)
 {
-    float CloseDst = 10000000000000000.0f ;
-    CIndex = -1;
+    float TotalDst = -1.0f;
     for(int i = 0; i < ObjectCount; i++)
     {
-        float Dst = CloseDst;
+        float Dst = TotalDst;
         float3 objorigin = (float3)RayObjectsBuffer[i].origin;
         float3 objsize = (float3)RayObjectsBuffer[i].size;
         switch (RayObjectsBuffer[i].type)
@@ -124,29 +182,67 @@ float GetSceneSDst(Ray ray, inout int CIndex)
                 Dst = SDstToBox((float3)ray.origin, objorigin, objsize * 0.5f);
                 break;
         }
-        if(Dst < CloseDst)
+        if (i == 0)
         {
-            CIndex = i;
-            CloseDst = Dst;
+            TotalDst = Dst;
         }
+        switch(RayObjectsBuffer[i].OpType)
+        {
+            case 0:
+            {
+                
+                //TotalDst = min(TotalDst, Dst);
+                //SmoothUnion
+                float h = clamp(0.5 + 0.5 * (TotalDst - Dst) / SmoothFactor, 0.0f, 1.0f);
+                TotalDst = lerp(TotalDst, Dst, h) - SmoothFactor * h * (1.0f - h);
+                break;
+            }
+            case 1:
+            {
+                //TotalDst = max(TotalDst, -Dst);
+                float h = clamp(0.5 - 0.5 * (TotalDst + Dst) / SmoothFactor, 0.0f, 1.0f);
+                TotalDst = lerp(TotalDst, -Dst, h) + SmoothFactor * h * (1.0f - h);
+                break;
+            }
+            case 2:
+            {
+                //TotalDst = max(TotalDst, Dst);
+                float h = clamp(0.5 - 0.5 * (TotalDst - Dst) / SmoothFactor, 0.0f, 1.0f);
+                TotalDst = lerp(TotalDst, Dst, h) + SmoothFactor * h * (1.0f - h);
+                break;
+            }
+            
+        }
+        
     }
-    return CloseDst;
+    return TotalDst;
 }
 
-bool GetSceneRenderData(Ray ray, inout float4 _color, inout float3 _normal)
+float4 GetSceneNormal(Ray ray)
 {
-    int CIndex = -1;
-    float SDst = GetSceneSDst(ray, CIndex);
+    float D0 = GetSceneSDst(ray);
+    const float eps = 0.0001f;
+    float3 D1 = float3(
+        GetSceneSDst(CreateRay(ray.origin - float3(eps, 0, 0), float3(0, 0, 0))),
+        GetSceneSDst(CreateRay(ray.origin - float3(0, eps, 0), float3(0, 0, 0))),
+        GetSceneSDst(CreateRay(ray.origin - float3(0, 0, eps), float3(0, 0, 0)))
+        );
+    return float4(normalize(D0 - D1), 1.0f);
+}
+
+bool GetSceneRenderData(Ray ray, inout float4 _color, inout float4 _normal)
+{
+    float SDst = GetSceneSDst(ray);
     if(SDst<0.05f)
     {
-        GetObjMaterialProperty(CIndex, _color);
-        _normal = GetObjectNormal(ray, CIndex);
+        GetObjMaterialProperty(ray, _color);
+        _normal = GetSceneNormal(ray);
         return true;
     }
     else
     {
         _color = float4(0.0f,0.0f,0.0f,0.0f);
-        _normal = float3(0.0f,0.0f,0.0f);
+        _normal = float4(0.0f,0.0f,0.0f,1.0f);
         return false;
     }
         
@@ -154,12 +250,39 @@ bool GetSceneRenderData(Ray ray, inout float4 _color, inout float3 _normal)
 
 bool MarchRay(inout Ray ray)
 {
-    int CIndex = -1;
-    float SDst = GetSceneSDst(ray, CIndex);
+    //int CIndex = -1;
+    float SDst = GetSceneSDst(ray);
 
     ray = CreateRay(ray.origin+ray.direction*SDst, ray.direction);
 
     return SDst>0.01f ? true : false;
+}
+
+float MarchShadowRay(inout Ray ray, int Maxstep)
+{
+    Ray EndRay = ray;
+    float3 lightDir = LightPI.rgb - EndRay.origin;
+    float DTL = length(lightDir);
+    ray = CreateRay(EndRay.origin, normalize(lightDir));
+    float Shadow = 0.5f;
+    for (int i = 0; i < MaxMarchStep ; i++)
+    {
+        float SDst = GetSceneSDst(ray);
+        ray = CreateRay(ray.origin + ray.direction * SDst, ray.direction);
+
+        if (length(ray.origin - EndRay.origin) > DTL)
+        {
+            Shadow = 1.0f;
+            break;
+        }
+        if (SDst < 0.01f)
+        {
+            Shadow = 0.0f;
+            break;
+        }   
+    }
+    return Shadow;
+   
 }
 
 [numthreads(16,16,1)]
@@ -176,18 +299,45 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         if (! MarchRay(EndRay))
             break;
     }
-
-    float Depth = length(EndRay.origin - ray.origin);
-
-    float4 _color; 
-    float3 _normal;
-    if(GetSceneRenderData(EndRay, _color, _normal))
+    
+    float4 _color;
+    float4 _normal;
+    if (GetSceneRenderData(EndRay, _color, _normal))
     {
-        Result[id.xy] = float4((_normal+float3(1.0f,1.0f,1.0f))*0.5f,1.0f);
+        _normal = float4((_normal + float3(1.0f, 1.0f, 1.0f)) * 0.5f, 1.0f);
     }
     else
-        Result[id.xy] = float4(0.0f, 0.0f, 0.0f ,1.0f);
+    {
+        _normal = float4(0.0f, 0.0f, 0.0f, 1.0f);
+        _color = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    }
 
+    
+    float ShadowMul = MarchShadowRay(EndRay, MaxMarchStep);
+
+    switch (RenderMode)
+    {
+ 
+        case 0:
+        {
+            float Depth = length(EndRay.origin - ray.origin);
+            Result[id.xy] = float4(Depth / DepthScale, 0.0f, 0.0f, 1.0f);
+            break;
+        }
+        case 1:
+        {
+            Result[id.xy] = _normal;
+            break;
+        }
+        case 2:
+        {
+            Result[id.xy] = _color;
+            break;
+        }
+    }
+
+    Result[id.xy] = ShadowMul;
+    
     //float Dst = SDstToSphere(ray.origin, RayObjectsBuffer[1].origin, RayObjectsBuffer[1].size);
     //float Dst01 = SDstToBox(ray.origin, RayObjectsBuffer[0].origin, RayObjectsBuffer[0].size);
 

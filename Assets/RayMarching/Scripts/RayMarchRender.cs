@@ -6,11 +6,13 @@ using UnityEngine;
 
 public class RayMarchRender : MonoBehaviour
 {
+    public List<GameObject> RenderQueue = new List<GameObject>();
     public ComputeShader RayMarchShader;
     public int MaxRayMarchStep = 50;
     public enum RenderMode { depth, NormalWS, phong };
     public RenderMode RMode = RenderMode.depth;
     public float depthScaleInverse = 50.0f;
+    public float SmoothFactor = 10.0f;
 
     private RenderTexture _target;
 
@@ -24,7 +26,8 @@ public class RayMarchRender : MonoBehaviour
     [SerializeField]
     struct ObjData
     {
-        public int type;
+        public int ShType;
+        public int OpType;
         public Vector3 origin;
         public Vector3 upvector;
         public Vector3 size;
@@ -51,6 +54,7 @@ public class RayMarchRender : MonoBehaviour
         RayMarchShader.SetInt("MaxMarchStep", MaxRayMarchStep);
         RayMarchShader.SetInt("RenderMode", (int)RMode);
         RayMarchShader.SetFloat("DepthScale", depthScaleInverse);
+        RayMarchShader.SetFloat("SmoothFactor", SmoothFactor);
 
         //LightData
         LightPI = new Vector4(_light.transform.position.x, _light.transform.position.y, _light.transform.position.z, _light.intensity);
@@ -68,7 +72,7 @@ public class RayMarchRender : MonoBehaviour
 
         //print(MarchData.Count);
 
-        ComputeBuffer DataBuffer = new ComputeBuffer(MarchData.Count, 56);
+        ComputeBuffer DataBuffer = new ComputeBuffer(MarchData.Count, 60);
         DataBuffer.SetData(MarchData);
         RayMarchShader.SetBuffer(0, "RayObjectsBuffer", DataBuffer);
         
@@ -114,7 +118,11 @@ public class RayMarchRender : MonoBehaviour
     }
     void Start()
     {
+        //random render queue, difficult to manage.
         LRayMarchObjects = GameObject.FindGameObjectsWithTag("RayMarchObjects");
+        //manually defined render queue, easy to manage multiple assets.
+        LRayMarchObjects = RenderQueue.ToArray();
+
         LRayMarchobjProperties = new RayMarchObject[LRayMarchObjects.Length];
         for (int i = 0; i < LRayMarchObjects.Length; i++)
         {
@@ -136,15 +144,14 @@ public class RayMarchRender : MonoBehaviour
         for (int i = 0; i < LRayMarchObjects.Length; i++)
         {
             ObjData OD = new ObjData();
-            OD.type = (int)LRayMarchobjProperties[i].Type;
+            OD.ShType = (int)LRayMarchobjProperties[i].ShType;
+            OD.OpType = (int)LRayMarchobjProperties[i].OpType;
             OD.material = LRayMarchobjProperties[i].baseColor;
             OD.origin = LRayMarchObjects[i].transform.position;
             OD.upvector = LRayMarchObjects[i].transform.up;
             OD.size = LRayMarchObjects[i].transform.localScale;
             OD.size = LRayMarchObjects[i].transform.localScale;
 
-            
-            
             MarchData.Add(OD);
         }
 
