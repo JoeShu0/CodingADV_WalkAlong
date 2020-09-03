@@ -258,12 +258,12 @@ bool MarchRay(inout Ray ray)
     return SDst>0.01f ? true : false;
 }
 
-float MarchShadowRay(inout Ray ray, int Maxstep)
+float MarchShadowRay(inout Ray EndRay)
 {
-    Ray EndRay = ray;
+    //Ray ray = EndRay;
     float3 lightDir = LightPI.rgb - EndRay.origin;
     float DTL = length(lightDir);
-    ray = CreateRay(EndRay.origin, normalize(lightDir));
+    Ray ray = CreateRay(EndRay.origin + normalize(lightDir)*0.25f, normalize(lightDir));
     float Shadow = 0.5f;
     for (int i = 0; i < MaxMarchStep ; i++)
     {
@@ -275,9 +275,9 @@ float MarchShadowRay(inout Ray ray, int Maxstep)
             Shadow = 1.0f;
             break;
         }
-        if (SDst < 0.01f)
+        if (SDst < 0.0f)
         {
-            Shadow = 0.0f;
+            Shadow = 0.5f;
             break;
         }   
     }
@@ -288,6 +288,7 @@ float MarchShadowRay(inout Ray ray, int Maxstep)
 [numthreads(16,16,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
+    
     uint width, height;
     Result.GetDimensions(width, height);
 
@@ -313,7 +314,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     }
 
     
-    float ShadowMul = MarchShadowRay(EndRay, MaxMarchStep);
+    float ShadowMul = MarchShadowRay(EndRay);
 
     switch (RenderMode)
     {
@@ -331,12 +332,12 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         }
         case 2:
         {
-            Result[id.xy] = _color;
+            Result[id.xy] = _color * ShadowMul;
             break;
         }
     }
 
-    Result[id.xy] = ShadowMul;
+    //Result[id.xy] = ShadowMul;
     
     //float Dst = SDstToSphere(ray.origin, RayObjectsBuffer[1].origin, RayObjectsBuffer[1].size);
     //float Dst01 = SDstToBox(ray.origin, RayObjectsBuffer[0].origin, RayObjectsBuffer[0].size);
