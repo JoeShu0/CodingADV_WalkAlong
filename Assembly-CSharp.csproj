@@ -69,6 +69,8 @@
     <Compile Include="Assets\HydraulicErosion\Scripts\HeightMapGenerator.cs" />
     <Compile Include="Assets\RayMarching\Scripts\RayMarchObject.cs" />
     <Compile Include="Assets\RayMarching\Scripts\RayMarchRender.cs" />
+    <Compile Include="Assets\Temp\TileGen.cs" />
+    <None Include="Assets\Temp\SnapAndTransition.shader" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColorShader.shader" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColor.shader" />
     <None Include="Assets\RayMarching\Scripts\RayMarchShader.compute" />
