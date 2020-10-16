@@ -3,6 +3,9 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _GridSize ("GridSize", Float) = 1.0
+        _TransitionParam("Transition", Vector) = (0.0,0.0,15.0,15.0)
+        _CenterPos ("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
     }
     SubShader
     {
@@ -35,20 +38,24 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float _GridSize;
+            float4 _TransitionParam;
+            float4 _CenterPos;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 float4 WPos = mul(unity_ObjectToWorld, v.vertex);
-                float Grid = 1.0f;
-                float Grid2 = 2.0f;
-                float Grid4 = 4.0f;
+                float Grid = _GridSize;
+                float Grid2 = _GridSize * 2.0f;
+                float Grid4 = _GridSize * 4.0f;
 
                 WPos.xz -= frac(unity_ObjectToWorld._m03_m23 / Grid2) * Grid2;
                 
-                float lerpDist = 12.0f;
-                float Dist = length(WPos.xz - float2(0.0f, 0.0f));
-                float TransiFactor = clamp(Dist / lerpDist, 0.0f, 1.0f);
+                //float lerpDist = 15.0f;
+                //float Dist = length(WPos.xz - float2(0.0f, 0.0f));
+                float Dist = WPos.x - _TransitionParam.x - _CenterPos.x;
+                float TransiFactor = clamp(Dist / _TransitionParam.z, 0.0f, 1.0f);
                 //TransiFactor = 0.5f;
 
                 float2 POffset = frac(WPos.xz / Grid4) - float2(0.5f, 0.5f);

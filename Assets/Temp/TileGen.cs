@@ -5,7 +5,9 @@ using UnityEngine;
 public class TileGen : MonoBehaviour
 {
     public Shader tileShader;
-    
+
+
+    private Material TileMat, TileMat2, TileMat4;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,20 +15,42 @@ public class TileGen : MonoBehaviour
 
         go00.transform.parent = gameObject.transform;
         MeshRenderer TileMeshRender = go00.GetComponent<MeshRenderer>();
-        Material TileMat = new Material(tileShader);
+        TileMat = new Material(tileShader);
+        TileMat.SetVector("_CenterPos", gameObject.transform.position);
         TileMeshRender.sharedMaterial = TileMat;
 
-        GameObject go01 = GameObject.Instantiate(go00, go00.transform);
+        //GameObject go01 = GameObject.Instantiate(go00, gameObject.transform);
 
-        go00.transform.position = new Vector3(-10, 0, 0);
-        go01.transform.position = new Vector3(10, 0, 0);
+        //go00.transform.position = new Vector3(-10, 0, 0);
+        //go01.transform.position = new Vector3(10, 0, 0);
 
+        GameObject go10 = GameObject.Instantiate(go00, gameObject.transform);
+        go10.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+        TileMat2 = new Material(tileShader);
+        TileMat2.SetFloat("_GridSize", 2.0f);
+        TileMat2.SetVector("_TransitionParam", new Vector4(20.0f,0.0f,30.0f,0.0f));
+        TileMat2.SetVector("_CenterPos", gameObject.transform.position);
+        go10.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
+        GameObject go11 = GameObject.Instantiate(go10, gameObject.transform);
+
+        //go00.transform.position = new Vector3(-20, 0, 40);
+        //go01.transform.position = new Vector3(20, 0, 40);
+
+        GameObject go20 = GameObject.Instantiate(go00, gameObject.transform);
+        go10.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
+        TileMat4 = new Material(tileShader);
+        TileMat4.SetFloat("_GridSize", 4.0f);
+        TileMat4.SetVector("_TransitionParam", new Vector4(60.0f, 0.0f, 60.0f, 0.0f));
+        TileMat4.SetVector("_CenterPos", gameObject.transform.position);
+        go10.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        TileMat.SetVector("_CenterPos", gameObject.transform.position);
+        TileMat2.SetVector("_CenterPos", gameObject.transform.position);
+        TileMat4.SetVector("_CenterPos", gameObject.transform.position);
     }
 
     GameObject GenerateTile(int tileSize, int tileXPCount)
