@@ -9,15 +9,17 @@ public class TileGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject go = GenerateTile(19, 20);
+        GameObject go00 = GenerateTile(20, 21);
 
-        go.transform.parent = gameObject.transform;
-
-        MeshRenderer TileMeshRender = go.GetComponent<MeshRenderer>();
-
+        go00.transform.parent = gameObject.transform;
+        MeshRenderer TileMeshRender = go00.GetComponent<MeshRenderer>();
         Material TileMat = new Material(tileShader);
-
         TileMeshRender.sharedMaterial = TileMat;
+
+        GameObject go01 = GameObject.Instantiate(go00, go00.transform);
+
+        go00.transform.position = new Vector3(-10, 0, 0);
+        go01.transform.position = new Vector3(10, 0, 0);
 
     }
 
@@ -48,14 +50,16 @@ public class TileGen : MonoBehaviour
         tilemesh.vertices = vertices;
 
         int[] triangles = new int[(tileXPCount-1) * (tileXPCount - 1) * 6];
+        int QuadOrient = 0;
         for (int x = 0; x < tileXPCount - 1; x++)
         {
+            QuadOrient++;
             for (int z = 0; z < tileXPCount - 1; z++)
             {
                 //quad num x*(HeightMapSize-1) + z
                 int QuadNum = x * (tileXPCount - 1) + z;
                 int TLPont = x * (tileXPCount) + z;
-                if (QuadNum % 2 == 0)
+                if (QuadOrient % 2 == 0)
                 {
                     triangles[QuadNum * 6 + 0] = TLPont;
                     triangles[QuadNum * 6 + 1] = TLPont + 1;
@@ -74,7 +78,9 @@ public class TileGen : MonoBehaviour
                     triangles[QuadNum * 6 + 5] = TLPont + tileXPCount + 1;
                     
                 }
-                
+                QuadOrient++;
+
+
             }
         }
         tilemesh.triangles = triangles;
