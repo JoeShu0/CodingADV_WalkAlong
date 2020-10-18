@@ -56,7 +56,7 @@
                 //float Dist = length(WPos.xz - float2(0.0f, 0.0f));
                 float Dist = WPos.x - _TransitionParam.x - _CenterPos.x;
                 float TransiFactor = clamp(Dist / _TransitionParam.z, 0.0f, 1.0f);
-                //TransiFactor = 0.5f;
+                //TransiFactor = 0.1f; 
 
                 float2 POffset = frac(WPos.xz / Grid4) - float2(0.5f, 0.5f);
                 const float MinTransitionRadius = 0.26;

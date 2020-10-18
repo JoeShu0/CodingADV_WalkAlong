@@ -11,38 +11,38 @@ public class TileGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject go00 = GenerateTile(20, 21);
+        GameObject go00 = GenerateTile(10, 10, 11, 11);
 
         go00.transform.parent = gameObject.transform;
         MeshRenderer TileMeshRender = go00.GetComponent<MeshRenderer>();
         TileMat = new Material(tileShader);
+        TileMat.SetFloat("_GridSize", 1.0f);
+        TileMat.SetVector("_TransitionParam", new Vector4(11.0f, 0.0f, 5.0f, 0.0f));
         TileMat.SetVector("_CenterPos", gameObject.transform.position);
         TileMeshRender.sharedMaterial = TileMat;
 
-        //GameObject go01 = GameObject.Instantiate(go00, gameObject.transform);
-
-        //go00.transform.position = new Vector3(-10, 0, 0);
-        //go01.transform.position = new Vector3(10, 0, 0);
+        GameObject go01 = GameObject.Instantiate(go00, gameObject.transform);
 
         GameObject go10 = GameObject.Instantiate(go00, gameObject.transform);
         go10.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
         TileMat2 = new Material(tileShader);
         TileMat2.SetFloat("_GridSize", 2.0f);
-        TileMat2.SetVector("_TransitionParam", new Vector4(20.0f,0.0f,30.0f,0.0f));
+        TileMat2.SetVector("_TransitionParam", new Vector4(22.0f,0.0f,10.0f,0.0f));
         TileMat2.SetVector("_CenterPos", gameObject.transform.position);
         go10.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
-        GameObject go11 = GameObject.Instantiate(go10, gameObject.transform);
+        //GameObject go11 = GameObject.Instantiate(go10, gameObject.transform);
 
         //go00.transform.position = new Vector3(-20, 0, 40);
         //go01.transform.position = new Vector3(20, 0, 40);
-
+        
         GameObject go20 = GameObject.Instantiate(go00, gameObject.transform);
-        go10.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
+        go20.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
         TileMat4 = new Material(tileShader);
         TileMat4.SetFloat("_GridSize", 4.0f);
-        TileMat4.SetVector("_TransitionParam", new Vector4(60.0f, 0.0f, 60.0f, 0.0f));
+        TileMat4.SetVector("_TransitionParam", new Vector4(44.0f, 0.0f, 20.0f, 0.0f));
         TileMat4.SetVector("_CenterPos", gameObject.transform.position);
-        go10.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
+        go20.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
+        
     }
 
     // Update is called once per frame
@@ -53,7 +53,7 @@ public class TileGen : MonoBehaviour
         TileMat4.SetVector("_CenterPos", gameObject.transform.position);
     }
 
-    GameObject GenerateTile(int tileSize, int tileXPCount)
+    GameObject GenerateTile(float tileSizeX, float tileSizeZ, int tileXPCount, int tileZPCount)
     {
         GameObject TileObj = new GameObject();
         TileObj.AddComponent<MeshFilter>();
@@ -62,44 +62,45 @@ public class TileGen : MonoBehaviour
 
         tilemesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
-        Vector3[] vertices = new Vector3[tileXPCount * tileXPCount];
-        float increment = (float)tileSize / (float)(tileXPCount-1);
+        Vector3[] vertices = new Vector3[tileXPCount * tileZPCount];
+        float incrementX = tileSizeX / (float)(tileXPCount - 1);
+        float incrementZ = tileSizeZ / (float)(tileZPCount - 1);
         for (int x = 0; x < tileXPCount; x++)
         {
-            for (int z = 0; z < tileXPCount; z++)
+            for (int z = 0; z < tileZPCount; z++)
             {
-                vertices[x * tileXPCount + z] = new Vector3(increment * x, 0.0f, increment * z);
+                vertices[x * tileZPCount + z] = new Vector3(incrementX * x, 0.0f, incrementZ * z);
             }
         }
         tilemesh.vertices = vertices;
 
-        int[] triangles = new int[(tileXPCount-1) * (tileXPCount - 1) * 6];
+        int[] triangles = new int[(tileXPCount-1) * (tileZPCount - 1) * 6];
         int QuadOrient = 0;
         for (int x = 0; x < tileXPCount - 1; x++)
         {
             QuadOrient++;
-            for (int z = 0; z < tileXPCount - 1; z++)
+            for (int z = 0; z < tileZPCount - 1; z++)
             {
                 //quad num x*(HeightMapSize-1) + z
-                int QuadNum = x * (tileXPCount - 1) + z;
-                int TLPont = x * (tileXPCount) + z;
+                int QuadNum = x * (tileZPCount - 1) + z;
+                int TLPont = x * (tileZPCount) + z;
                 if (QuadOrient % 2 == 0)
                 {
                     triangles[QuadNum * 6 + 0] = TLPont;
                     triangles[QuadNum * 6 + 1] = TLPont + 1;
-                    triangles[QuadNum * 6 + 2] = TLPont + tileXPCount + 1;
+                    triangles[QuadNum * 6 + 2] = TLPont + tileZPCount + 1;
                     triangles[QuadNum * 6 + 3] = TLPont;
-                    triangles[QuadNum * 6 + 4] = TLPont + tileXPCount + 1;
-                    triangles[QuadNum * 6 + 5] = TLPont + tileXPCount;
+                    triangles[QuadNum * 6 + 4] = TLPont + tileZPCount + 1;
+                    triangles[QuadNum * 6 + 5] = TLPont + tileZPCount;
                 }
                 else 
                 {
                     triangles[QuadNum * 6 + 0] = TLPont;
                     triangles[QuadNum * 6 + 1] = TLPont + 1;
-                    triangles[QuadNum * 6 + 2] = TLPont + tileXPCount;
-                    triangles[QuadNum * 6 + 3] = TLPont + tileXPCount;
+                    triangles[QuadNum * 6 + 2] = TLPont + tileZPCount;
+                    triangles[QuadNum * 6 + 3] = TLPont + tileZPCount;
                     triangles[QuadNum * 6 + 4] = TLPont + 1;
-                    triangles[QuadNum * 6 + 5] = TLPont + tileXPCount + 1;
+                    triangles[QuadNum * 6 + 5] = TLPont + tileZPCount + 1;
                     
                 }
                 QuadOrient++;
@@ -112,7 +113,7 @@ public class TileGen : MonoBehaviour
         Vector2[] UVs = new Vector2[vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
         {
-            UVs[i] = new Vector2(vertices[i].z / (float)tileSize, vertices[i].x / (float)tileSize);
+            UVs[i] = new Vector2(vertices[i].z / (float)tileSizeX, vertices[i].x / (float)tileSizeZ);
         }
 
         tilemesh.uv = UVs;
