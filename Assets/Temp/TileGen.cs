@@ -6,6 +6,19 @@ public class TileGen : MonoBehaviour
 {
     public Shader tileShader;
 
+    enum TileType
+    {
+        Interior,
+        FatX,
+        SlimX,
+        FatXSlimZ,
+        SlimXFatZ,
+        SlimXZ,
+        FatXZ,
+        FatXOuter,
+        FatXZOuter,
+        Count
+    }
 
     private Material TileMat, TileMat2, TileMat4, TileMatY;
     // Start is called before the first frame update
@@ -84,6 +97,8 @@ public class TileGen : MonoBehaviour
         go00Y.transform.rotation = Quaternion.Euler(0,270,0);
         go01Y.transform.rotation = Quaternion.Euler(0, 270, 0);
 
+
+        GenerateTile(TileType.Count, 10, 10);
     }
 
     // Update is called once per frame
@@ -162,5 +177,14 @@ public class TileGen : MonoBehaviour
         TileObj.GetComponent<MeshFilter>().sharedMesh = tilemesh;
 
         return TileObj;
+    }
+
+    Mesh GenerateTile(TileType type, float GridSize, int GridCount)
+    {
+        //make sure the grid size is fixed bwteen tiles si that the snap works
+        //the generated mesh should have the pivot on the center of the interior type. and consistent through out all tiles
+        //So when placing the tiles we can just use symmetry~
+        Debug.Log(type);
+        return new Mesh();
     }
 }
