@@ -11,38 +11,66 @@ public class TileGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject go00 = GenerateTile(10, 10, 11, 11);
+        GameObject goin = GenerateTile(10, 10, 11, 11);
 
+        GameObject go00 = GenerateTile(9, 10, 10, 11);
+        GameObject go00FX = GenerateTile(11, 10, 12, 11);
+
+        goin.transform.parent = gameObject.transform;
         go00.transform.parent = gameObject.transform;
+        go00FX.transform.parent = gameObject.transform;
         MeshRenderer TileMeshRender = go00.GetComponent<MeshRenderer>();
+        MeshRenderer TileMeshRenderFX = go00FX.GetComponent<MeshRenderer>();
         TileMat = new Material(tileShader);
         TileMat.SetFloat("_GridSize", 1.0f);
-        TileMat.SetVector("_TransitionParam", new Vector4(11.0f, 0.0f, 5.0f, 0.0f));
+        TileMat.SetVector("_TransitionParam", new Vector4(10.0f, 0.0f, 5.0f, 0.0f));
         TileMat.SetVector("_CenterPos", gameObject.transform.position);
         TileMeshRender.sharedMaterial = TileMat;
+        TileMeshRenderFX.sharedMaterial = TileMat;
+        
 
-        GameObject go01 = GameObject.Instantiate(go00, gameObject.transform);
+        GameObject goi1 = GameObject.Instantiate(goin, gameObject.transform);
+        goin.GetComponent<MeshRenderer>().sharedMaterial = TileMat;
+        goi1.GetComponent<MeshRenderer>().sharedMaterial = TileMat;
 
+        goi1.transform.position = new Vector3(0, 0, 0);
+        goin.transform.position = new Vector3(-10, 0, 0);
+
+        //go00.transform.Rotate(new Vector3(0, 1, 0), 180);
+        go00.transform.position = new Vector3(10, 0, 0);
+        go00FX.transform.Rotate(new Vector3(0, 1, 0), 180);
+        go00FX.transform.position = new Vector3(-10, 0, 10);
+        //**
         GameObject go10 = GameObject.Instantiate(go00, gameObject.transform);
+        GameObject go10FX = GameObject.Instantiate(go00FX, gameObject.transform);
+        go10FX.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
         go10.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
         TileMat2 = new Material(tileShader);
         TileMat2.SetFloat("_GridSize", 2.0f);
-        TileMat2.SetVector("_TransitionParam", new Vector4(22.0f,0.0f,10.0f,0.0f));
+        TileMat2.SetVector("_TransitionParam", new Vector4(20.0f,0.0f,10.0f,0.0f));
         TileMat2.SetVector("_CenterPos", gameObject.transform.position);
         go10.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
-        //GameObject go11 = GameObject.Instantiate(go10, gameObject.transform);
+        go10FX.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
 
-        //go00.transform.position = new Vector3(-20, 0, 40);
-        //go01.transform.position = new Vector3(20, 0, 40);
-        
+        go10.transform.position = new Vector3(20, 0, 0);
+        go10FX.transform.position = new Vector3(-20, 0, 20);
+        //**
         GameObject go20 = GameObject.Instantiate(go00, gameObject.transform);
+        GameObject go20FX = GameObject.Instantiate(go00FX, gameObject.transform);
         go20.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
+        go20FX.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
         TileMat4 = new Material(tileShader);
         TileMat4.SetFloat("_GridSize", 4.0f);
-        TileMat4.SetVector("_TransitionParam", new Vector4(44.0f, 0.0f, 20.0f, 0.0f));
+        TileMat4.SetVector("_TransitionParam", new Vector4(40.0f, 0.0f, 20.0f, 0.0f));
         TileMat4.SetVector("_CenterPos", gameObject.transform.position);
         go20.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
-        
+        go20FX.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
+
+        go20.transform.position = new Vector3(40, 0, 0);
+        go20FX.transform.position = new Vector3(-40, 0, 40);
+
+
+
     }
 
     // Update is called once per frame

@@ -54,7 +54,7 @@
                 
                 //float lerpDist = 15.0f;
                 //float Dist = length(WPos.xz - float2(0.0f, 0.0f));
-                float Dist = WPos.x - _TransitionParam.x - _CenterPos.x;
+                float Dist = abs(WPos.x - _CenterPos.x) - abs(_TransitionParam.x);
                 float TransiFactor = clamp(Dist / _TransitionParam.z, 0.0f, 1.0f);
                 //TransiFactor = 0.1f; 
 
