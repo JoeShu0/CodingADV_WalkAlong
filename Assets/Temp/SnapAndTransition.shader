@@ -54,8 +54,9 @@
                 
                 //float lerpDist = 15.0f;
                 //float Dist = length(WPos.xz - float2(0.0f, 0.0f));
-                float Dist = abs(WPos.x - _CenterPos.x) - abs(_TransitionParam.x);
-                float TransiFactor = clamp(Dist / _TransitionParam.z, 0.0f, 1.0f);
+                float DistX = abs(WPos.x - _CenterPos.x) - abs(_TransitionParam.x);
+                float DistZ = abs(WPos.z - _CenterPos.z) - abs(_TransitionParam.y);
+                float TransiFactor = clamp(max(DistX, DistZ) / _TransitionParam.z, 0.0f, 1.0f);
                 //TransiFactor = 0.1f; 
 
                 float2 POffset = frac(WPos.xz / Grid4) - float2(0.5f, 0.5f);

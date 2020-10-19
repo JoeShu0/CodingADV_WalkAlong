@@ -7,7 +7,7 @@ public class TileGen : MonoBehaviour
     public Shader tileShader;
 
 
-    private Material TileMat, TileMat2, TileMat4;
+    private Material TileMat, TileMat2, TileMat4, TileMatY;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +23,7 @@ public class TileGen : MonoBehaviour
         MeshRenderer TileMeshRenderFX = go00FX.GetComponent<MeshRenderer>();
         TileMat = new Material(tileShader);
         TileMat.SetFloat("_GridSize", 1.0f);
-        TileMat.SetVector("_TransitionParam", new Vector4(10.0f, 0.0f, 5.0f, 0.0f));
+        TileMat.SetVector("_TransitionParam", new Vector4(10.0f, 10.0f, 5.0f, 5.0f));
         TileMat.SetVector("_CenterPos", gameObject.transform.position);
         TileMeshRender.sharedMaterial = TileMat;
         TileMeshRenderFX.sharedMaterial = TileMat;
@@ -47,7 +47,7 @@ public class TileGen : MonoBehaviour
         go10.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
         TileMat2 = new Material(tileShader);
         TileMat2.SetFloat("_GridSize", 2.0f);
-        TileMat2.SetVector("_TransitionParam", new Vector4(20.0f,0.0f,10.0f,0.0f));
+        TileMat2.SetVector("_TransitionParam", new Vector4(20.0f,20.0f,10.0f,10.0f));
         TileMat2.SetVector("_CenterPos", gameObject.transform.position);
         go10.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
         go10FX.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
@@ -61,7 +61,7 @@ public class TileGen : MonoBehaviour
         go20FX.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
         TileMat4 = new Material(tileShader);
         TileMat4.SetFloat("_GridSize", 4.0f);
-        TileMat4.SetVector("_TransitionParam", new Vector4(40.0f, 0.0f, 20.0f, 0.0f));
+        TileMat4.SetVector("_TransitionParam", new Vector4(40.0f, 40.0f, 20.0f, 20.0f));
         TileMat4.SetVector("_CenterPos", gameObject.transform.position);
         go20.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
         go20FX.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
@@ -69,7 +69,20 @@ public class TileGen : MonoBehaviour
         go20.transform.position = new Vector3(40, 0, 0);
         go20FX.transform.position = new Vector3(-40, 0, 40);
 
-
+        //Y axis~~~~
+        GameObject go00Y = GameObject.Instantiate(go00, gameObject.transform);
+        GameObject go01Y = GameObject.Instantiate(go00, gameObject.transform);
+        
+        TileMatY = new Material(tileShader);
+        TileMatY.SetFloat("_GridSize", 1.0f);
+        TileMatY.SetVector("_TransitionParam", new Vector4(10.0f, 10.0f, 5.0f, 5.0f));
+        TileMatY.SetVector("_CenterPos", gameObject.transform.position);
+        go00Y.GetComponent<MeshRenderer>().sharedMaterial = TileMat;
+        go01Y.GetComponent<MeshRenderer>().sharedMaterial = TileMat;
+        go00Y.transform.position = new Vector3(10, 0, 10);
+        go01Y.transform.position = new Vector3(0, 0, 10);
+        go00Y.transform.rotation = Quaternion.Euler(0,270,0);
+        go01Y.transform.rotation = Quaternion.Euler(0, 270, 0);
 
     }
 
