@@ -45,27 +45,28 @@
             v2f vert (appdata v)
             {
                 v2f o;
+                
                 float4 WPos = mul(unity_ObjectToWorld, v.vertex);
                 float Grid = _GridSize;
                 float Grid2 = _GridSize * 2.0f;
                 float Grid4 = _GridSize * 4.0f;
 
+                //WPos.xz -= frac(WPos / Grid) * Grid;
                 WPos.xz -= frac(unity_ObjectToWorld._m03_m23 / Grid2) * Grid2;
                 
-                //float lerpDist = 15.0f;
-                //float Dist = length(WPos.xz - float2(0.0f, 0.0f));
+                
                 float DistX = abs(WPos.x - _CenterPos.x) - abs(_TransitionParam.x);
                 float DistZ = abs(WPos.z - _CenterPos.z) - abs(_TransitionParam.y);
                 float TransiFactor = clamp(max(DistX, DistZ) / _TransitionParam.z, 0.0f, 1.0f);
-                //TransiFactor = 0.1f; 
 
+                
                 float2 POffset = frac(WPos.xz / Grid4) - float2(0.5f, 0.5f);
                 const float MinTransitionRadius = 0.26;
                 if (abs(POffset.x) < MinTransitionRadius)
                     WPos.x += POffset.x * Grid4 * TransiFactor;
                 if (abs(POffset.y) < MinTransitionRadius)
                     WPos.z += POffset.y * Grid4 * TransiFactor;
-
+                
                 float4 LPos = mul(unity_WorldToObject, WPos);
                 
                 o.vertex = UnityObjectToClipPos(LPos);
@@ -81,7 +82,7 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
-                //return i.WPos;
+                return float4(0.5f,0.5f,0.5f,1.0f);
             }
             ENDCG
         }

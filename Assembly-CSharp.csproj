@@ -73,6 +73,7 @@
     <None Include="Assets\Temp\SnapAndTransition.shader" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColorShader.shader" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColor.shader" />
+    <None Include="Assets\Temp\TestTileShader.shader" />
     <None Include="Assets\RayMarching\Scripts\RayMarchShader.compute" />
     <None Include="Assets\ComputeShader\Scripts\ErosionShader.compute" />
     <Reference Include="UnityEngine">

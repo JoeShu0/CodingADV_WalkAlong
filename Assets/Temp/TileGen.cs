@@ -23,30 +23,52 @@ public class TileGen : MonoBehaviour
         Count
     }
 
-    private Material TileMat, TileMat2, TileMat4, TileMatY;
+    static int LODCount = 8;
+    static float GridSize = 0.5f;
+    static int GridCountPerTile = 24;//this value haveto be thr mul of 4 since the snapping requires it
+
+    private Material[] LODMats = new Material[LODCount];
     private GameObject TileObj;
     private Mesh[] TileMeshes = new Mesh[(int)TileType.Count];
-    private float My_Timer = 0.0f;
-    private int MI = 0;
+
+    private Material TileMat,TileMat2,TileMat4,TileMatY;
+
     // Start is called before the first frame update
     void Start()
     {
         //string[] STileType = (string[])Enum.GetValues(typeof(TileType));
+        
+        
         for (int i = 0; i < (int)TileType.Count; i++)
         {
-            TileMeshes[i] = GenerateTile((TileType)i, 0.25f, 8);
+            TileMeshes[i] = GenerateTile((TileType)i, GridSize, GridCountPerTile);
         }
-        
-        TileObj = new GameObject("TestTile");
-        TileObj.AddComponent<MeshFilter>();
-        TileObj.AddComponent<MeshRenderer>();
-        //TileObj.GetComponent<MeshFilter>().sharedMesh = GenerateTile(TileType.Interior, 0.25f, 8);
-        TileObj.transform.parent = gameObject.transform;
-        TileObj.GetComponent<MeshFilter>().sharedMesh = TileMeshes[7];
+
+        GameObject[] LODS = new GameObject[LODCount];
+        Material LODMat = null;
+
+        for (int i = 0; i < LODCount-1; i++)
+        {
+            LODS[i] = BuildLOD(TileMeshes, GridSize, GridCountPerTile, i, tileShader, gameObject, ref LODMat);
+            LODMats[i] = LODMat;
+        }
+        //Gen the outer LOD
+        int lastLODIndex = LODCount - 1;
+        LODS[lastLODIndex] = BuildLOD(TileMeshes, GridSize, GridCountPerTile, lastLODIndex, tileShader, gameObject, ref LODMat, true);
+        LODMats[lastLODIndex] = LODMat;
+
+
+
+
 
         /*
         GameObject goin = GenerateTile(10, 10, 11, 11);
-
+        TileMat = new Material(tileShader);
+        TileMat.SetFloat("_GridSize", 1.0f);
+        TileMat.SetVector("_TransitionParam", new Vector4(10.0f, 10.0f, 5.0f, 5.0f));
+        TileMat.SetVector("_CenterPos", gameObject.transform.position);
+        goin.GetComponent<MeshRenderer>().sharedMaterial = TileMat;
+        
         GameObject go00 = GenerateTile(9, 10, 10, 11);
         GameObject go00FX = GenerateTile(11, 10, 12, 11);
 
@@ -57,7 +79,7 @@ public class TileGen : MonoBehaviour
         MeshRenderer TileMeshRenderFX = go00FX.GetComponent<MeshRenderer>();
         TileMat = new Material(tileShader);
         TileMat.SetFloat("_GridSize", 1.0f);
-        TileMat.SetVector("_TransitionParam", new Vector4(10.0f, 10.0f, 5.0f, 5.0f));
+        TileMat.SetVector("_TransitionParam", new Vector4(11.0f, 11.0f, 5.0f, 5.0f));
         TileMat.SetVector("_CenterPos", gameObject.transform.position);
         TileMeshRender.sharedMaterial = TileMat;
         TileMeshRenderFX.sharedMaterial = TileMat;
@@ -81,7 +103,7 @@ public class TileGen : MonoBehaviour
         go10.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
         TileMat2 = new Material(tileShader);
         TileMat2.SetFloat("_GridSize", 2.0f);
-        TileMat2.SetVector("_TransitionParam", new Vector4(20.0f,20.0f,10.0f,10.0f));
+        TileMat2.SetVector("_TransitionParam", new Vector4(22.0f,22.0f,10.0f,10.0f));
         TileMat2.SetVector("_CenterPos", gameObject.transform.position);
         go10.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
         go10FX.GetComponent<MeshRenderer>().sharedMaterial = TileMat2;
@@ -95,7 +117,7 @@ public class TileGen : MonoBehaviour
         go20FX.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
         TileMat4 = new Material(tileShader);
         TileMat4.SetFloat("_GridSize", 4.0f);
-        TileMat4.SetVector("_TransitionParam", new Vector4(40.0f, 40.0f, 20.0f, 20.0f));
+        TileMat4.SetVector("_TransitionParam", new Vector4(44.0f, 44.0f, 20.0f, 20.0f));
         TileMat4.SetVector("_CenterPos", gameObject.transform.position);
         go20.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
         go20FX.GetComponent<MeshRenderer>().sharedMaterial = TileMat4;
@@ -109,7 +131,7 @@ public class TileGen : MonoBehaviour
         
         TileMatY = new Material(tileShader);
         TileMatY.SetFloat("_GridSize", 1.0f);
-        TileMatY.SetVector("_TransitionParam", new Vector4(10.0f, 10.0f, 5.0f, 5.0f));
+        TileMatY.SetVector("_TransitionParam", new Vector4(11.0f, 11.0f, 5.0f, 5.0f));
         TileMatY.SetVector("_CenterPos", gameObject.transform.position);
         go00Y.GetComponent<MeshRenderer>().sharedMaterial = TileMat;
         go01Y.GetComponent<MeshRenderer>().sharedMaterial = TileMat;
@@ -129,7 +151,8 @@ public class TileGen : MonoBehaviour
         //TileMat.SetVector("_CenterPos", gameObject.transform.position);
         //TileMat2.SetVector("_CenterPos", gameObject.transform.position);
         //TileMat4.SetVector("_CenterPos", gameObject.transform.position);
-        
+        //TileMatY.SetVector("_CenterPos", gameObject.transform.position);
+        /*
         My_Timer += Time.deltaTime;
         if (My_Timer > 1.0f)
         {
@@ -137,9 +160,14 @@ public class TileGen : MonoBehaviour
             MI =(MI+1)%9;
             My_Timer = 0.0f;
         }
-        
+        */
         //TileObj.GetComponent<MeshFilter>().sharedMesh = TileMeshes[7];
 
+        foreach (Material TileMat in LODMats)
+        {
+            TileMat.SetVector("_CenterPos", gameObject.transform.position);
+        }
+        
     }
 
     GameObject GenerateTile(float tileSizeX, float tileSizeZ, int tileXPCount, int tileZPCount)
@@ -282,9 +310,9 @@ public class TileGen : MonoBehaviour
             for(int i = 0; i < vertices.Length; i++)
             {
                 if (vertices[i].x - 0.5f * TileSizeX > 0.1f )
-                    vertices[i].x *= 10.0f;
+                    vertices[i].x *= 50.0f;
                 if (vertices[i].z - 0.5f * TileSizeZ > 0.1f)
-                    vertices[i].z *= 10.0f;
+                    vertices[i].z *= 50.0f;
             }
         tilemesh.vertices = vertices;
 
@@ -334,5 +362,83 @@ public class TileGen : MonoBehaviour
 
         Debug.Log(type);
         return tilemesh;
+    }
+
+    static GameObject BuildLOD(Mesh[] in_TileMeshes, float GridSize, int GridCount, int LODIndex, Shader TileShader, GameObject parent, ref Material LODMat, bool bIsLastLOD = false)
+    {
+        GameObject LOD = new GameObject("LOD_" + LODIndex.ToString());
+        LOD.transform.parent = parent.transform;
+        float LODScale = Mathf.Pow(2.0f, LODIndex);
+
+        float TileSize = GridSize * (float)GridCount;
+        int TileCount = 0;
+        Vector2[] TilesOffsets;
+        TileType[] TilesType;
+        int[] TilesRotate;
+        if (LODIndex == 0)
+        {
+            TileCount = 16;
+            TilesOffsets = new[] {new Vector2(-1.5f, 1.5f), new Vector2(-0.5f, 1.5f), new Vector2(0.5f, 1.5f), new Vector2(1.5f, 1.5f),
+                                  new Vector2(-1.5f, 0.5f), new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(1.5f, 0.5f),
+                                  new Vector2(-1.5f, -0.5f), new Vector2(-0.5f, -0.5f), new Vector2(0.5f, -0.5f), new Vector2(1.5f, -0.5f),
+                                  new Vector2(-1.5f, -1.5f), new Vector2(-0.5f, -1.5f), new Vector2(0.5f, -1.5f), new Vector2(1.5f, -1.5f) };
+            TilesType = new[] {TileType.SlimXFatZ,    TileType.SlimX,    TileType.SlimX,    TileType.SlimXZ,
+                               TileType.FatX,         TileType.Interior, TileType.Interior, TileType.SlimX,
+                               TileType.FatX,         TileType.Interior, TileType.Interior, TileType.SlimX,
+                               TileType.FatXZ,        TileType.FatX,     TileType.FatX,     TileType.FatXSlimZ };
+            TilesRotate = new[] { -90,    -90,    -90,    0,
+                                  180,    0,      0,      0,
+                                  180,    0,      0,      0,
+                                  180,    90,     90,     90};
+        }
+        else 
+        {
+            TileCount = 12;
+            TilesOffsets = new[] {new Vector2(-1.5f, 1.5f), new Vector2(-0.5f, 1.5f), new Vector2(0.5f, 1.5f), new Vector2(1.5f, 1.5f),
+                                  new Vector2(-1.5f, 0.5f),                                                      new Vector2(1.5f, 0.5f),
+                                  new Vector2(-1.5f, -0.5f),                                                     new Vector2(1.5f, -0.5f),
+                                  new Vector2(-1.5f, -1.5f), new Vector2(-0.5f, -1.5f), new Vector2(0.5f, -1.5f), new Vector2(1.5f, -1.5f) };
+
+            if(!bIsLastLOD)
+                TilesType = new[] {TileType.SlimXFatZ,    TileType.SlimX,    TileType.SlimX,    TileType.SlimXZ,
+                               TileType.FatX,                                                TileType.SlimX,
+                               TileType.FatX,                                                TileType.SlimX,
+                               TileType.FatXZ,        TileType.FatX,     TileType.FatX,     TileType.FatXSlimZ };
+            else
+                TilesType = new[] {TileType.FatXZOuter,    TileType.FatXOuter,    TileType.FatXOuter,    TileType.FatXZOuter,
+                               TileType.FatXOuter,                                                      TileType.FatXOuter,
+                               TileType.FatXOuter,                                                      TileType.FatXOuter,
+                               TileType.FatXZOuter,        TileType.FatXOuter,     TileType.FatXOuter,     TileType.FatXZOuter };
+
+            TilesRotate = new[] {   -90,    -90,    -90,    0,
+                                    180,                    0,
+                                    180,                    0,
+                                    180,    90,     90,     90 };
+
+        }
+        
+
+        Material TileMat = new Material(TileShader);
+        TileMat.SetFloat("_GridSize", GridSize * LODScale);
+        TileMat.SetVector("_TransitionParam", new Vector4(TileSize*1.25f, TileSize * 1.25f, 0.5f* TileSize, 0.5f * TileSize) * LODScale);
+        TileMat.SetVector("_CenterPos", LOD.transform.position);
+
+        for (int i = 0; i < TileCount; i++)
+        {
+            GameObject CTile = new GameObject(TilesType[i].ToString() + "_" + i.ToString());
+            CTile.transform.parent = LOD.transform;
+            CTile.AddComponent<MeshFilter>();
+            CTile.AddComponent<MeshRenderer>();
+            CTile.GetComponent<MeshFilter>().sharedMesh = in_TileMeshes[(int)TilesType[i]];
+            CTile.transform.localPosition = new Vector3(TilesOffsets[i].x * TileSize, 0, TilesOffsets[i].y * TileSize);
+            CTile.transform.localRotation = Quaternion.Euler(0, TilesRotate[i], 0);
+
+            
+            CTile.GetComponent<MeshRenderer>().sharedMaterial = TileMat;  
+        }
+
+        LODMat = TileMat;
+        LOD.transform.localScale = new Vector3(LODScale, 1, LODScale);
+        return LOD;
     }
 }
