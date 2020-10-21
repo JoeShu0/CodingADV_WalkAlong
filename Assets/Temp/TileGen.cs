@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
+using System;
+using System.Threading;
 
 public class TileGen : MonoBehaviour
 {
@@ -21,9 +24,27 @@ public class TileGen : MonoBehaviour
     }
 
     private Material TileMat, TileMat2, TileMat4, TileMatY;
+    private GameObject TileObj;
+    private Mesh[] TileMeshes = new Mesh[(int)TileType.Count];
+    private float My_Timer = 0.0f;
+    private int MI = 0;
     // Start is called before the first frame update
     void Start()
     {
+        //string[] STileType = (string[])Enum.GetValues(typeof(TileType));
+        for (int i = 0; i < (int)TileType.Count; i++)
+        {
+            TileMeshes[i] = GenerateTile((TileType)i, 0.25f, 8);
+        }
+        
+        TileObj = new GameObject("TestTile");
+        TileObj.AddComponent<MeshFilter>();
+        TileObj.AddComponent<MeshRenderer>();
+        //TileObj.GetComponent<MeshFilter>().sharedMesh = GenerateTile(TileType.Interior, 0.25f, 8);
+        TileObj.transform.parent = gameObject.transform;
+        TileObj.GetComponent<MeshFilter>().sharedMesh = TileMeshes[7];
+
+        /*
         GameObject goin = GenerateTile(10, 10, 11, 11);
 
         GameObject go00 = GenerateTile(9, 10, 10, 11);
@@ -99,14 +120,26 @@ public class TileGen : MonoBehaviour
 
 
         GenerateTile(TileType.Count, 10, 10);
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
-        TileMat.SetVector("_CenterPos", gameObject.transform.position);
-        TileMat2.SetVector("_CenterPos", gameObject.transform.position);
-        TileMat4.SetVector("_CenterPos", gameObject.transform.position);
+        //TileMat.SetVector("_CenterPos", gameObject.transform.position);
+        //TileMat2.SetVector("_CenterPos", gameObject.transform.position);
+        //TileMat4.SetVector("_CenterPos", gameObject.transform.position);
+        
+        My_Timer += Time.deltaTime;
+        if (My_Timer > 1.0f)
+        {
+            TileObj.GetComponent<MeshFilter>().sharedMesh = TileMeshes[MI];
+            MI =(MI+1)%9;
+            My_Timer = 0.0f;
+        }
+        
+        //TileObj.GetComponent<MeshFilter>().sharedMesh = TileMeshes[7];
+
     }
 
     GameObject GenerateTile(float tileSizeX, float tileSizeZ, int tileXPCount, int tileZPCount)
@@ -184,7 +217,122 @@ public class TileGen : MonoBehaviour
         //make sure the grid size is fixed bwteen tiles si that the snap works
         //the generated mesh should have the pivot on the center of the interior type. and consistent through out all tiles
         //So when placing the tiles we can just use symmetry~
+
+        //try build a interior tile
+        Mesh tilemesh = new Mesh();
+        tilemesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        int GridCountX = GridCount;
+        int GridCountZ = GridCount;
+        float TileSizeX = GridSize * GridCountX;
+        float TileSizeZ = GridSize * GridCountZ;
+
+        bool bIsOutertile = false;
+        switch(type)
+        { 
+            case TileType.Interior:
+                break;
+            case TileType.FatX:
+                GridCountX++;
+                break;
+            case TileType.SlimX:
+                GridCountX--;
+                break;
+            case TileType.FatXSlimZ:
+                GridCountX++;
+                GridCountZ--;
+                break;
+            case TileType.SlimXFatZ:
+                GridCountX--;
+                GridCountZ++;
+                break;
+            case TileType.SlimXZ:
+                GridCountX--;
+                GridCountZ--;
+                break;
+            case TileType.FatXZ:
+                GridCountX++;
+                GridCountZ++;
+                break;
+            case TileType.FatXOuter:
+                GridCountX++;
+                bIsOutertile = true;
+                break;
+            case TileType.FatXZOuter:
+                GridCountX++;
+                GridCountZ++;
+                bIsOutertile = true;
+                break;
+            case TileType.Count:
+                Debug.LogError("Invalide TileType!");
+                return null;
+        }
+
+        Vector3[] vertices = new Vector3[(GridCountX + 1) * (GridCountZ + 1)];
+        //float incrementX = tileSizeX / (float)(tileXPCount - 1);
+        //float incrementZ = tileSizeZ / (float)(tileZPCount - 1);
+        for (int x = 0; x < GridCountX + 1; x++)
+        {
+            for (int z = 0; z < GridCountZ + 1; z++)
+            {
+                vertices[x * (GridCountZ + 1) + z] = new Vector3(GridSize * x, 0.0f, GridSize * z) 
+                    + new Vector3(-0.5f * TileSizeX, 0, -0.5f * TileSizeX);
+            }
+        }
+        if(bIsOutertile)
+            for(int i = 0; i < vertices.Length; i++)
+            {
+                if (vertices[i].x - 0.5f * TileSizeX > 0.1f )
+                    vertices[i].x *= 10.0f;
+                if (vertices[i].z - 0.5f * TileSizeZ > 0.1f)
+                    vertices[i].z *= 10.0f;
+            }
+        tilemesh.vertices = vertices;
+
+        int[] triangles = new int[(GridCountX) * (GridCountZ) * 6];
+        int QuadOrient = 0;
+        for (int x = 0; x < GridCountX; x++)
+        {
+            for (int z = 0; z < GridCountZ; z++)
+            {
+                //quad num x*(HeightMapSize-1) + z
+                int QuadNum = x * (GridCountZ) + z;
+                int TLPont = x * (GridCountZ + 1) + z;
+                if (QuadOrient % 2 == 0)
+                {
+                    triangles[QuadNum * 6 + 0] = TLPont;
+                    triangles[QuadNum * 6 + 1] = TLPont + 1;
+                    triangles[QuadNum * 6 + 2] = TLPont + GridCountZ + 2;
+                    triangles[QuadNum * 6 + 3] = TLPont;
+                    triangles[QuadNum * 6 + 4] = TLPont + GridCountZ + 2;
+                    triangles[QuadNum * 6 + 5] = TLPont + GridCountZ + 1;
+                }
+                else
+                {
+                    triangles[QuadNum * 6 + 0] = TLPont;
+                    triangles[QuadNum * 6 + 1] = TLPont + 1;
+                    triangles[QuadNum * 6 + 2] = TLPont + GridCountZ + 1;
+                    triangles[QuadNum * 6 + 3] = TLPont + GridCountZ + 1;
+                    triangles[QuadNum * 6 + 4] = TLPont + 1;
+                    triangles[QuadNum * 6 + 5] = TLPont + GridCountZ + 2;
+
+                }
+                QuadOrient++;
+
+
+            }
+            QuadOrient += GridCountZ % 2 + 1;
+        }
+        tilemesh.triangles = triangles;
+
+        Vector2[] UVs = new Vector2[vertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            UVs[i] = new Vector2(vertices[i].z / (float)TileSizeX, vertices[i].x / (float)TileSizeZ);
+        }
+
+        tilemesh.uv = UVs;
+
         Debug.Log(type);
-        return new Mesh();
+        return tilemesh;
     }
 }
