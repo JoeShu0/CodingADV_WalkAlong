@@ -26,6 +26,7 @@ public class GerstnerTest : MonoBehaviour
         float theta = Time.time + OriginalPos.x;
         float sin = Mathf.Sin(theta);
         float cos = Mathf.Cos(theta);
+        //* Mathf.PI
         float Wx = _Amplitude * Mathf.Cos(Vector3.Dot(OriginalPos, _Direction)* (2 / _WaveLength) + Time.time * (_Speed * 2 / _WaveLength)) * _Direction.x;
         float Wz = _Amplitude * Mathf.Cos(Vector3.Dot(OriginalPos, _Direction) * (2 / _WaveLength) + Time.time * (_Speed * 2 / _WaveLength)) * _Direction.z;
         float Wy = _Amplitude * Mathf.Sin(Vector3.Dot(OriginalPos, _Direction) * (2 / _WaveLength) + Time.time * (_Speed * 2 / _WaveLength));

@@ -167,10 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &11206284
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -277,10 +277,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &33659239
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -373,10 +373,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &37095513
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -497,10 +497,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &44003658
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -607,10 +607,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &59517204
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -703,10 +703,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &95280831
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -827,10 +827,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &97005122
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1020,10 +1020,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &126910508
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1130,10 +1130,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &140215770
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1240,10 +1240,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &149809157
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1336,10 +1336,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &174358487
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1460,10 +1460,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &174953226
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1570,10 +1570,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &190522581
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1680,10 +1680,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &198714178
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1790,10 +1790,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &214587903
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1900,10 +1900,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &217521064
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2010,10 +2010,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &217652384
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2106,10 +2106,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &261371884
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2230,10 +2230,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &269893434
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2432,10 +2432,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &333861776
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2542,10 +2542,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &336010348
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2652,10 +2652,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &441423506
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2762,10 +2762,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &483891598
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2872,10 +2872,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &487091324
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2982,10 +2982,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &558374605
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3092,10 +3092,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &561827142
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3202,10 +3202,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &565791088
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3312,10 +3312,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &569886837
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3422,10 +3422,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &592183772
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3532,10 +3532,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &616990000
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3642,10 +3642,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &621869627
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3752,10 +3752,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &623081806
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3862,10 +3862,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &659685446
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3972,10 +3972,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &668139030
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4082,10 +4082,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &696216130
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4192,10 +4192,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &696366893
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4302,10 +4302,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &706047762
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4412,10 +4412,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &709627290
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4522,10 +4522,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &739330329
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4632,10 +4632,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &754669660
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4742,10 +4742,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &765851040
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4852,10 +4852,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &817345494
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4962,10 +4962,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &840383446
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5072,10 +5072,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &859202450
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5182,10 +5182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &880710358
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5292,10 +5292,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &896032185
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5402,10 +5402,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &905211716
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5512,10 +5512,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &919747941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5608,10 +5608,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &923453757
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5732,10 +5732,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &924047865
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5842,10 +5842,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &943123477
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5952,10 +5952,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &944909245
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6062,10 +6062,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &955006355
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6172,10 +6172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &966233478
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6282,10 +6282,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &972728780
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6392,10 +6392,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &990312335
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6502,10 +6502,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &998132063
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6612,10 +6612,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1044601560
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6722,10 +6722,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1058649579
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6832,10 +6832,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1060204919
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6942,10 +6942,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1078575381
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7052,10 +7052,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1084933550
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7148,10 +7148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1091782056
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7272,10 +7272,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1121512444
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7368,10 +7368,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1143096815
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7492,10 +7492,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1159806150
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7662,10 +7662,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!1 &1170346491
 GameObject:
   m_ObjectHideFlags: 0
@@ -7712,10 +7712,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1170346494
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7822,10 +7822,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1180779305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7932,10 +7932,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1197149303
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8042,10 +8042,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1209952911
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8138,10 +8138,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1225516051
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8227,7 +8227,7 @@ GameObject:
   - component: {fileID: 1237870400}
   - component: {fileID: 1237870399}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Ocean
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8246,6 +8246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileShader: {fileID: 4800000, guid: 41fb7b7f058091d498331ea4e8d83afd, type: 3}
+  ShapeShader: {fileID: 7200000, guid: 9542cdf7a1499cf479a89df699c6a03d, type: 3}
 --- !u!4 &1237870400
 Transform:
   m_ObjectHideFlags: 0
@@ -8306,10 +8307,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1241750569
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8416,10 +8417,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1247903596
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8526,10 +8527,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1274039941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8794,10 +8795,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1290392677
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8904,10 +8905,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1296306355
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9000,10 +9001,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1300524045
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9124,10 +9125,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1322343283
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9234,10 +9235,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1325765410
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9344,10 +9345,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1369042392
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9454,10 +9455,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1382171222
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9564,10 +9565,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1437984404
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9674,10 +9675,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1448383309
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9770,10 +9771,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1468122719
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9880,10 +9881,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1471290712
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10004,10 +10005,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1518469738
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10114,10 +10115,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1522318913
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10224,10 +10225,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1526173346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10334,10 +10335,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1563392717
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10444,10 +10445,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1584779696
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10554,10 +10555,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1587680553
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10664,10 +10665,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1647742643
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10760,10 +10761,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1657907482
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10884,10 +10885,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1679479075
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10994,10 +10995,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1700872509
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11104,10 +11105,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1750380761
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11214,10 +11215,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1753373732
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11324,10 +11325,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1761887133
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11434,10 +11435,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1775499562
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11544,10 +11545,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1794730545
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11654,10 +11655,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1811325456
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11764,10 +11765,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1811484984
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11874,10 +11875,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1819052897
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11984,10 +11985,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1838232251
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12094,10 +12095,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1847981975
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12204,10 +12205,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1863360599
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12314,10 +12315,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1865956186
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12424,10 +12425,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1875057690
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12534,10 +12535,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1886359546
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12644,10 +12645,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1886843287
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12740,10 +12741,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1923838822
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12864,10 +12865,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1987199873
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12974,10 +12975,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &1993108288
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13084,10 +13085,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2011919997
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13194,10 +13195,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2014120230
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13304,10 +13305,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2016607860
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13414,10 +13415,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2016613702
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13524,10 +13525,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2016644728
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13634,10 +13635,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2032800652
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13744,10 +13745,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2039224184
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13840,10 +13841,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2043390599
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13950,10 +13951,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2086802293
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14074,10 +14075,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2088217624
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14184,10 +14185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2088292919
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14294,10 +14295,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2089812494
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14404,10 +14405,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2097696479
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14514,10 +14515,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9079aee8c4d31f5448efbb3e52032243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _WaveLength: 2
+  _WaveLength: 3
   _Amplitude: 1
-  _Speed: 1
-  _Direction: {x: 1, y: 0, z: 1}
+  _Speed: 5
+  _Direction: {x: 1, y: 0, z: 2}
 --- !u!65 &2112216708
 BoxCollider:
   m_ObjectHideFlags: 0

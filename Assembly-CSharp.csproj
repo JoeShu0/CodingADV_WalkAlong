@@ -71,10 +71,11 @@
     <Compile Include="Assets\RayMarching\Scripts\RayMarchRender.cs" />
     <Compile Include="Assets\Temp\GerstnerTest.cs" />
     <Compile Include="Assets\Temp\TileGen.cs" />
+    <Compile Include="Assets\Temp\TileObjGen.cs" />
     <None Include="Assets\Temp\SnapAndTransition.shader" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColorShader.shader" />
+    <None Include="Assets\Temp\DisplaceMapGen.compute" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColor.shader" />
-    <None Include="Assets\Temp\TestTileShader.shader" />
     <None Include="Assets\RayMarching\Scripts\RayMarchShader.compute" />
     <None Include="Assets\ComputeShader\Scripts\ErosionShader.compute" />
     <Reference Include="UnityEngine">
