@@ -67,6 +67,11 @@
                 
                 //Gen UV
                 float2 UV = (WPos.xz) / _LODSize + 0.5f;
+
+                //sample displacement tex
+                float3 col = tex2Dlod(_MainTex, float4(UV,0,0)).rgb;
+                //Displace Vertex
+                WPos += float4(col,0.0f);
                 
                 //back to LocalSpace
                 float4 LPos = mul(unity_WorldToObject, WPos);
@@ -85,7 +90,7 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return i.WPos;
-                return col;
+                //return col;
                 return float4(0.5f,0.5f,0.5f,1.0f);
             }
             ENDCG

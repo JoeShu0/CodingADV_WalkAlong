@@ -35,6 +35,7 @@ public class TileGen : MonoBehaviour
     static float GridSize = 0.5f;
     static int GridCountPerTile = 24;//this value haveto be thr mul of 4 since the snapping requires it
     static int RTSize = 512;
+    static int WaveCount = 2;
 
     private Material[] LODMats = new Material[LODCount];
     private GameObject TileObj;
@@ -45,6 +46,7 @@ public class TileGen : MonoBehaviour
     private int KIndex;
 
     private List<WaveData> WaveDatas = new List<WaveData>();
+    private WaveData[] WDs = new WaveData[WaveCount];
 
     // Start is called before the first frame update
     void Start()
@@ -77,27 +79,21 @@ public class TileGen : MonoBehaviour
 
         KIndex = ShapeShader.FindKernel("CSMain");
         //ShapeShader.SetTexture(KIndex, "Result", LODDisplaceMaps[0]);
+        ShapeShader.SetInt("WaveCount", WaveCount);
         
 
         threadGroupX = Mathf.CeilToInt(RTSize / 32.0f);
         threadGroupY = Mathf.CeilToInt(RTSize / 32.0f);
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
 
-        ComputeBuffer WaveBuffer = new ComputeBuffer(2, 16);
-        WaveData WD01 = new WaveData();
-        WD01.WaveLength = 5.0f;
-        WD01.Amplitude = 2.0f;
-        WD01.Direction = new Vector2(1.0f, 0.0f);
-        WaveDatas.Add(WD01);
-        WaveData WD02 = new WaveData();
-        WD02.WaveLength = 5.0f;
-        WD02.Amplitude = 2.0f;
-        WD02.Direction = new Vector2(1.0f, 0.0f);
-        WaveDatas.Add(WD02);
+        WDs[0].WaveLength = 5.0f;
+        WDs[0].Amplitude = 0.5f;
+        WDs[0].Direction = new Vector2(1.0f, 0.0f);
+        WDs[1].WaveLength = 2.0f;
+        WDs[1].Amplitude = 0.0f;
+        WDs[1].Direction = new Vector2(0.0f, 1.0f);
 
-        WaveBuffer.SetData(WaveDatas);
-
-        ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
+        
 
         //WaveBuffer.Release();
 
@@ -111,6 +107,10 @@ public class TileGen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ComputeBuffer WaveBuffer = new ComputeBuffer(WaveCount, 16);
+        WaveBuffer.SetData(WDs);
+        ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
+
         for (int i = 0; i < LODDisplaceMaps.Length; i++)
         {
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * (i + 1));
@@ -119,7 +119,8 @@ public class TileGen : MonoBehaviour
             ShapeShader.SetTexture(KIndex, "Result", LODDisplaceMaps[i]);
             ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
         }
-        
+
+        WaveBuffer.Release();
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
 
 
@@ -346,6 +347,7 @@ public class TileGen : MonoBehaviour
                 LODDisplaceMaps[i].Release();
             LODDisplaceMaps[i] = new RenderTexture(RTSize, RTSize, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             LODDisplaceMaps[i].enableRandomWrite = true;
+            LODDisplaceMaps[i].wrapMode = TextureWrapMode.Repeat;
             LODDisplaceMaps[i].Create();
         }  
     }

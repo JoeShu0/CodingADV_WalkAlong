@@ -3,12 +3,12 @@
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
-const float PI = 3.14159265;
 
 RWTexture2D<float4> Result;
 float LODSize;
 int LODIndex;
 float _Time;
+int WaveCount;
 
 struct Wave
 {
@@ -20,17 +20,27 @@ StructuredBuffer<Wave> WavesBuffer;
 
 float3 GetWaveSum(float3 OriginalWPos)
 {
-    float _Amplitude = WavesBuffer[0].Amplitude;
-    float _WaveLength = WavesBuffer[0].WaveLength;
-    float k = 2 * PI / _WaveLength;
-    float _Speed = sqrt(9.8 / k);
-    float2 _Direction = WavesBuffer[0].Direction;
-    float f = k * (dot(OriginalWPos, float3(_Direction.x, 0 , _Direction.y)) + _Time);
+    float PI =3.14159265f; 
 
-    float Wx = _Amplitude * cos(f) * _Direction.x;
-    float Wz = _Amplitude * cos(f) * _Direction.y;
-    float Wy = _Amplitude * sin(f);
-    return float3(OriginalWPos.x + Wx, OriginalWPos.y + Wy, OriginalWPos.z + Wz);
+    float3 Displace = float3(0.0f,0.0f,0.0f);
+
+    for(int i=0;i<WaveCount;i++)
+    {
+        float _Amplitude = WavesBuffer[i].Amplitude;
+        float _WaveLength = WavesBuffer[i].WaveLength;
+        float k = 2 * PI / _WaveLength;
+        float _Speed = sqrt(9.8 / k);
+        float2 _Direction = WavesBuffer[i].Direction;
+        float f = k * (dot(OriginalWPos, float3(_Direction.x, 0 , _Direction.y)) + _Time);
+
+        float Wx = _Amplitude * cos(f) * _Direction.x;
+        float Wz = _Amplitude * cos(f) * _Direction.y;
+        float Wy = _Amplitude * sin(f);
+
+        Displace += float3(Wx, Wy, Wz);
+    }
+    
+    return Displace;
 }
 
 [numthreads(32,32,1)]
@@ -43,24 +53,9 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float3 WPos = float3((id.x / float(width) - 0.5f) * LODSize, 0.0f, (id.y / float(height) - 0.5f) * LODSize);
 
     //WavesBuffer[0].WaveLength
-    //float3 DisplacedWPos = GetWaveSum(WPos);
-    //float3 Displacement = DisplacedWPos - WPos;
+    float3 Displacement = GetWaveSum(WPos);
 
-    float3 OriginalWPos = WPos;
-
-    float _Amplitude = WavesBuffer[0].Amplitude;
-    float _WaveLength = WavesBuffer[0].WaveLength;
-    float k = 2 * PI / _WaveLength;
-    float _Speed = sqrt(9.8 / k);
-    float2 _Direction = WavesBuffer[0].Direction;
-    float f = k * (dot(OriginalWPos, float3(_Direction.x, 0, _Direction.y)) + _Time * _Speed);
-
-    float Wx = _Amplitude * cos(f) * _Direction.x;
-    float Wz = _Amplitude * cos(f) * _Direction.y;
-    float Wy = _Amplitude * sin(f);
-    float3 DisplacedWPos = float3(OriginalWPos.x + Wx, OriginalWPos.y + Wy, OriginalWPos.z + Wz);
-
-    Result[id.xy] = float4(cos(_Time * _Speed)*0.5f + 0.5f, 0.0f, 0.0f,1.0f);
+    Result[id.xy] = float4(Displacement,1.0f);
     /*
     if (length(WPos) < 12.0f)
         Result[id.xy] = float4(1, 0, 0, 0);
