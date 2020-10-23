@@ -5,6 +5,7 @@
 // with cs.SetTexture
 
 RWTexture2D<float4> Result;
+float3 CenterPos;
 float LODSize;
 int LODIndex;
 float _Time;
@@ -31,7 +32,7 @@ float3 GetWaveSum(float3 OriginalWPos)
         float k = 2 * PI / _WaveLength;
         float _Speed = sqrt(9.8 / k);
         float2 _Direction = WavesBuffer[i].Direction;
-        float f = k * (dot(OriginalWPos, float3(_Direction.x, 0 , _Direction.y)) + _Time);
+        float f = k * (dot(OriginalWPos, float3(_Direction.x, 0 , _Direction.y)) + _Time* _Speed);
 
         float Wx = _Amplitude * cos(f) * _Direction.x;
         float Wz = _Amplitude * cos(f) * _Direction.y;
@@ -50,16 +51,19 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     uint width, height;
     Result.GetDimensions(width, height);
 
-    float3 WPos = float3((id.x / float(width) - 0.5f) * LODSize, 0.0f, (id.y / float(height) - 0.5f) * LODSize);
+    //D3D CoordSystem
+    float3 WPos = float3((id.x / float(width) - 0.5f) * LODSize, 0.0f, (id.y / float(height) - 0.5f) * LODSize) + CenterPos;
 
     //WavesBuffer[0].WaveLength
     float3 Displacement = GetWaveSum(WPos);
 
     Result[id.xy] = float4(Displacement,1.0f);
+    //Result[id.xy] = float4(1.0f, 0.0f, 0.0f, 1.0f);
     /*
-    if (length(WPos) < 12.0f)
+    if (length(WPos-float3(25,0,10)) < 12.0f)
         Result[id.xy] = float4(1, 0, 0, 0);
     else
         Result[id.xy] = float4(0.5f, 0.5f, 0.5f, 1.0f);
-        */
+    */
+        
 }

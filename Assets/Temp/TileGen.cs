@@ -86,12 +86,12 @@ public class TileGen : MonoBehaviour
         threadGroupY = Mathf.CeilToInt(RTSize / 32.0f);
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
 
-        WDs[0].WaveLength = 5.0f;
-        WDs[0].Amplitude = 0.5f;
-        WDs[0].Direction = new Vector2(1.0f, 0.0f);
+        WDs[0].WaveLength = 100.0f;
+        WDs[0].Amplitude = 1.0f;
+        WDs[0].Direction = new Vector2(1f, 2.0f);
         WDs[1].WaveLength = 2.0f;
         WDs[1].Amplitude = 0.0f;
-        WDs[1].Direction = new Vector2(0.0f, 1.0f);
+        WDs[1].Direction = new Vector2(0.5f, 1.0f);
 
         
 
@@ -110,10 +110,12 @@ public class TileGen : MonoBehaviour
         ComputeBuffer WaveBuffer = new ComputeBuffer(WaveCount, 16);
         WaveBuffer.SetData(WDs);
         ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
+        ShapeShader.SetFloats("CenterPos", new float[] {gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z});
+        //ShapeShader.SetVector("CenterPos", WaveBuffer);
 
         for (int i = 0; i < LODDisplaceMaps.Length; i++)
         {
-            ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * (i + 1));
+            ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2,i));
             ShapeShader.SetInt("LODIndex", i);
             ShapeShader.SetFloat("_Time", Time.time);
             ShapeShader.SetTexture(KIndex, "Result", LODDisplaceMaps[i]);
@@ -266,7 +268,7 @@ public class TileGen : MonoBehaviour
         float LODScale = Mathf.Pow(2.0f, LODIndex);
 
         float TileSize = GridSize * (float)GridCount;
-        float LODSize = TileSize * 4.0f * (LODIndex+1);
+        float LODSize = TileSize * 4.0f * Mathf.Pow(2,LODIndex);
         int TileCount = 0;
         Vector2[] TilesOffsets;
         TileType[] TilesType;
@@ -347,7 +349,7 @@ public class TileGen : MonoBehaviour
                 LODDisplaceMaps[i].Release();
             LODDisplaceMaps[i] = new RenderTexture(RTSize, RTSize, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             LODDisplaceMaps[i].enableRandomWrite = true;
-            LODDisplaceMaps[i].wrapMode = TextureWrapMode.Repeat;
+            LODDisplaceMaps[i].wrapMode = TextureWrapMode.Clamp;
             LODDisplaceMaps[i].Create();
         }  
     }

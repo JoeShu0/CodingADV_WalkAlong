@@ -47,8 +47,10 @@
             v2f vert (appdata v)
             {
                 v2f o;
+                
                 //Snapping
                 float4 WPos = mul(unity_ObjectToWorld, v.vertex);
+                
                 float Grid = _GridSize;
                 float Grid2 = _GridSize * 2.0f;
                 float Grid4 = _GridSize * 4.0f;
@@ -66,19 +68,27 @@
                     WPos.z += POffset.y * Grid4 * TransiFactor;
                 
                 //Gen UV
-                float2 UV = (WPos.xz) / _LODSize + 0.5f;
+                float2 UV = (WPos.xz - _CenterPos.xz) / _LODSize + 0.5f;
 
                 //sample displacement tex
                 float3 col = tex2Dlod(_MainTex, float4(UV,0,0)).rgb;
                 //Displace Vertex
                 WPos += float4(col,0.0f);
+                //float4 OWPos = mul(unity_ObjectToWorld, v.vertex);
+                //o.WPos = fmod(OWPos, 10.0f) / 10.0f;
                 
                 //back to LocalSpace
                 float4 LPos = mul(unity_WorldToObject, WPos);
+                //position debug
+                //WPos = mul(unity_ObjectToWorld, LPos);
+
                 
                 o.vertex = UnityObjectToClipPos(LPos);
+                
+
                 o.uv = TRANSFORM_TEX(UV, _MainTex);
-                o.WPos = WPos;
+                o.WPos = fmod(WPos, 50.0f) / 50.0f;
+                //o.WPos = float4(col, 0.0f);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
