@@ -86,22 +86,39 @@ public class TileGen : MonoBehaviour
         threadGroupY = Mathf.CeilToInt(RTSize / 32.0f);
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
 
-        WDs[0].WaveLength = 100.0f;
+        WDs[0].WaveLength = 50.0f;
         WDs[0].Amplitude = 1.0f;
         WDs[0].Direction = new Vector2(1f, 2.0f);
-        WDs[1].WaveLength = 2.0f;
-        WDs[1].Amplitude = 0.0f;
-        WDs[1].Direction = new Vector2(0.5f, 1.0f);
+        WDs[1].WaveLength = 10.0f;
+        WDs[1].Amplitude = 0.2f;
+        WDs[1].Direction = new Vector2(0.75f, -1.0f);
 
-        
+
 
         //WaveBuffer.Release();
+        //LODMats[0].SetTexture("_LODDisTex", LODDisplaceMaps[1]);
+        //LODMats[0].SetFloat("_AddUVScale", 0.5f);
 
+        //LODMats[1].SetTexture("_LODDisTex", LODDisplaceMaps[1]);
+        
+
+        
         for (int i = 0; i < LODDisplaceMaps.Length; i++)
         {
-            LODMats[i].mainTexture = LODDisplaceMaps[i];
+            if (i + 1 < LODDisplaceMaps.Length)
+            {
+                LODMats[i].SetTexture("_LODDisTex", LODDisplaceMaps[i]);
+                LODMats[i].SetTexture("_NextLODDisTex", LODDisplaceMaps[i+1]);
+            }
+            else 
+            {
+                LODMats[i].SetTexture("_LODDisTex", LODDisplaceMaps[i]);
+                LODMats[i].SetTexture("_NextLODDisTex", LODDisplaceMaps[i]);
+            }
+            
         }
         
+
     }
 
     // Update is called once per frame

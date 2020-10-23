@@ -3,10 +3,13 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _LODDisTex("LODDisTexture", 2D) = "white" {}
+        _NextLODDisTex("NextLODDisTexture", 2D) = "white" {}
         _GridSize ("GridSize", Float) = 1.0
         _TransitionParam("Transition", Vector) = (0.0,0.0,15.0,15.0)
         _CenterPos ("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
         _LODSize ("LODPatchSize", Float) = 1.0
+        _AddUVScale("UVScale", Float) = 1.0
     }
     SubShader
     {
@@ -39,10 +42,16 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            sampler2D _LODDisTex;
+            float4 _LODDisTex_ST;
+            sampler2D _NextLODDisTex;
+            float4 _NextLODDisTex_ST;
+
             float _GridSize;
             float4 _TransitionParam;
             float4 _CenterPos;
             float _LODSize;
+            float _AddUVScale;
 
             v2f vert (appdata v)
             {
@@ -68,10 +77,19 @@
                     WPos.z += POffset.y * Grid4 * TransiFactor;
                 
                 //Gen UV
-                float2 UV = (WPos.xz - _CenterPos.xz) / _LODSize + 0.5f;
+                float2 UV = (WPos.xz - _CenterPos.xz) / _LODSize *_AddUVScale + 0.5f;
+                float2 UV_n = (WPos.xz - _CenterPos.xz) / _LODSize * 0.5f + 0.5f;
 
                 //sample displacement tex
-                float3 col = tex2Dlod(_MainTex, float4(UV,0,0)).rgb;
+                float3 col = tex2Dlod(_LODDisTex, float4(UV,0,0)).rgb;
+                float3 col_n = tex2Dlod(_NextLODDisTex, float4(UV_n, 0, 0)).rgb;
+
+                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.8f)*5.0f, 0, 1);
+                float LODBlendFactor = max(LODUVblend.x, LODUVblend.y);
+                col = lerp(col, col_n, LODBlendFactor);
+                //blend area debug
+                //col = float3(LODUVblend,0.0f);
+
                 //Displace Vertex
                 WPos += float4(col,0.0f);
                 //float4 OWPos = mul(unity_ObjectToWorld, v.vertex);
@@ -86,9 +104,9 @@
                 o.vertex = UnityObjectToClipPos(LPos);
                 
 
-                o.uv = TRANSFORM_TEX(UV, _MainTex);
+                o.uv = TRANSFORM_TEX(UV, _LODDisTex);
                 o.WPos = fmod(WPos, 50.0f) / 50.0f;
-                //o.WPos = float4(col, 0.0f);
+                o.WPos = float4(col, 0.0f);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
@@ -96,7 +114,7 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
+                fixed4 col = tex2D(_LODDisTex, i.uv);
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return i.WPos;
