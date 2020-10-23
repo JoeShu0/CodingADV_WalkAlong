@@ -3,8 +3,11 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _SkyTex ("ReflectTex", Cube) = "white" {}
         _LODDisTex("LODDisTexture", 2D) = "white" {}
         _NextLODDisTex("NextLODDisTexture", 2D) = "white" {}
+        _LODNTex("LODNTexture", 2D) = "white" {}
+        _NextLODNTex("NextLODNTexture", 2D) = "white" {}
         _GridSize ("GridSize", Float) = 1.0
         _TransitionParam("Transition", Vector) = (0.0,0.0,15.0,15.0)
         _CenterPos ("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
@@ -42,10 +45,19 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+
+            uniform samplerCUBE _SkyTex;
+
             sampler2D _LODDisTex;
             float4 _LODDisTex_ST;
             sampler2D _NextLODDisTex;
             float4 _NextLODDisTex_ST;
+
+            sampler2D _LODNTex;
+            float4 _LODNTex_ST;
+            sampler2D _NextLODNTex;
+            float4 _NextLODNTex_ST;
+
 
             float _GridSize;
             float4 _TransitionParam;
@@ -105,7 +117,7 @@
                 
 
                 o.uv = TRANSFORM_TEX(UV, _LODDisTex);
-                o.WPos = fmod(WPos, 50.0f) / 50.0f;
+                o.WPos = WPos;
                 o.WPos = float4(col, 0.0f);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
@@ -113,13 +125,25 @@
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_LODDisTex, i.uv);
+                // sample the normal texture
+                float4 _Normal = tex2D(_LODNTex, i.uv);
+                
+                //_WorldSpaceCameraPos 
+                float3 reflectDir = reflect(_WorldSpaceCameraPos, _Normal.xyz);
+
+                float4 skyData = texCUBE(_SkyTex, reflectDir);
+                //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
+                
+                float3 lightDir = (unity_LightPosition[0] - i.WPos).rgb;
+
+                float4 col = float4(0.5f, 0.5f, 0.5f, 1.0f);
+                col *= dot(lightDir, _Normal.rgb);
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
-                //return i.WPos;
-                //return col;
-                return float4(0.5f,0.5f,0.5f,1.0f);
+                //return float4(lightDir,1.0f);
+                //return _Normal;
+                return col;
+                //return float4(0.5f,0.5f,0.5f,1.0f);
             }
             ENDCG
         }

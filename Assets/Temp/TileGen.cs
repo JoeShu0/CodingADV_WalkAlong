@@ -9,6 +9,7 @@ public class TileGen : MonoBehaviour
 {
     public Shader tileShader;
     public ComputeShader ShapeShader;
+    public Texture SkyTex;
 
     enum TileType
     {
@@ -27,7 +28,7 @@ public class TileGen : MonoBehaviour
     struct WaveData
     {
         public float WaveLength;
-        public float Amplitude;
+        public float Steepness;
         public Vector2 Direction;
     }
 
@@ -35,13 +36,14 @@ public class TileGen : MonoBehaviour
     static float GridSize = 0.5f;
     static int GridCountPerTile = 24;//this value haveto be thr mul of 4 since the snapping requires it
     static int RTSize = 512;
-    static int WaveCount = 2;
+    static int WaveCount = 3;
 
     private Material[] LODMats = new Material[LODCount];
     private GameObject TileObj;
     private Mesh[] TileMeshes = new Mesh[(int)TileType.Count];
 
     private RenderTexture[] LODDisplaceMaps = new RenderTexture[LODCount];
+    private RenderTexture[] LODNormalMaps = new RenderTexture[LODCount];
     private int threadGroupX, threadGroupY;
     private int KIndex;
 
@@ -75,7 +77,7 @@ public class TileGen : MonoBehaviour
 
 
 
-        InitLODRTs(LODDisplaceMaps, RTSize);
+        InitLODRTs(LODDisplaceMaps, LODNormalMaps, RTSize);
 
         KIndex = ShapeShader.FindKernel("CSMain");
         //ShapeShader.SetTexture(KIndex, "Result", LODDisplaceMaps[0]);
@@ -87,11 +89,14 @@ public class TileGen : MonoBehaviour
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
 
         WDs[0].WaveLength = 50.0f;
-        WDs[0].Amplitude = 1.0f;
-        WDs[0].Direction = new Vector2(1f, 2.0f);
-        WDs[1].WaveLength = 10.0f;
-        WDs[1].Amplitude = 0.2f;
-        WDs[1].Direction = new Vector2(0.75f, -1.0f);
+        WDs[0].Steepness = 0.4f;
+        WDs[0].Direction = new Vector2(1f, 0.5f);
+        WDs[1].WaveLength = 8.0f;
+        WDs[1].Steepness = 0.25f;
+        WDs[1].Direction = new Vector2(0.15f, -1.0f);
+        WDs[2].WaveLength = 12.0f;
+        WDs[2].Steepness = 0.1f;
+        WDs[2].Direction = new Vector2(-0.35f, -0.65f);
 
 
 
@@ -100,24 +105,28 @@ public class TileGen : MonoBehaviour
         //LODMats[0].SetFloat("_AddUVScale", 0.5f);
 
         //LODMats[1].SetTexture("_LODDisTex", LODDisplaceMaps[1]);
-        
 
-        
+
+
         for (int i = 0; i < LODDisplaceMaps.Length; i++)
         {
             if (i + 1 < LODDisplaceMaps.Length)
             {
                 LODMats[i].SetTexture("_LODDisTex", LODDisplaceMaps[i]);
                 LODMats[i].SetTexture("_NextLODDisTex", LODDisplaceMaps[i+1]);
+                LODMats[i].SetTexture("_LODNTex", LODNormalMaps[i]);
+                LODMats[i].SetTexture("_NextLODNTex", LODNormalMaps[i + 1]);
             }
             else 
             {
                 LODMats[i].SetTexture("_LODDisTex", LODDisplaceMaps[i]);
                 LODMats[i].SetTexture("_NextLODDisTex", LODDisplaceMaps[i]);
+                LODMats[i].SetTexture("_LODNTex", LODNormalMaps[i]);
+                LODMats[i].SetTexture("_NextLODNTex", LODNormalMaps[i]);
             }
             
         }
-        
+        LODMats[0].SetTexture("_SkyTex", SkyTex);
 
     }
 
@@ -135,7 +144,8 @@ public class TileGen : MonoBehaviour
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2,i));
             ShapeShader.SetInt("LODIndex", i);
             ShapeShader.SetFloat("_Time", Time.time);
-            ShapeShader.SetTexture(KIndex, "Result", LODDisplaceMaps[i]);
+            ShapeShader.SetTexture(KIndex, "Displace", LODDisplaceMaps[i]);
+            ShapeShader.SetTexture(KIndex, "Normal", LODNormalMaps[i]);
             ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
         }
 
@@ -358,7 +368,7 @@ public class TileGen : MonoBehaviour
         return LOD;
     }
 
-    static private void InitLODRTs(RenderTexture[] LODDisplaceMaps, int RTSize)
+    static private void InitLODRTs(RenderTexture[] LODDisplaceMaps, RenderTexture[] LODNormalMaps, int RTSize)
     {
         for (int i = 0; i< LODDisplaceMaps.Length; i++)
         {
@@ -368,6 +378,13 @@ public class TileGen : MonoBehaviour
             LODDisplaceMaps[i].enableRandomWrite = true;
             LODDisplaceMaps[i].wrapMode = TextureWrapMode.Clamp;
             LODDisplaceMaps[i].Create();
+
+            if (LODNormalMaps[i] != null)
+                LODNormalMaps[i].Release();
+            LODNormalMaps[i] = new RenderTexture(RTSize, RTSize, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
+            LODNormalMaps[i].enableRandomWrite = true;
+            LODNormalMaps[i].wrapMode = TextureWrapMode.Clamp;
+            LODNormalMaps[i].Create();
         }  
     }
 }

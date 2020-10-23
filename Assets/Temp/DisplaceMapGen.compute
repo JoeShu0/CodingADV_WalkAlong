@@ -4,7 +4,8 @@
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
 
-RWTexture2D<float4> Result;
+RWTexture2D<float4> Displace;
+RWTexture2D<float4> Normal;
 float3 CenterPos;
 float LODSize;
 int LODIndex;
@@ -14,34 +15,58 @@ int WaveCount;
 struct Wave
 {
     float WaveLength;
-    float Amplitude;
+    float Steepness;
     float2 Direction;
 };
 StructuredBuffer<Wave> WavesBuffer;
 
-float3 GetWaveSum(float3 OriginalWPos)
+struct GerstnerOut
+{
+    float3 displacement;
+    float3 normalVector;
+};
+
+GerstnerOut GetWaveSum(float3 OriginalWPos)
 {
     float PI =3.14159265f; 
 
     float3 Displace = float3(0.0f,0.0f,0.0f);
+    float3 tangent = float3(1.0f, 0.0f, 0.0f);
+    float3 binormal = float3(0.0f, 0.0f, 1.0f);
 
     for(int i=0;i<WaveCount;i++)
     {
-        float _Amplitude = WavesBuffer[i].Amplitude;
+        float _Steepness = WavesBuffer[i].Steepness * 1.0f;
         float _WaveLength = WavesBuffer[i].WaveLength;
         float k = 2 * PI / _WaveLength;
+        float _Amplitude = _Steepness / k;
         float _Speed = sqrt(9.8 / k);
-        float2 _Direction = WavesBuffer[i].Direction;
-        float f = k * (dot(OriginalWPos, float3(_Direction.x, 0 , _Direction.y)) + _Time* _Speed);
+        float2 _Direction = normalize(WavesBuffer[i].Direction);
+        float f = k * (dot(OriginalWPos, float3(_Direction.x, 0 , _Direction.y)) - _Time* _Speed);
 
         float Wx = _Amplitude * cos(f) * _Direction.x;
         float Wz = _Amplitude * cos(f) * _Direction.y;
         float Wy = _Amplitude * sin(f);
 
         Displace += float3(Wx, Wy, Wz);
+
+        tangent += float3( - _Direction.x * _Direction.x*(_Steepness * sin(f)),
+                                _Direction.x * (_Steepness * cos(f)),
+                                - _Direction.x * _Direction.y * (_Steepness * sin(f)));
+
+        binormal += float3(-_Direction.x * _Direction.y * (_Steepness * sin(f)),
+                                _Direction.y * (_Steepness * cos(f)),
+                                 - _Direction.x * _Direction.x * (_Steepness * sin(f)));
+
     }
+
+    float3 normal = normalize(cross(binormal, tangent));
     
-    return Displace;
+    GerstnerOut ReturnData;
+    ReturnData.displacement = Displace;
+    ReturnData.normalVector = normal;
+
+    return ReturnData;
 }
 
 [numthreads(32,32,1)]
@@ -49,15 +74,17 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 {
     // TODO: insert actual code here!
     uint width, height;
-    Result.GetDimensions(width, height);
+    Displace.GetDimensions(width, height);
 
     //D3D CoordSystem
     float3 WPos = float3((id.x / float(width) - 0.5f) * LODSize, 0.0f, (id.y / float(height) - 0.5f) * LODSize) + CenterPos;
 
     //WavesBuffer[0].WaveLength
-    float3 Displacement = GetWaveSum(WPos);
+    float3 Displacement = GetWaveSum(WPos).displacement;
+    float3 Normalout = GetWaveSum(WPos).normalVector;
 
-    Result[id.xy] = float4(Displacement,1.0f);
+    Displace[id.xy] = float4(Displacement,1.0f);
+    Normal[id.xy] = float4(Normalout,1.0f);
     //Result[id.xy] = float4(1.0f, 0.0f, 0.0f, 1.0f);
     /*
     if (length(WPos-float3(25,0,10)) < 12.0f)

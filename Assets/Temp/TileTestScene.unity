@@ -967,13 +967,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119639704}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.11278218, y: -0, z: -0, w: 0.99361974}
+  m_LocalPosition: {x: 0, y: 23.55, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 12.951, y: 0, z: 0}
 --- !u!1 &126910505
 GameObject:
   m_ObjectHideFlags: 0
@@ -2379,13 +2379,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314406983}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.19841127, y: -0.42943317, z: 0.20405109, w: 0.8570784}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 31.022001, y: -49.861004, z: 12.081}
 --- !u!1 &333861773
 GameObject:
   m_ObjectHideFlags: 0
@@ -8247,6 +8247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileShader: {fileID: 4800000, guid: 41fb7b7f058091d498331ea4e8d83afd, type: 3}
   ShapeShader: {fileID: 7200000, guid: 9542cdf7a1499cf479a89df699c6a03d, type: 3}
+  SkyTex: {fileID: 8900000, guid: 46639070145eb7547a799337935b4d3b, type: 3}
 --- !u!4 &1237870400
 Transform:
   m_ObjectHideFlags: 0
