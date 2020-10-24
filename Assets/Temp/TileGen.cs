@@ -398,14 +398,14 @@ public class TileGen : MonoBehaviour
                 LODDisplaceMaps[i].Release();
             LODDisplaceMaps[i] = new RenderTexture(RTSize, RTSize, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             LODDisplaceMaps[i].enableRandomWrite = true;
-            LODDisplaceMaps[i].wrapMode = TextureWrapMode.Clamp;
+            LODDisplaceMaps[i].wrapMode = TextureWrapMode.Repeat;
             LODDisplaceMaps[i].Create();
 
             if (LODNormalMaps[i] != null)
                 LODNormalMaps[i].Release();
             LODNormalMaps[i] = new RenderTexture(RTSize, RTSize, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             LODNormalMaps[i].enableRandomWrite = true;
-            LODNormalMaps[i].wrapMode = TextureWrapMode.Clamp;
+            LODNormalMaps[i].wrapMode = TextureWrapMode.Repeat;
             LODNormalMaps[i].Create();
         }  
     }

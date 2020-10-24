@@ -69,9 +69,10 @@
     <Compile Include="Assets\HydraulicErosion\Scripts\HeightMapGenerator.cs" />
     <Compile Include="Assets\RayMarching\Scripts\RayMarchObject.cs" />
     <Compile Include="Assets\RayMarching\Scripts\RayMarchRender.cs" />
-    <Compile Include="Assets\Temp\GerstnerTest.cs" />
+    <Compile Include="Assets\Temp\Gerstner\GerstnerTest.cs" />
     <Compile Include="Assets\Temp\TileGen.cs" />
     <Compile Include="Assets\Temp\TileObjGen.cs" />
+    <Compile Include="Assets\Temp\WaveEquation\WaveEquaTest.cs" />
     <None Include="Assets\Temp\SnapAndTransition.shader" />
     <None Include="Assets\Temp\ShowNormal.shader" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColorShader.shader" />
@@ -79,6 +80,7 @@
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColor.shader" />
     <None Include="Assets\RayMarching\Scripts\RayMarchShader.compute" />
     <None Include="Assets\ComputeShader\Scripts\ErosionShader.compute" />
+    <None Include="Assets\Temp\WaveEquation\WaveEquaGen.compute" />
     <Reference Include="UnityEngine">
       <HintPath>D:/Unity_Editor/2019.4.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

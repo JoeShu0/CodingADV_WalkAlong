@@ -1,0 +1,50 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+//In this RT R=elevation G=VerticalSpeed
+RWTexture2D<float4> Result;
+//SamplerState samplerResult;
+float4 WaveOriginData;
+float _Time;
+
+[numthreads(32,32,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    uint width, height;
+    Result.GetDimensions(width, height);
+
+    float2 UV = float2(id.xy)/float2(width,height);
+    float DisTOri = length(UV - WaveOriginData.xy);
+    
+    
+    float4 previousData = Result[id.xy];
+    
+    if(DisTOri < WaveOriginData.z && fmod(_Time,0.5f) < 0.01f)
+    {
+        previousData.g = 0.1f;
+    }
+
+    //float dx = 1.0/width;
+    //float dy = 1.0/height;
+
+    //old elevation
+    float P_E = previousData.r;
+    //old Verticalspeed
+    float P_S = previousData.g;
+
+    //get near point wavedata elevation
+    float ex = Result[int2(id.x+1,id.y)].x;
+    float emx = Result[int2(id.x-1,id.y)].x;
+    float ey = Result[int2(id.x,id.y+1)].x;
+    float emy = Result[int2(id.x,id.y-1)].x;
+
+    //new elevation
+    float N_E = P_E + P_S + 0.5 * (ex + emx + ey + emy - 4.0f * P_E);
+    float N_S = N_E - P_E;
+
+    previousData.xy = float2(N_E, N_S);
+
+    Result[id.xy] = previousData;
+}
