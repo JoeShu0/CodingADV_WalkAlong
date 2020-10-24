@@ -36,7 +36,7 @@ public class TileGen : MonoBehaviour
     static float GridSize = 0.5f;
     static int GridCountPerTile = 24;//this value haveto be thr mul of 4 since the snapping requires it
     static int RTSize = 512;
-    static int WaveCount = 3;
+    static int WaveCount = 9;
 
     private Material[] LODMats = new Material[LODCount];
     private GameObject TileObj;
@@ -88,15 +88,35 @@ public class TileGen : MonoBehaviour
         threadGroupY = Mathf.CeilToInt(RTSize / 32.0f);
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
 
-        WDs[0].WaveLength = 50.0f;
-        WDs[0].Steepness = 0.4f;
+        WDs[0].WaveLength = 100.0f;
+        WDs[0].Steepness = 0.05f;
         WDs[0].Direction = new Vector2(1f, 0.5f);
-        WDs[1].WaveLength = 8.0f;
-        WDs[1].Steepness = 0.25f;
+        WDs[1].WaveLength = 50.0f;
+        WDs[1].Steepness = 0.09f;
         WDs[1].Direction = new Vector2(0.15f, -1.0f);
-        WDs[2].WaveLength = 12.0f;
+        WDs[2].WaveLength = 25.0f;
         WDs[2].Steepness = 0.1f;
         WDs[2].Direction = new Vector2(-0.35f, -0.65f);
+
+        WDs[3].WaveLength = 12.0f;
+        WDs[3].Steepness = 0.12f;
+        WDs[3].Direction = new Vector2(0.7f, 0.5f);
+        WDs[4].WaveLength = 6.0f;
+        WDs[4].Steepness = 0.10f;
+        WDs[4].Direction = new Vector2(0.35f, 0.85f);
+        WDs[5].WaveLength = 3.0f;
+        WDs[5].Steepness = 0.05f;
+        WDs[5].Direction = new Vector2(-0.65f, -0.15f);
+
+        WDs[6].WaveLength = 2.0f;
+        WDs[6].Steepness = 0.08f;
+        WDs[6].Direction = new Vector2(0.5f, 0.5f);
+        WDs[7].WaveLength = 1.0f;
+        WDs[7].Steepness = 0.05f;
+        WDs[7].Direction = new Vector2(-0.15f, 0.95f);
+        WDs[8].WaveLength = 0.5f;
+        WDs[8].Steepness = 0.02f;
+        WDs[8].Direction = new Vector2(-0.45f, -0.15f);
 
 
 

@@ -137,7 +137,7 @@
                 float3 lightDir = (unity_LightPosition[0] - i.WPos).rgb;
 
                 float4 col = float4(0.5f, 0.5f, 0.5f, 1.0f);
-                col *= dot(lightDir, _Normal.rgb);
+                col *= dot(float3(0,1,0), _Normal.rgb);
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(lightDir,1.0f);
