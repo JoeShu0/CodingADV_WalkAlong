@@ -10,6 +10,8 @@ public class TileGen : MonoBehaviour
     public Shader tileShader;
     public ComputeShader ShapeShader;
     public Texture SkyTex;
+    [Range(0.0f, 2.0f)]
+    public float AnimWaveScale;
 
     enum TileType
     {
@@ -33,8 +35,8 @@ public class TileGen : MonoBehaviour
     }
 
     static int LODCount = 8;
-    static float GridSize = 0.5f;
-    static int GridCountPerTile = 24;//this value haveto be thr mul of 4 since the snapping requires it
+    static float GridSize = 0.25f;
+    static int GridCountPerTile = 40;//this value haveto be thr mul of 4 since the snapping requires it
     static int RTSize = 512;
     static int WaveCount = 9;
 
