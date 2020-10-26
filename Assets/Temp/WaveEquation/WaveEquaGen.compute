@@ -1,13 +1,22 @@
 ﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Initialize
 #pragma kernel CSMain
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
 //In this RT R=elevation G=VerticalSpeed
+RWTexture2D<float4> PrevResult;
 RWTexture2D<float4> Result;
 //SamplerState samplerResult;
 float4 WaveOriginData;
 float _Time;
+float _DeltaTime;
+
+[numthreads(32, 32, 1)]
+void Initialize(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+}
 
 [numthreads(32,32,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
@@ -19,11 +28,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float DisTOri = length(UV - WaveOriginData.xy);
     
     
-    float4 previousData = Result[id.xy];
+    float4 previousData = PrevResult[id.xy];
     
-    if(DisTOri < WaveOriginData.z && fmod(_Time,0.5f) < 0.01f)
+    if(DisTOri < WaveOriginData.z && fmod(_Time,1.0f) < 0.01f)
     {
-        previousData.g = 0.1f;
+        previousData.g = 1.0f;
     }
 
     //float dx = 1.0/width;
@@ -35,14 +44,18 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float P_S = previousData.g;
 
     //get near point wavedata elevation
-    float ex = Result[int2(id.x+1,id.y)].x;
-    float emx = Result[int2(id.x-1,id.y)].x;
-    float ey = Result[int2(id.x,id.y+1)].x;
-    float emy = Result[int2(id.x,id.y-1)].x;
+    float ex = length(float2(id.x + 1, id.y) -float2(128,128))<50.0f? 0 : PrevResult[int2(id.x+1,id.y)].x;
+    float emx = length(float2(id.x - 1, id.y) - float2(128, 128)) < 50.0f ? 0 : PrevResult[int2(id.x-1,id.y)].x;
+    float ey = length(float2(id.x, id.y+1) - float2(128, 128)) < 50.0f ? 0 : PrevResult[int2(id.x,id.y+1)].x;
+    float emy = length(float2(id.x, id.y - 1) - float2(128, 128)) < 50.0f ? 0 : PrevResult[int2(id.x,id.y-1)].x;
+
+    float a = _DeltaTime * _DeltaTime * 500.0f;
 
     //new elevation
-    float N_E = P_E + P_S + 0.5 * (ex + emx + ey + emy - 4.0f * P_E);
+    float N_E = P_E + P_S + a * (ex + emx + ey + emy - 4.0f * P_E);
     float N_S = N_E - P_E;
+
+    N_E *= 0.99f;
 
     previousData.xy = float2(N_E, N_S);
 
