@@ -4,6 +4,7 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _SkyTex ("ReflectTex", Cube) = "white" {}
+        _DetailN("DetailNormal", 2D) = "white" {}
         _LODDisTex("LODDisTexture", 2D) = "white" {}
         _NextLODDisTex("NextLODDisTexture", 2D) = "white" {}
         _LODNTex("LODNTexture", 2D) = "white" {}
@@ -37,14 +38,19 @@
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float4 WPos: TEXCOORD1;
+                float4 StaticUV : TEXCOORD2;
+                float4 UVBlendF : TEXCOORD3;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+
+            sampler2D _DetailN;
+            float4 _DetailN_ST;
 
             uniform samplerCUBE _SkyTex;
 
@@ -64,6 +70,15 @@
             float4 _CenterPos;
             float _LODSize;
             float _AddUVScale;
+
+            //Onlyuse this kind of recon for tangent space Normal since Z could have 2 sulotion
+            void UnpackNormalAndTangent(float4 _NormalNT, out float3 _Normal, out float3 _Tangent)
+            {
+                float ReconZ = sqrt(1.0f - saturate(dot(_NormalNT.xy, _NormalNT.xy)));
+                _Normal = normalize(float3(_NormalNT.x, _NormalNT.y, ReconZ));
+                float ReconTZ = sqrt(1.0f - saturate(dot(_NormalNT.zw, _NormalNT.zw)));
+                _Tangent = normalize(float3(_NormalNT.z, _NormalNT.w, ReconTZ));
+            }
 
             v2f vert (appdata v)
             {
@@ -89,8 +104,12 @@
                     WPos.z += POffset.y * Grid4 * TransiFactor;
                 
                 //Gen UV
-                float2 UV = (WPos.xz - _CenterPos.xz) / _LODSize *_AddUVScale + 0.5f;
+                float2 UV = (WPos.xz - _CenterPos.xz) / _LODSize + 0.5f;
                 float2 UV_n = (WPos.xz - _CenterPos.xz) / _LODSize * 0.5f + 0.5f;
+
+                //StaticUV for detail tex, current scale and transiton fixed!
+                float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.2f + float2(_Time.y, _Time.y) * 0.01f;
+                o.StaticUV = float4(S_UV, 0.0f, 0.0f);
 
                 //sample displacement tex
                 float3 col = tex2Dlod(_LODDisTex, float4(UV,0,0)).rgb;
@@ -99,6 +118,7 @@
                 float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.8f)*5.0f, 0, 1);
                 float LODBlendFactor = max(LODUVblend.x, LODUVblend.y);
                 col = lerp(col, col_n, LODBlendFactor);
+                
                 //blend area debug
                 //col = float3(LODUVblend,0.0f);
 
@@ -116,9 +136,11 @@
                 o.vertex = UnityObjectToClipPos(LPos);
                 
 
-                o.uv = TRANSFORM_TEX(UV, _LODDisTex);
+                //o.uv = TRANSFORM_TEX(UV, _LODDisTex);
+                o.uv = float4(UV, UV_n);
+                o.UVBlendF = float4(LODBlendFactor, 0.0f, 0.0f, 0.0f);
                 o.WPos = WPos;
-                o.WPos = float4(col, 0.0f);
+                //o.WPos = float4(col, 0.0f);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
@@ -126,10 +148,22 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the normal texture
-                float4 _Normal = tex2D(_LODNTex, i.uv);
+                float3 _Normal = tex2D(_LODNTex, i.uv.rg);
+                float3 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
+
+                _Normal = normalize(lerp(_Normal, _NNormal, i.UVBlendF.x));
+
+                //try recon binormal and tangent using x->tangent
+                float3 _Binormal = normalize(cross(float3(1,0,0), _Normal));
+                float3 _Tangent = normalize(cross(_Normal, _Binormal));
+
+                //Detail normalmap
+                float3 _NormalD = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy)));
+
+                _Normal = _Tangent * _NormalD.x + _Binormal * _NormalD.y + _Normal * _NormalD.z;
                 
                 //_WorldSpaceCameraPos 
-                float3 reflectDir = reflect(_WorldSpaceCameraPos, _Normal.xyz);
+                float3 reflectDir = normalize(reflect(i.WPos.xyz - _WorldSpaceCameraPos, _Normal.xyz));
 
                 float4 skyData = texCUBE(_SkyTex, reflectDir);
                 //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
@@ -137,11 +171,14 @@
                 float3 lightDir = (unity_LightPosition[0] - i.WPos).rgb;
 
                 float4 col = float4(0.5f, 0.5f, 0.5f, 1.0f);
-                col *= dot(float3(0,1,0), _Normal.rgb);
+                col = pow(dot(normalize(float3(0,1,1)), reflectDir), 50);
+                col += skyData;
+
+
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
-                //return float4(lightDir,1.0f);
-                //return _Normal;
+                //return float4(reflectDir,1.0f);
+                //return float4(_NormalD,0.0f);
                 return col;
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }

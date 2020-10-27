@@ -1628,7 +1628,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119639704}
   m_LocalRotation: {x: 0.11278218, y: -0, z: -0, w: 0.99361974}
-  m_LocalPosition: {x: 0, y: 23.55, z: -69.7}
+  m_LocalPosition: {x: 0, y: 6.06, z: -6.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -16938,7 +16938,7 @@ MonoBehaviour:
   tileShader: {fileID: 4800000, guid: 41fb7b7f058091d498331ea4e8d83afd, type: 3}
   ShapeShader: {fileID: 7200000, guid: 9542cdf7a1499cf479a89df699c6a03d, type: 3}
   SkyTex: {fileID: 8900000, guid: 46639070145eb7547a799337935b4d3b, type: 3}
-  AnimWaveScale: 0
+  AnimWaveScale: 1
 --- !u!4 &1237870400
 Transform:
   m_ObjectHideFlags: 0

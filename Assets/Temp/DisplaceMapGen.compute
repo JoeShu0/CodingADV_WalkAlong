@@ -24,6 +24,7 @@ struct GerstnerOut
 {
     float3 displacement;
     float3 normalVector;
+    float3 tangentVector;
 };
 
 GerstnerOut GetWaveSum(float3 OriginalWPos)
@@ -61,10 +62,12 @@ GerstnerOut GetWaveSum(float3 OriginalWPos)
     }
 
     float3 normal = normalize(cross(binormal, tangent));
+    tangent = normalize(tangent);
     
     GerstnerOut ReturnData;
     ReturnData.displacement = Displace;
     ReturnData.normalVector = normal;
+    ReturnData.tangentVector = tangent;
 
     return ReturnData;
 }
@@ -80,8 +83,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float3 WPos = float3((id.x / float(width) - 0.5f) * LODSize, 0.0f, (id.y / float(height) - 0.5f) * LODSize) + CenterPos;
 
     //WavesBuffer[0].WaveLength
-    float3 Displacement = GetWaveSum(WPos).displacement;
-    float3 Normalout = GetWaveSum(WPos).normalVector;
+    GerstnerOut outputWaveVectors = GetWaveSum(WPos);
+
+    float3 Displacement = outputWaveVectors.displacement;
+    float3 Normalout = outputWaveVectors.normalVector;
+    float3 Tangentout = outputWaveVectors.tangentVector;
 
     Displace[id.xy] = float4(Displacement,1.0f);
     Normal[id.xy] = float4(Normalout,1.0f);

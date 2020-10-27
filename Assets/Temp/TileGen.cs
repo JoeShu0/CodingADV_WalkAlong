@@ -10,6 +10,7 @@ public class TileGen : MonoBehaviour
     public Shader tileShader;
     public ComputeShader ShapeShader;
     public Texture SkyTex;
+    public Texture WaterDetailNormal;
     [Range(0.0f, 2.0f)]
     public float AnimWaveScale;
 
@@ -27,17 +28,19 @@ public class TileGen : MonoBehaviour
         Count
     }
 
-    struct WaveData
+    [SerializeField]
+    public struct WaveData
     {
         public float WaveLength;
         public float Steepness;
         public Vector2 Direction;
     }
+    public WaveData[] WDs = new WaveData[WaveCount];
 
     static int LODCount = 8;
-    static float GridSize = 0.25f;
-    static int GridCountPerTile = 20;//this value haveto be thr mul of 4 since the snapping requires it
-    static int RTSize = 256;
+    static float GridSize = 0.1f;
+    static int GridCountPerTile = 50;//this value haveto be thr mul of 4 since the snapping requires it
+    static int RTSize = 512;
     static int WaveCount = 9;
 
     private Material[] LODMats = new Material[LODCount];
@@ -50,7 +53,7 @@ public class TileGen : MonoBehaviour
     private int KIndex;
 
     private List<WaveData> WaveDatas = new List<WaveData>();
-    private WaveData[] WDs = new WaveData[WaveCount];
+    //private WaveData[] WDs = new WaveData[WaveCount];
 
     // Start is called before the first frame update
     void Start()
@@ -89,37 +92,77 @@ public class TileGen : MonoBehaviour
         threadGroupX = Mathf.CeilToInt(RTSize / 32.0f);
         threadGroupY = Mathf.CeilToInt(RTSize / 32.0f);
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
-
+        /*
         WDs[0].WaveLength = 100.0f;
-        WDs[0].Steepness = 0.05f;
-        WDs[0].Direction = new Vector2(1f, 0.5f);
+        WDs[0].Steepness = 0.0f;
+        WDs[0].Direction = new Vector2(0.35f, 0.5f);
         WDs[1].WaveLength = 50.0f;
-        WDs[1].Steepness = 0.09f;
-        WDs[1].Direction = new Vector2(0.15f, -1.0f);
+        WDs[1].Steepness = 0.0f;
+        WDs[1].Direction = new Vector2(0.15f, 0.95f);
         WDs[2].WaveLength = 25.0f;
-        WDs[2].Steepness = 0.1f;
+        WDs[2].Steepness = 0.0f;
         WDs[2].Direction = new Vector2(-0.35f, -0.65f);
 
         WDs[3].WaveLength = 12.0f;
-        WDs[3].Steepness = 0.12f;
+        WDs[3].Steepness = 0.0f;
         WDs[3].Direction = new Vector2(0.7f, 0.5f);
         WDs[4].WaveLength = 6.0f;
-        WDs[4].Steepness = 0.10f;
+        WDs[4].Steepness = 0.0f;
         WDs[4].Direction = new Vector2(0.35f, 0.85f);
         WDs[5].WaveLength = 3.0f;
-        WDs[5].Steepness = 0.05f;
+        WDs[5].Steepness = 0.0f;
         WDs[5].Direction = new Vector2(-0.65f, -0.15f);
 
         WDs[6].WaveLength = 2.0f;
-        WDs[6].Steepness = 0.08f;
+        WDs[6].Steepness = 0.0f;
         WDs[6].Direction = new Vector2(0.5f, 0.5f);
         WDs[7].WaveLength = 1.0f;
-        WDs[7].Steepness = 0.05f;
-        WDs[7].Direction = new Vector2(-0.15f, 0.95f);
-        WDs[8].WaveLength = 0.5f;
-        WDs[8].Steepness = 0.02f;
-        WDs[8].Direction = new Vector2(-0.45f, -0.15f);
+        WDs[7].Steepness = 0.0f;
+        WDs[7].Direction = new Vector2(0.45f, 0.95f);
+        WDs[8].WaveLength = 1.5f;
+        WDs[8].Steepness = 0.0f;
+        WDs[8].Direction = new Vector2(0.45f, 0.15f);
+        */
+        WDs[0].WaveLength = 100.0f;
+        WDs[0].Steepness = 0.04f;
+        WDs[0].Direction = new Vector2(0.35f, 0.5f);
+        WDs[1].WaveLength = 50.0f;
+        WDs[1].Steepness = 0.06f;
+        WDs[1].Direction = new Vector2(0.15f, 0.95f);
+        WDs[2].WaveLength = 25.0f;
+        WDs[2].Steepness = 0.08f;
+        WDs[2].Direction = new Vector2(-0.35f, -0.65f);
 
+        WDs[3].WaveLength = 12.0f;
+        WDs[3].Steepness = 0.1f;
+        WDs[3].Direction = new Vector2(0.7f, 0.5f);
+        WDs[4].WaveLength = 6.0f;
+        WDs[4].Steepness = 0.11f;
+        WDs[4].Direction = new Vector2(-0.35f, 0.85f);
+        WDs[5].WaveLength = 3.0f;
+        WDs[5].Steepness = 0.06f;
+        WDs[5].Direction = new Vector2(-0.65f, -0.15f);
+
+        WDs[6].WaveLength = 1.5f;
+        WDs[6].Steepness = 0.15f;
+        WDs[6].Direction = new Vector2(0.5f, 0.5f);
+        WDs[7].WaveLength = 0.8f;
+        WDs[7].Steepness = 0.10f;
+        WDs[7].Direction = new Vector2(0.45f, 0.95f);
+        WDs[8].WaveLength = 0.4f;
+        WDs[8].Steepness = 0.05f;
+        WDs[8].Direction = new Vector2(0.45f, 0.15f);
+        /*
+        WDs[9].WaveLength = 1.0f;
+        WDs[9].Steepness = 0.08f;
+        WDs[9].Direction = new Vector2(0.25f, 0.5f);
+        WDs[10].WaveLength = 0.6f;
+        WDs[10].Steepness = 0.04f;
+        WDs[10].Direction = new Vector2(-0.55f, 0.65f);
+        WDs[11].WaveLength = 0.4f;
+        WDs[11].Steepness = 0.01f;
+        WDs[11].Direction = new Vector2(0.25f, 0.15f);
+        */
 
 
         //WaveBuffer.Release();
@@ -146,9 +189,9 @@ public class TileGen : MonoBehaviour
                 LODMats[i].SetTexture("_LODNTex", LODNormalMaps[i]);
                 LODMats[i].SetTexture("_NextLODNTex", LODNormalMaps[i]);
             }
-            
+            LODMats[i].SetTexture("_SkyTex", SkyTex);
+            LODMats[i].SetTexture("_DetailN", WaterDetailNormal);
         }
-        LODMats[0].SetTexture("_SkyTex", SkyTex);
 
     }
 
@@ -156,7 +199,14 @@ public class TileGen : MonoBehaviour
     void Update()
     {
         ComputeBuffer WaveBuffer = new ComputeBuffer(WaveCount, 16);
-        WaveBuffer.SetData(WDs);
+
+        WaveData[] PassData = (WaveData[])WDs.Clone();
+        for (int i = 0; i < WDs.Length; i++)
+        {
+            PassData[i].Steepness = WDs[i].Steepness * AnimWaveScale;
+        }
+
+        WaveBuffer.SetData(PassData);
         ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
         ShapeShader.SetFloats("CenterPos", new float[] {gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z});
         //ShapeShader.SetVector("CenterPos", WaveBuffer);
@@ -303,7 +353,9 @@ public class TileGen : MonoBehaviour
         }
 
         tilemesh.uv = UVs;
-
+        
+        //Intentionly make larger bound to avoid fructrum culling when moving vertex~
+        tilemesh.bounds = new Bounds(new Vector3(0, 0, 0), new Vector3(TileSizeX * 1.35f, 10.0f, TileSizeZ * 1.35f));
         //Debug.Log(type);
         return tilemesh;
     }
@@ -409,4 +461,13 @@ public class TileGen : MonoBehaviour
             LODNormalMaps[i].Create();
         }  
     }
+    /*
+    void UpdateAnimWaveData()
+    {
+        for(int i = 0; i<WDs.Length; i++)
+        {
+            WDs[i].Steepness *= AnimWaveScale;
+        }
+    }
+    */
 }
