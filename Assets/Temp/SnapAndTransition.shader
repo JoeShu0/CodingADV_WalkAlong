@@ -108,7 +108,7 @@
                 float2 UV_n = (WPos.xz - _CenterPos.xz) / _LODSize * 0.5f + 0.5f;
 
                 //StaticUV for detail tex, current scale and transiton fixed!
-                float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.2f + float2(_Time.y, _Time.y) * 0.01f;
+                float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.2f ;
                 o.StaticUV = float4(S_UV, 0.0f, 0.0f);
 
                 //sample displacement tex
@@ -158,7 +158,10 @@
                 float3 _Tangent = normalize(cross(_Normal, _Binormal));
 
                 //Detail normalmap
-                float3 _NormalD = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy)));
+                float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.01f)));
+                float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.01f)));
+
+                float3 _NormalD = normalize(_NormalD01 + _NormalD02);
 
                 _Normal = _Tangent * _NormalD.x + _Binormal * _NormalD.y + _Normal * _NormalD.z;
                 
