@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using System;
+//using System;
 using System.Threading;
+
 
 public class TileGen : MonoBehaviour
 {
@@ -37,11 +38,23 @@ public class TileGen : MonoBehaviour
     }
     public WaveData[] WDs = new WaveData[WaveCount];
 
+    public Vector2 WaveLengthRange = new Vector2(128.0f, 0.1f);
+    public Vector2 SteepnessRange = new Vector2(0.1f, 0.001f);
+    public float WaveWindAngle = 90.0f;
+    public float[] WaveLengths;
+    public float[] Steepnesses;
+    public float[] DirAngleDegs;
+
+    //Count for LOD rings
     static int LODCount = 8;
+    //Min grid size
     static float GridSize = 0.1f;
-    static int GridCountPerTile = 50;//this value haveto be thr mul of 4 since the snapping requires it
+    //grid count for each tile in standard, have to be the mul of 4 since the snapping requires it
+    static int GridCountPerTile = 50;
+    //RTSize effect rendertexture size (displace and normal) for each LOD, lower it will effect normalmap quality
     static int RTSize = 512;
-    static int WaveCount = 9;
+    //WaveCount should be mul of 4 Since we are packing it into vectors
+    static int WaveCount = 48;
 
     private Material[] LODMats = new Material[LODCount];
     private GameObject TileObj;
@@ -92,37 +105,7 @@ public class TileGen : MonoBehaviour
         threadGroupX = Mathf.CeilToInt(RTSize / 32.0f);
         threadGroupY = Mathf.CeilToInt(RTSize / 32.0f);
         //ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
-        /*
-        WDs[0].WaveLength = 100.0f;
-        WDs[0].Steepness = 0.0f;
-        WDs[0].Direction = new Vector2(0.35f, 0.5f);
-        WDs[1].WaveLength = 50.0f;
-        WDs[1].Steepness = 0.0f;
-        WDs[1].Direction = new Vector2(0.15f, 0.95f);
-        WDs[2].WaveLength = 25.0f;
-        WDs[2].Steepness = 0.0f;
-        WDs[2].Direction = new Vector2(-0.35f, -0.65f);
-
-        WDs[3].WaveLength = 12.0f;
-        WDs[3].Steepness = 0.0f;
-        WDs[3].Direction = new Vector2(0.7f, 0.5f);
-        WDs[4].WaveLength = 6.0f;
-        WDs[4].Steepness = 0.0f;
-        WDs[4].Direction = new Vector2(0.35f, 0.85f);
-        WDs[5].WaveLength = 3.0f;
-        WDs[5].Steepness = 0.0f;
-        WDs[5].Direction = new Vector2(-0.65f, -0.15f);
-
-        WDs[6].WaveLength = 2.0f;
-        WDs[6].Steepness = 0.0f;
-        WDs[6].Direction = new Vector2(0.5f, 0.5f);
-        WDs[7].WaveLength = 1.0f;
-        WDs[7].Steepness = 0.0f;
-        WDs[7].Direction = new Vector2(0.45f, 0.95f);
-        WDs[8].WaveLength = 1.5f;
-        WDs[8].Steepness = 0.0f;
-        WDs[8].Direction = new Vector2(0.45f, 0.15f);
-        */
+        
         WDs[0].WaveLength = 100.0f;
         WDs[0].Steepness = 0.04f;
         WDs[0].Direction = new Vector2(0.35f, 0.5f);
@@ -149,10 +132,10 @@ public class TileGen : MonoBehaviour
         WDs[7].WaveLength = 0.8f;
         WDs[7].Steepness = 0.10f;
         WDs[7].Direction = new Vector2(0.45f, 0.95f);
-        WDs[8].WaveLength = 0.4f;
+        WDs[8].WaveLength = 4f;
         WDs[8].Steepness = 0.05f;
-        WDs[8].Direction = new Vector2(0.45f, 0.15f);
-        /*
+        WDs[8].Direction = new Vector2(-0.45f, 0.15f);
+        
         WDs[9].WaveLength = 1.0f;
         WDs[9].Steepness = 0.08f;
         WDs[9].Direction = new Vector2(0.25f, 0.5f);
@@ -162,8 +145,15 @@ public class TileGen : MonoBehaviour
         WDs[11].WaveLength = 0.4f;
         WDs[11].Steepness = 0.01f;
         WDs[11].Direction = new Vector2(0.25f, 0.15f);
-        */
 
+        GenerateWaves(WaveCount, ref WaveLengths, ref Steepnesses, ref DirAngleDegs, WaveLengthRange, SteepnessRange, WaveWindAngle);
+
+        for (int i = 0; i < WaveCount; i++)
+        {
+            WDs[i].WaveLength = WaveLengths[i];
+            WDs[i].Steepness = Steepnesses[i] * AnimWaveScale;
+            WDs[i].Direction = new Vector2((float)Mathf.Cos(Mathf.Deg2Rad*DirAngleDegs[i]), (float)Mathf.Sin(Mathf.Deg2Rad * DirAngleDegs[i]));
+        }
 
         //WaveBuffer.Release();
         //LODMats[0].SetTexture("_LODDisTex", LODDisplaceMaps[1]);
@@ -200,13 +190,9 @@ public class TileGen : MonoBehaviour
     {
         ComputeBuffer WaveBuffer = new ComputeBuffer(WaveCount, 16);
 
-        WaveData[] PassData = (WaveData[])WDs.Clone();
-        for (int i = 0; i < WDs.Length; i++)
-        {
-            PassData[i].Steepness = WDs[i].Steepness * AnimWaveScale;
-        }
+      
 
-        WaveBuffer.SetData(PassData);
+        WaveBuffer.SetData(WDs);
         ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
         ShapeShader.SetFloats("CenterPos", new float[] {gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z});
         //ShapeShader.SetVector("CenterPos", WaveBuffer);
@@ -470,4 +456,26 @@ public class TileGen : MonoBehaviour
         }
     }
     */
+
+    static void GenerateWaves(int WaveCount, ref float[] WaveLengths, ref float[] Steepnesses, ref float[] DirAngleDegs, Vector2 WaveLengthRange, Vector2 SteepnessRange, float WaveWindAngle)
+    {
+        if (WaveLengths != null) { WaveLengths = new float[WaveCount]; };
+        if (Steepnesses != null) { Steepnesses = new float[WaveCount]; };
+        if (DirAngleDegs != null) { DirAngleDegs = new float[WaveCount]; };
+
+        float rnd = Random.Range(0.0f, 1.0f);
+
+        float GroupCount = Mathf.Log(WaveCount, 2);
+
+        int WavePerGroup = Mathf.FloorToInt(WaveCount / GroupCount);
+
+        float WaveLengthIncre = (WaveLengthRange.x - WaveLengthRange.y) / (float)WaveCount;
+
+        for (int i = 0; i < WaveCount; i++)
+        {
+            WaveLengths[i] = WaveLengthIncre * i + WaveLengthIncre * Random.Range(0.0f, 1.0f);
+            Steepnesses[i] = Mathf.Lerp(SteepnessRange.x, SteepnessRange.y, Random.Range(0.0f, 1.0f));
+            DirAngleDegs[i] = Random.Range(-1.0f, 1.0f) * WaveWindAngle;
+        }
+    }
 }

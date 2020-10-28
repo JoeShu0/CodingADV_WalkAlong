@@ -158,8 +158,8 @@
                 float3 _Tangent = normalize(cross(_Normal, _Binormal));
 
                 //Detail normalmap
-                float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.01f)));
-                float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.01f)));
+                float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.02f)));
+                float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.04f)));
 
                 float3 _NormalD = normalize(_NormalD01 + _NormalD02);
 
