@@ -159,7 +159,7 @@
 
                 //Detail normalmap
                 float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.02f)));
-                float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.04f)));
+                float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.04f + float2(0.5f, 0.5f))));
 
                 float3 _NormalD = normalize(_NormalD01 + _NormalD02);
 

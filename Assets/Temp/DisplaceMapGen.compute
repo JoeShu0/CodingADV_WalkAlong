@@ -12,6 +12,11 @@ int LODIndex;
 float _Time;
 int WaveCount;
 
+float4 _WaveLengths[48];
+float4 _Steepnesses[48];
+float4 _DirXs[48];
+float4 _DirZs[48];
+
 struct Wave
 {
     float WaveLength;
@@ -60,7 +65,24 @@ GerstnerOut GetWaveSum(float3 OriginalWPos)
                                  - _Direction.x * _Direction.x * (_Steepness * sin(f)));
 
     }
+    
+    //fixed wave attenuation
+    float4 wt = float4(1, 1, 1, 1);
 
+    for (int n = 0; n < fmod(WaveCount, 4); n++)
+    {
+        float4 ks = 2 * PI / _WaveLengths[n];
+        float4 Amplitudes = _Steepnesses[n] / ks;
+        //later we have to this sqrt into CPU and integret it into Dir
+        float4 Speeds = 0.1f;//sqrt(9.8 / k);
+        float4 fs = ks * ((OriginalWPos.x * _DirXs[n] + OriginalWPos.z * _DirZs[n]) - _Time * Speeds);
+        float4 Wxs = Amplitudes * cos(fs) * _DirXs[n];
+        float4 Wzs = Amplitudes * cos(fs) * _DirZs[n];
+        float4 Wys = Amplitudes * sin(fs);
+
+        //Displace += float3(dot(Wxs, wt), dot(Wys, wt), dot(Wzs, wt));
+    }
+    
     float3 normal = normalize(cross(binormal, tangent));
     tangent = normalize(tangent);
     
@@ -91,6 +113,9 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
     Displace[id.xy] = float4(Displacement,1.0f);
     Normal[id.xy] = float4(Normalout,1.0f);
+
+    //debug
+    //Displace[id.xy] = _WaveLengths[10];
     //Result[id.xy] = float4(1.0f, 0.0f, 0.0f, 1.0f);
     /*
     if (length(WPos-float3(25,0,10)) < 12.0f)
