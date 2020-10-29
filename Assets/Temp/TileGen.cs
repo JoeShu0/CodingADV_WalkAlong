@@ -465,17 +465,20 @@ public class TileGen : MonoBehaviour
 
         float rnd = Random.Range(0.0f, 1.0f);
 
-        float GroupCount = Mathf.Log(WaveCount, 2);
-
+        int GroupCount = Mathf.FloorToInt(Mathf.Log(WaveCount, 2)) + 1;
         int WavePerGroup = Mathf.FloorToInt(WaveCount / GroupCount);
 
-        float WaveLengthIncre = (WaveLengthRange.x - WaveLengthRange.y) / (float)WaveCount;
-
-        for (int i = 0; i < WaveCount; i++)
+        for (int i = 0; i < GroupCount; i++)
         {
-            WaveLengths[i] = WaveLengthIncre * i + WaveLengthIncre * Random.Range(0.0f, 1.0f);
-            Steepnesses[i] = Mathf.Lerp(SteepnessRange.x, SteepnessRange.y, Random.Range(0.0f, 1.0f));
-            DirAngleDegs[i] = Random.Range(-1.0f, 1.0f) * WaveWindAngle;
+            float Max_WaveLength = Mathf.Pow(2, i);
+            float Min_WaveLength = i == 0 ? 0 : Mathf.Pow(2, i - 1);
+            for (int n = 0; n < WavePerGroup; n++)
+            {
+                int index = i * WavePerGroup + n;
+                WaveLengths[index] = Mathf.Lerp(Min_WaveLength, Max_WaveLength, Random.Range(0.0f, 1.0f));
+                Steepnesses[index] = Mathf.Lerp(SteepnessRange.x, SteepnessRange.y, Random.Range(0.0f, 1.0f));
+                DirAngleDegs[index] = Random.Range(-1.0f, 1.0f) * WaveWindAngle;
+            }
         }
     }
 }
