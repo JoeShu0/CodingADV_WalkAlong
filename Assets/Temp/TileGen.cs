@@ -160,8 +160,6 @@ public class TileGen : MonoBehaviour
         //Generating displacement&Normal rendertexure with compute shader
         ComputeBuffer WaveBuffer = new ComputeBuffer(WaveCount, 20);
 
-        if (Time.time % 1.0f < 0.001f)
-            print("yeah");
         /*
         for (int i = 0; i < WaveCount; i++)
         {

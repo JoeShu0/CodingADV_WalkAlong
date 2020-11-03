@@ -108,7 +108,7 @@
                 float2 UV_n = (WPos.xz - _CenterPos.xz) / _LODSize * 0.5f + 0.5f;
 
                 //StaticUV for detail tex, current scale and transiton fixed!
-                float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.2f ;
+                float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.5f ;
                 o.StaticUV = float4(S_UV, 0.0f, 0.0f);
 
                 //sample displacement tex

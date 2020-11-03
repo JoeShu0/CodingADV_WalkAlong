@@ -17107,18 +17107,18 @@ MonoBehaviour:
   SkyTex: {fileID: 8900000, guid: 6ac1f8102791dd941a456230f0d369bf, type: 3}
   WaterDetailNormal: {fileID: 2800000, guid: 889e574f9d7c9684daa36f20fbd8ce1c, type: 3}
   AnimWindDirDegs: 0
-  WaveWindAngleRange: 75
+  WaveWindAngleRange: 90
   WaveLengthRange: {x: 128, y: 0.1}
   SteepnessRange: {x: 0.02, y: 0.001}
   AnimWaveAmpMul:
-  - 1.44
-  - 1.2
-  - 0.83
-  - 0.45
-  - 0.14
-  - 0.04
-  - 0.01
-  - 0.01
+  - 1.04
+  - 1.1
+  - 1.01
+  - 0.7
+  - 0.34
+  - 0.1
+  - 0.05
+  - 0.06
 --- !u!4 &1237870400
 Transform:
   m_ObjectHideFlags: 0
