@@ -12,19 +12,24 @@ int LODIndex;
 float _Time;
 int WaveCount;
 
-float4 _WaveLengths[48];
-float4 _Steepnesses[48];
-float4 _DirXs[48];
-float4 _DirZs[48];
-
 struct Wave
 {
     float WaveLength;
-    float Steepness;
+    float Amplitude;
+    float Speed;
     float2 Direction;
 };
 StructuredBuffer<Wave> WavesBuffer;
-
+/*
+struct WaveBatched
+{
+    float4 WaveLengths;
+    float4 Steepnesses;
+    float4 DirectionX;
+    float4 DirectionY;
+};
+StructuredBuffer<WaveBatched> WavesBatchBuffer;
+*/
 struct GerstnerOut
 {
     float3 displacement;
@@ -42,11 +47,12 @@ GerstnerOut GetWaveSum(float3 OriginalWPos)
 
     for(int i=0;i<WaveCount;i++)
     {
-        float _Steepness = WavesBuffer[i].Steepness * 1.0f;
+        
         float _WaveLength = WavesBuffer[i].WaveLength;
         float k = 2 * PI / _WaveLength;
-        float _Amplitude = _Steepness / k;
-        float _Speed = sqrt(9.8 / k);
+        float _Amplitude = WavesBuffer[i].Amplitude;
+        float _Steepness = _Amplitude * k;
+        float _Speed = WavesBuffer[i].Speed;
         float2 _Direction = normalize(WavesBuffer[i].Direction);
         float f = k * (dot(OriginalWPos, float3(_Direction.x, 0 , _Direction.y)) - _Time* _Speed);
 
@@ -65,12 +71,13 @@ GerstnerOut GetWaveSum(float3 OriginalWPos)
                                  - _Direction.x * _Direction.x * (_Steepness * sin(f)));
 
     }
-    
+    /*
     //fixed wave attenuation
     float4 wt = float4(1, 1, 1, 1);
 
     for (int n = 0; n < fmod(WaveCount, 4); n++)
     {
+        
         float4 ks = 2 * PI / _WaveLengths[n];
         float4 Amplitudes = _Steepnesses[n] / ks;
         //later we have to this sqrt into CPU and integret it into Dir
@@ -80,8 +87,13 @@ GerstnerOut GetWaveSum(float3 OriginalWPos)
         float4 Wzs = Amplitudes * cos(fs) * _DirZs[n];
         float4 Wys = Amplitudes * sin(fs);
 
-        //Displace += float3(dot(Wxs, wt), dot(Wys, wt), dot(Wzs, wt));
+        Displace += float3(dot(Wxs, wt), dot(Wys, wt), dot(Wzs, wt));
+        Displace += ks.xyz;
+        
+
+        Displace += float3(WavesBatchBuffer[i].x, WavesBatchBuffer[i].y, WavesBatchBuffer[i].z);
     }
+    */
     
     float3 normal = normalize(cross(binormal, tangent));
     tangent = normalize(tangent);

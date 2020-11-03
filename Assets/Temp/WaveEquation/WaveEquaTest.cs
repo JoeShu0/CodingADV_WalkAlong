@@ -39,11 +39,9 @@ public class WaveEquaTest : MonoBehaviour
     void FixedUpdate()
     {
         _timer += Time.deltaTime;
-        if (_timer > 0.5)
-        {
-            _timer = 0.0f;
-            //WaveOriginPos += new Vector2(0.02f, 0.02f);
-        }
+
+
+        WaveOriginPos += new Vector2(0.005f, 0.00f);
 
         WaveComputeShader.SetTexture(KIndex, "PrevResult", Prev_WaveRenderTexture);
         WaveComputeShader.SetTexture(KIndex, "Result", WaveRenderTexture);

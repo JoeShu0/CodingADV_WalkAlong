@@ -30,9 +30,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     
     float4 previousData = PrevResult[id.xy];
     
-    if(DisTOri < WaveOriginData.z && fmod(_Time,1.0f) < 0.01f)
+    if(DisTOri < WaveOriginData.z && fmod(_Time,0.2f)<0.1f)
     {
-        previousData.g = 1.0f;
+        
+        previousData.g = 0.05f;
+        
     }
 
     //float dx = 1.0/width;

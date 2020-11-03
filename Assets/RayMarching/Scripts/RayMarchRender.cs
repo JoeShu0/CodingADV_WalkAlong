@@ -12,7 +12,7 @@ public class RayMarchRender : MonoBehaviour
     public enum RenderMode { depth, NormalWS, phong };
     public RenderMode RMode = RenderMode.depth;
     public float depthScaleInverse = 50.0f;
-    public float SmoothFactor = 10.0f;
+    public float SmoothFactor = 50.0f;
 
     private RenderTexture _target;
 

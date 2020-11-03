@@ -82,6 +82,7 @@
     <None Include="Assets\RayMarching\Scripts\RayMarchShader.compute" />
     <None Include="Assets\ComputeShader\Scripts\ErosionShader.compute" />
     <None Include="Assets\Temp\WaveEquation\WaveEquaGen.compute" />
+    <None Include="Assets\Temp\WaveEquation\DisplaceShader.shader" />
     <Reference Include="UnityEngine">
       <HintPath>D:/Unity_Editor/2019.4.7f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

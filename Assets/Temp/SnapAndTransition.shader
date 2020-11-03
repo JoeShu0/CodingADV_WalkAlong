@@ -182,6 +182,7 @@
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
                 //return float4(_NormalD,0.0f);
+                //return i.WPos;
                 return col;
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }
