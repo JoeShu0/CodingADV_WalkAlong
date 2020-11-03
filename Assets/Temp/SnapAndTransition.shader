@@ -3,17 +3,27 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+
         _SkyTex ("ReflectTex", Cube) = "white" {}
+
         _DetailN("DetailNormal", 2D) = "white" {}
+
         _LODDisTex("LODDisTexture", 2D) = "white" {}
         _NextLODDisTex("NextLODDisTexture", 2D) = "white" {}
+
         _LODNTex("LODNTexture", 2D) = "white" {}
         _NextLODNTex("NextLODNTexture", 2D) = "white" {}
+
         _GridSize ("GridSize", Float) = 1.0
         _TransitionParam("Transition", Vector) = (0.0,0.0,15.0,15.0)
         _CenterPos ("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
         _LODSize ("LODPatchSize", Float) = 1.0
         _AddUVScale("UVScale", Float) = 1.0
+
+        _FresnelB("FresnelBase", Float) = 0.01
+        _FresnelMul("FresnelMul", Float) = 0.5
+        _FresnelPow("FresnelPow", Float) = 2.0
+        _FresnelCol("FresnelBase", Vector) = (1.0,1.0,1.0,.5) 
     }
     SubShader
     {
@@ -43,7 +53,7 @@
                 float4 vertex : SV_POSITION;
                 float4 WPos: TEXCOORD1;
                 float4 StaticUV : TEXCOORD2;
-                float4 UVBlendF : TEXCOORD3;
+                float4 CameraDir : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -71,6 +81,11 @@
             float _LODSize;
             float _AddUVScale;
 
+            float _FresnelB;
+            float _FresnelMul;
+            float _FresnelPow;
+            float4 _FresnelCol;
+    
             //Onlyuse this kind of recon for tangent space Normal since Z could have 2 sulotion
             void UnpackNormalAndTangent(float4 _NormalNT, out float3 _Normal, out float3 _Tangent)
             {
@@ -109,7 +124,7 @@
 
                 //StaticUV for detail tex, current scale and transiton fixed!
                 float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.5f ;
-                o.StaticUV = float4(S_UV, 0.0f, 0.0f);
+                
 
                 //sample displacement tex
                 float3 col = tex2Dlod(_LODDisTex, float4(UV,0,0)).rgb;
@@ -135,10 +150,10 @@
                 
                 o.vertex = UnityObjectToClipPos(LPos);
                 
-
+                o.StaticUV = float4(S_UV, LODBlendFactor, 0.0f);
                 //o.uv = TRANSFORM_TEX(UV, _LODDisTex);
                 o.uv = float4(UV, UV_n);
-                o.UVBlendF = float4(LODBlendFactor, 0.0f, 0.0f, 0.0f);
+                o.CameraDir = float4(_WorldSpaceCameraPos - WPos.xyz, 0.0f);
                 o.WPos = WPos;
                 //o.WPos = float4(col, 0.0f);
                 UNITY_TRANSFER_FOG(o,o.vertex);
@@ -151,7 +166,7 @@
                 float3 _Normal = tex2D(_LODNTex, i.uv.rg);
                 float3 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
 
-                _Normal = normalize(lerp(_Normal, _NNormal, i.UVBlendF.x));
+                _Normal = normalize(lerp(_Normal, _NNormal, i.StaticUV.z));
 
                 //try recon binormal and tangent using x->tangent
                 float3 _Binormal = normalize(cross(float3(1,0,0), _Normal));
@@ -165,8 +180,9 @@
 
                 _Normal = _Tangent * _NormalD.x + _Binormal * _NormalD.y + _Normal * _NormalD.z;
                 
-                //_WorldSpaceCameraPos 
-                float3 reflectDir = normalize(reflect(i.WPos.xyz - _WorldSpaceCameraPos, _Normal.xyz));
+                //_WorldSpaceCameraPos
+                
+                float3 reflectDir = normalize(reflect(-i.CameraDir, _Normal.xyz));
 
                 float4 skyData = texCUBE(_SkyTex, reflectDir);
                 //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
@@ -175,8 +191,10 @@
 
                 float4 col = float4(0.5f, 0.5f, 0.5f, 1.0f);
                 col = pow(dot(normalize(float3(0,1,1)), reflectDir), 50);
-                col += skyData;
+                //col += skyData;
 
+                float fresnel = _FresnelB + _FresnelMul*pow(1-dot(-normalize(i.CameraDir), _Normal), _FresnelPow);
+                //col.rgb += lerp(col.rgb, skyData.rgb, fresnel) * _FresnelCol.a
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);

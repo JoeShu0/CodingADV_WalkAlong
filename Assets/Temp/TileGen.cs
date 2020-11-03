@@ -64,7 +64,7 @@ public class TileGen : MonoBehaviour
     //RTSize effect rendertexture size (displace and normal) for each LOD, lower it will effect normalmap quality
     static int RTSize = 512;
     //WaveCount should be mul of 4 Since we are packing it into vectors
-    static int WaveCount = 128;
+    static int WaveCount = 64;
     //LODMaterils
     private Material[] LODMats = new Material[LODCount];
     //LOD game object
@@ -433,7 +433,7 @@ public class TileGen : MonoBehaviour
         //Generate waves using Log ditribution, No steepness difference in diff wavelength!!!.
         //feels unnature, but it is OK for neow
 
-        int GroupCount = Mathf.FloorToInt(Mathf.Log(WaveCount, 2)) + 1;
+        int GroupCount = Mathf.FloorToInt(Mathf.Log(128, 2)) + 1;
         int WavePerGroup = Mathf.FloorToInt(WaveCount / GroupCount);
 
         int index = 0;
@@ -450,7 +450,7 @@ public class TileGen : MonoBehaviour
                 //Debug.Log(index);
                 if (index < WaveCount)
                 {
-                    WaveLengths[index] = Mathf.Lerp(Min_WaveLength, Max_WaveLength, Random.Range(0.0f, 1.0f));
+                    WaveLengths[index] = Mathf.Lerp(Min_WaveLength, Max_WaveLength, Random.Range(0.1f, 1.0f));
                     Amplitudes[index] = WaveLengths[index] * 0.006f * AnimWaveAmpMul[i];
                     DirAngleDegs[index] = Random.Range(-1.0f, 1.0f) * WaveWindAngle + WindAngle;
                     //DirX[index] = (float)Mathf.Cos(Mathf.Deg2Rad * DirAngleDegs[index]);
