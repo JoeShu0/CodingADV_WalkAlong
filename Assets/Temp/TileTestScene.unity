@@ -4782,13 +4782,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314406983}
-  m_LocalRotation: {x: 0.23163064, y: -0.2696434, z: 0.16538161, w: 0.91993946}
+  m_LocalRotation: {x: 0.1306335, y: -0.65974194, z: 0.2528609, w: 0.6955119}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 31.022001, y: -29.308, z: 12.081}
+  m_LocalEulerAnglesHint: {x: 31.022001, y: -83.61201, z: 12.081}
 --- !u!1 &321175543
 GameObject:
   m_ObjectHideFlags: 0
@@ -5464,7 +5464,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: dcbab6a84af99154ba3f5ee0731b656c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.03
+      value: -2.23
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dcbab6a84af99154ba3f5ee0731b656c,
         type: 3}
@@ -5510,6 +5510,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dcbab6a84af99154ba3f5ee0731b656c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 11883
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dcbab6a84af99154ba3f5ee0731b656c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 11883
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dcbab6a84af99154ba3f5ee0731b656c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 11883
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: dcbab6a84af99154ba3f5ee0731b656c,
         type: 3}
@@ -17089,7 +17104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1237870399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17097,7 +17112,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237870398}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fefc576718bc1841b2a40feb863b271, type: 3}
   m_Name: 

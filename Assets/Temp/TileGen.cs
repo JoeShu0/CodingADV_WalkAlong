@@ -6,6 +6,7 @@ using UnityEngine.Assertions;
 //using System;
 using System.Threading;
 using UnityEngine.UI;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class TileGen : MonoBehaviour
 {
@@ -79,6 +80,8 @@ public class TileGen : MonoBehaviour
     private int KIndex;
     private int ID_BWavelength;
 
+    private Light DirectionalLight;
+
 
     //private List<WaveData> WaveDatas = new List<WaveData>();
     //private WaveData[] WDs = new WaveData[WaveCount];
@@ -87,7 +90,10 @@ public class TileGen : MonoBehaviour
     void Start()
     {
         //string[] STileType = (string[])Enum.GetValues(typeof(TileType));
-        
+        //get a refernce to the directional light 
+        DirectionalLight = GameObject.FindObjectOfType<Light>();
+        Vector3 LightDir = DirectionalLight.transform.forward;
+
         //generate all th tile types 
         for (int i = 0; i < (int)TileType.Count; i++)
         {
@@ -121,7 +127,7 @@ public class TileGen : MonoBehaviour
         GenerateWaves(WaveCount, ref WaveLengths, ref Amplitudes, ref DirAngleDegs,
                         WaveLengthRange, WaveWindAngleRange, AnimWindDirDegs, AnimWaveAmpMul);
 
-
+        //assign wave data to the buffer
         for (int i = 0; i < WaveCount; i++)
         {
             WDs[i].WaveLength = WaveLengths[i];
@@ -150,6 +156,9 @@ public class TileGen : MonoBehaviour
             }
             LODMats[i].SetTexture("_SkyTex", SkyTex);
             LODMats[i].SetTexture("_DetailN", WaterDetailNormal);
+
+
+            LODMats[i].SetVector("_SunDir", new Vector4(LightDir.x, LightDir.y, LightDir.z, 0.0f)); 
         }
 
     }

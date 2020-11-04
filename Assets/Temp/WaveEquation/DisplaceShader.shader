@@ -3,6 +3,11 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+
+        _FresnelB("FresnelBase", Float) = 0.01
+        _FresnelMul("FresnelMul", Float) = 0.5
+        _FresnelPow("FresnelPow", Float) = 2.0
+        _FresnelCol("FresnelBase", Vector) = (1.0,1.0,1.0,.5)
     }
     SubShader
     {
