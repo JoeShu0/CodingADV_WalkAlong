@@ -5,6 +5,7 @@
         _MainTex ("Texture", 2D) = "white" {}
 
         _SkyTex ("ReflectTex", Cube) = "white" {}
+        _SunDir("DirectionalightDir", Vector) = (0.0,-1.0,0.0,0.0)
 
         _DetailN("DetailNormal", 2D) = "white" {}
 
@@ -63,6 +64,7 @@
             float4 _DetailN_ST;
 
             uniform samplerCUBE _SkyTex;
+            float4 _SunDir;
 
             sampler2D _LODDisTex;
             float4 _LODDisTex_ST;
@@ -187,11 +189,10 @@
                 float4 skyData = texCUBE(_SkyTex, reflectDir);
                 //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
                 
-                float3 lightDir = (unity_LightPosition[0] - i.WPos).rgb;
+                float3 lightDir = _SunDir;//(unity_LightPosition[0] - i.WPos).rgb;
 
                 float4 col = float4(0.5f, 0.5f, 0.5f, 1.0f);
-                col = pow(dot(normalize(float3(0,1,1)), reflectDir), 50);
-                //col += skyData;
+                col = pow(dot(normalize(-lightDir), reflectDir), 50);
 
                 float fresnel = _FresnelB + _FresnelMul*pow(1-dot(-normalize(i.CameraDir), _Normal), _FresnelPow);
                 //col.rgb += lerp(col.rgb, skyData.rgb, fresnel) * _FresnelCol.a
