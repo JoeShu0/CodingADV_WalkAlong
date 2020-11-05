@@ -5536,6 +5536,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SubdPlane
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dcbab6a84af99154ba3f5ee0731b656c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcbab6a84af99154ba3f5ee0731b656c, type: 3}
 --- !u!1 &411419884
@@ -17104,7 +17109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1237870399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17112,7 +17117,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237870398}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fefc576718bc1841b2a40feb863b271, type: 3}
   m_Name: 
@@ -17126,13 +17131,13 @@ MonoBehaviour:
   WaveLengthRange: {x: 128, y: 0.1}
   SteepnessRange: {x: 0.02, y: 0.001}
   AnimWaveAmpMul:
-  - 1.46
-  - 1.15
-  - 0.94
-  - 0.68
-  - 0.48
-  - 0.26
-  - 0.11
+  - 1.68
+  - 1.23
+  - 0.89
+  - 0.67
+  - 0.46
+  - 0.29
+  - 0.14
   - 0.05
 --- !u!4 &1237870400
 Transform:

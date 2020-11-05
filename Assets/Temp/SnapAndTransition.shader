@@ -189,20 +189,22 @@
                 float4 skyData = texCUBE(_SkyTex, reflectDir);
                 //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
                 
-                float3 lightDir = _SunDir;//(unity_LightPosition[0] - i.WPos).rgb;
+                float4 col = float4(0.02f, 0.02f, 0.15f, 1.0f);
 
                 float4 SunReflect = float4(0.0f, 0.0f, 1.0f, 1.0f);
-                SunReflect = pow(dot(normalize(-lightDir), reflectDir), 50);
+                SunReflect = pow(saturate(dot(normalize(-_SunDir), reflectDir)), 50);
 
-                float fresnel = _FresnelB + _FresnelMul*pow(1-dot(-normalize(i.CameraDir.xyz), _Normal), _FresnelPow);
-                //col.rgb += lerp(col.rgb, skyData.rgb, fresnel) * _FresnelCol.a
+                float fresnel = _FresnelB + _FresnelMul*pow(1-dot(normalize(i.CameraDir.xyz), _Normal), _FresnelPow);
+                col.rgb += lerp(col.rgb, skyData.rgb, fresnel) * _FresnelCol.a;
+
+                col.rgb += SunReflect.rgb;
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
                 //return float4(_NormalD,0.0f);
                 //return i.WPos;
-                return fresnel;
+                return col;
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }
             ENDCG
