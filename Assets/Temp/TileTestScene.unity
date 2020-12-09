@@ -1601,7 +1601,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 100000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1609,10 +1609,10 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
-  m_TargetEye: 3
+  m_TargetEye: 0
   m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
@@ -17131,14 +17131,15 @@ MonoBehaviour:
   WaveLengthRange: {x: 128, y: 0.1}
   SteepnessRange: {x: 0.02, y: 0.001}
   AnimWaveAmpMul:
-  - 1.79
-  - 1.44
-  - 1.23
-  - 0.98
-  - 0.72
-  - 0.52
-  - 0.29
-  - 0.08
+  - 1.75
+  - 1.26
+  - 0.84
+  - 0.56
+  - 0.38
+  - 0.24
+  - 0.11
+  - 0.02
+  OceanScale: 1
 --- !u!4 &1237870400
 Transform:
   m_ObjectHideFlags: 0

@@ -63,6 +63,7 @@
                 float4 WPos: TEXCOORD1;
                 float4 StaticUV : TEXCOORD2;
                 float4 CameraDir : TEXCOORD3;
+                float depth : TEXCOORD4;
             };
 
             sampler2D _MainTex;
@@ -145,7 +146,7 @@
                 float3 col = tex2Dlod(_LODDisTex, float4(UV,0,0)).rgb;
                 float3 col_n = tex2Dlod(_NextLODDisTex, float4(UV_n, 0, 0)).rgb;
 
-                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.8f)*5.0f, 0, 1);
+                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.5f)*5.0f, 0, 1);
                 float LODBlendFactor = max(LODUVblend.x, LODUVblend.y);
                 col = lerp(col, col_n, LODBlendFactor);
                 
@@ -172,6 +173,14 @@
                 o.WPos = WPos;
                 //o.WPos = float4(col, 0.0f);
                 UNITY_TRANSFER_FOG(o,o.vertex);
+
+                //add Depth
+                //o.depth = COMPUTE_DEPTH_01; Same as depth texture
+                float _depth;
+                COMPUTE_EYEDEPTH(_depth);
+                o.depth = _depth;
+
+
                 return o;
             }
 
@@ -193,7 +202,12 @@
 
                 float3 _NormalD = normalize(_NormalD01 + _NormalD02);
 
-                _Normal = _Tangent * _NormalD.x + _Binormal * _NormalD.y + _Normal * _NormalD.z;
+                _NormalD = _Tangent * _NormalD.x + _Binormal * _NormalD.y + _Normal * _NormalD.z;
+                
+                //Temp Detail normal and normal fade
+                _Normal = lerp(_NormalD, _Normal, clamp((i.depth - 100.0f) / 500.0f, 0, 1));
+                _Normal = lerp(_Normal, float3(0,1,0), clamp((i.depth - 1000.0f) / 8000.0f, 0, 1));
+
                 
                 //_WorldSpaceCameraPos
                 
@@ -216,7 +230,7 @@
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
                 //return float4(_NormalD,0.0f);
-                //return i.WPos;
+                //return _Depth;
                 return col;
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }

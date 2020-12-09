@@ -108,6 +108,7 @@ public class TileGen : MonoBehaviour
     {
         //Get the camera
         MainCam = GameObject.FindObjectOfType<Camera>();
+        //MainCam.depthTextureMode = DepthTextureMode.Depth;
         
         //string[] STileType = (string[])Enum.GetValues(typeof(TileType));
         //get a refernce to the directional light 
@@ -198,7 +199,7 @@ public class TileGen : MonoBehaviour
     {
         if (MainCam.transform.hasChanged)
         {
-            Debug.Log("Changed!!");
+            //Debug.Log("Changed!!");
             MainCam.transform.hasChanged = false;
             int CameraHeightLevel = Mathf.FloorToInt(Mathf.Sqrt(Mathf.Abs(MainCam.transform.position.y) / CameraHeight0)) + 1;
 
@@ -240,11 +241,11 @@ public class TileGen : MonoBehaviour
         for (int i = 0; i < LODDisplaceMaps.Length; i++)
         {
             //trying to reduce the WaveCount computed for far LODs
-            //ShapeShader.SetInt("WaveCount", WaveCount - i * 6);
-            //WaveBuffer.SetData(WDs.Skip(i*6).ToArray());
+            ShapeShader.SetInt("WaveCount", WaveCount - i * 6);
+             WaveBuffer.SetData(WDs.Skip(i*6).ToArray());
 
-            ShapeShader.SetInt("WaveCount", WaveCount);
-            WaveBuffer.SetData(WDs);
+            //ShapeShader.SetInt("WaveCount", WaveCount);
+            //WaveBuffer.SetData(WDs);
             ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
 
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2, i) * OceanScale);
@@ -378,7 +379,7 @@ public class TileGen : MonoBehaviour
         tilemesh.uv = UVs;
         
         //Intentionly make larger bound to avoid fructrum culling when moving vertex~
-        tilemesh.bounds = new Bounds(new Vector3(0, 0, 0), new Vector3(TileSizeX * 1.35f, 10.0f, TileSizeZ * 1.35f));
+        tilemesh.bounds = new Bounds(new Vector3(0, 0, 0), new Vector3(TileSizeX * 1.8f, 20.0f, TileSizeZ * 1.8f));
         //Debug.Log(type);
         return tilemesh;
     }
