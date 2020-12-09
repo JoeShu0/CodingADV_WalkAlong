@@ -21,14 +21,14 @@
         //Water Center
         _CenterPos("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
         
-        //staic params(may make into constant later)
+        //staic params(only Set when initialize)
         //parameters when theLOD scale is 1
-        _GridSize ("GridSize", Float) = 1.0
-        _TransitionParam("Transition", Vector) = (0.0,0.0,15.0,15.0)
+        _GridSize ("GridSize", Float) = 1.0 //size for individual grid
+        _TransitionParam("Transition", Vector) = (0.0,0.0,15.0,15.0)//LOD Transition x=... 
+        _LODSize ("LODPatchSize", Float) = 1.0 //WholeLODPatch Size = gridsize*gridcount*patchtilecount
         
-        _LODSize ("LODPatchSize", Float) = 1.0
-        //_AddUVScale("UVScale", Float) = 1.0
 
+        //**********shader part*************
         _FresnelB("FresnelBase", Float) = 0.01
         _FresnelMul("FresnelMul", Float) = 0.5
         _FresnelPow("FresnelPow", Float) = 2.0
@@ -135,13 +135,13 @@
                 float2 UV_n = (WPos.xz - _CenterPos.xz) / _LODSize * 0.5f + 0.5f;
 
                 //StaticUV for detail tex, current scale and transiton fixed!
-                float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.5f ;
+                float2 S_UV = WPos.xz * 0.5f ;
                 
                 //sample displacement tex
                 float3 col = tex2Dlod(_LODDisTex, float4(UV,0,0)).rgb;
                 float3 col_n = tex2Dlod(_NextLODDisTex, float4(UV_n, 0, 0)).rgb;
 
-                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.5f)*5.0f, 0, 1);
+                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.8f)*5.0f, 0, 1);
                 float LODBlendFactor = max(LODUVblend.x, LODUVblend.y);
                 col = lerp(col, col_n, LODBlendFactor);
                 

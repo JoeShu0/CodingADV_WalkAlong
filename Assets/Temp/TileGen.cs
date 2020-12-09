@@ -73,7 +73,7 @@ public class TileGen : MonoBehaviour
     //Min grid size
     static float GridSize = 0.2f;
     //grid count for each tile in standard, have to be the mul of 4 since the snapping requires it
-    static int GridCountPerTile = 50;
+    static int GridCountPerTile = 40;
     //RTSize effect rendertexture size (displace and normal) for each LOD, lower it will effect normalmap quality
     static int RTSize = 512;
     //WaveCount should be mul of 4 Since we are packing it into vectors
