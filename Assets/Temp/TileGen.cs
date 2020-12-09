@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Assertions;
-//using System;
+using System;
+using System.Linq;
 using System.Threading;
 using UnityEngine.UI;
 using UnityEngine.Experimental.GlobalIllumination;
@@ -24,7 +25,9 @@ public class TileGen : MonoBehaviour
     [Range(0.0f, 2.0f)]
     public float[] AnimWaveAmpMul = new float[8];
 
+    public int OceanScale = 1;
 
+    private Camera MainCam;
 
     //WaveData for debug
     private float[] WaveLengths = new float[WaveCount];
@@ -55,18 +58,28 @@ public class TileGen : MonoBehaviour
     }
     private WaveData[] WDs = new WaveData[WaveCount];
 
+
+    //Backlogs
+    /* 1. Add a parameter to controll the height without change ammplitude #does not workout!! normal is not changed
+     * 2. change both displace and height into batched compute
+     * 3. Try only compute the suitable wave length for each LOD and add them to the higher LOD# set back to just reduce the wavecuont for LODs
+     * 4. make the water plane scale with the camera height
+     */
+
+
     //**************Params for OceanGeo *************** 
     //Count for LOD rings
     static int LODCount = 8;
     //Min grid size
-    static float GridSize = 0.1f;
+    static float GridSize = 0.2f;
     //grid count for each tile in standard, have to be the mul of 4 since the snapping requires it
     static int GridCountPerTile = 50;
     //RTSize effect rendertexture size (displace and normal) for each LOD, lower it will effect normalmap quality
     static int RTSize = 512;
     //WaveCount should be mul of 4 Since we are packing it into vectors
+    //And We are getting each LOD to compute diff wave length so we fix the WaveCount to 64=8*8
     static int WaveCount = 64;
-    //LODMaterils
+    //LODMaterials
     private Material[] LODMats = new Material[LODCount];
     //LOD game object
     private GameObject TileObj;
@@ -89,6 +102,9 @@ public class TileGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Get the camera
+        MainCam = GameObject.FindObjectOfType<Camera>();
+        
         //string[] STileType = (string[])Enum.GetValues(typeof(TileType));
         //get a refernce to the directional light 
         DirectionalLight = GameObject.FindObjectOfType<Light>();
@@ -178,13 +194,19 @@ public class TileGen : MonoBehaviour
             WDs[i].Direction = new Vector2((float)Mathf.Cos(Mathf.Deg2Rad * DirAngleDegs[i]), (float)Mathf.Sin(Mathf.Deg2Rad * DirAngleDegs[i]));
         }*/
         
-        WaveBuffer.SetData(WDs);
-        ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
+        //WaveBuffer.SetData(WDs);
+        //ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
         ShapeShader.SetFloats("CenterPos", new float[] {gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z});
         
 
         for (int i = 0; i < LODDisplaceMaps.Length; i++)
         {
+            //trying to reduce the WaveCount computed for far LODs
+            ShapeShader.SetInt("WaveCount", WaveCount - i * 6);
+
+            WaveBuffer.SetData(WDs.Skip(i*6).ToArray());
+            ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
+
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2,i));
             ShapeShader.SetInt("LODIndex", i);
             ShapeShader.SetFloat("_Time", Time.time);
@@ -452,16 +474,16 @@ public class TileGen : MonoBehaviour
         for (int i = 0; i < GroupCount; i++)
         {
             float Max_WaveLength = Mathf.Pow(2, i);
-            float Min_WaveLength = i == 0 ? 0.0f : Mathf.Pow(2, i - 1);
+            float Min_WaveLength = i == 0 ? 0.25f : Mathf.Pow(2, i - 1);
             for (int n = 0; n < WavePerGroup; n++)
             {
                 index = i * WavePerGroup + n;
                 //Debug.Log(index);
                 if (index < WaveCount)
                 {
-                    WaveLengths[index] = Mathf.Lerp(Min_WaveLength, Max_WaveLength, Random.Range(0.1f, 1.0f));
+                    WaveLengths[index] = Mathf.Lerp(Min_WaveLength, Max_WaveLength, UnityEngine.Random.Range(0.1f, 1.0f));
                     Amplitudes[index] = WaveLengths[index] * 0.006f * AnimWaveAmpMul[i];
-                    DirAngleDegs[index] = Random.Range(-1.0f, 1.0f) * WaveWindAngle + WindAngle;
+                    DirAngleDegs[index] = UnityEngine.Random.Range(-1.0f, 1.0f) * WaveWindAngle + WindAngle;
                     //DirX[index] = (float)Mathf.Cos(Mathf.Deg2Rad * DirAngleDegs[index]);
                     //DirZ[index] = (float)Mathf.Sin(Mathf.Deg2Rad * DirAngleDegs[index]);
                 }
@@ -474,11 +496,13 @@ public class TileGen : MonoBehaviour
             Debug.Log("waves not filled");
             for (int n = index+1; n < WaveCount; n++)
             {
-                WaveLengths[n] = Mathf.Lerp(WaveLengthRange.x, WaveLengthRange.x, Random.Range(0.0f, 1.0f));
+                WaveLengths[n] = Mathf.Lerp(WaveLengthRange.x, WaveLengthRange.x, UnityEngine.Random.Range(0.0f, 1.0f));
                 Amplitudes[n] = 0.0f;
                 DirAngleDegs[n] = 0.0f;
             }
         }
+
+        //Array.Sort(WaveLengths);
     }
 
     static Vector4[] FArray2VectorBatch(float[] floatarray)

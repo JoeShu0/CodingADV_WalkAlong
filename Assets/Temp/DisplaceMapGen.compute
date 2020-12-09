@@ -58,7 +58,7 @@ GerstnerOut GetWaveSum(float3 OriginalWPos)
 
         float Wx = _Amplitude * cos(f) * _Direction.x;
         float Wz = _Amplitude * cos(f) * _Direction.y;
-        float Wy = _Amplitude * sin(f);
+        float Wy = _Amplitude * sin(f) * 1.0f;
 
         Displace += float3(Wx, Wy, Wz);
 

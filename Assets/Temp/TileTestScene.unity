@@ -1627,13 +1627,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119639704}
-  m_LocalRotation: {x: 0.11278218, y: -0, z: -0, w: 0.99361974}
+  m_LocalRotation: {x: 0.10499923, y: 0.3627138, z: -0.04117036, w: 0.92505074}
   m_LocalPosition: {x: -1.635, y: 3.437, z: 0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 12.951, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 12.951, y: 42.820004, z: 0}
 --- !u!1 &126910505
 GameObject:
   m_ObjectHideFlags: 0
@@ -17127,18 +17127,18 @@ MonoBehaviour:
   SkyTex: {fileID: 8900000, guid: 6ac1f8102791dd941a456230f0d369bf, type: 3}
   WaterDetailNormal: {fileID: 2800000, guid: 889e574f9d7c9684daa36f20fbd8ce1c, type: 3}
   AnimWindDirDegs: 0
-  WaveWindAngleRange: 90
+  WaveWindAngleRange: 120
   WaveLengthRange: {x: 128, y: 0.1}
   SteepnessRange: {x: 0.02, y: 0.001}
   AnimWaveAmpMul:
-  - 1.68
+  - 1.79
+  - 1.44
   - 1.23
-  - 0.89
-  - 0.67
-  - 0.46
+  - 0.98
+  - 0.72
+  - 0.52
   - 0.29
-  - 0.14
-  - 0.05
+  - 0.08
 --- !u!4 &1237870400
 Transform:
   m_ObjectHideFlags: 0

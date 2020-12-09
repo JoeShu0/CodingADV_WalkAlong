@@ -15,11 +15,19 @@
         _LODNTex("LODNTexture", 2D) = "white" {}
         _NextLODNTex("NextLODNTexture", 2D) = "white" {}
 
+        //runtime params
+        //scale LODs
+        _LODScale("LODScale", Float) = 1.0
+        //Water Center
+        _CenterPos("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
+        
+        //staic params(may make into constant later)
+        //parameters when theLOD scale is 1
         _GridSize ("GridSize", Float) = 1.0
         _TransitionParam("Transition", Vector) = (0.0,0.0,15.0,15.0)
-        _CenterPos ("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
+        
         _LODSize ("LODPatchSize", Float) = 1.0
-        _AddUVScale("UVScale", Float) = 1.0
+        //_AddUVScale("UVScale", Float) = 1.0
 
         _FresnelB("FresnelBase", Float) = 0.01
         _FresnelMul("FresnelMul", Float) = 0.5
@@ -81,7 +89,7 @@
             float4 _TransitionParam;
             float4 _CenterPos;
             float _LODSize;
-            float _AddUVScale;
+            //float _AddUVScale;
 
             float _FresnelB;
             float _FresnelMul;
@@ -101,15 +109,17 @@
             {
                 v2f o;
                 
-                //Snapping
-                float4 WPos = mul(unity_ObjectToWorld, v.vertex);
-                
                 float Grid = _GridSize;
                 float Grid2 = _GridSize * 2.0f;
                 float Grid4 = _GridSize * 4.0f;
+
+                //get Point world position(scaled by parent!)
+                float4 WPos = mul(unity_ObjectToWorld, v.vertex);
+                //snap to 2*unit grid(scaled by parent!)
                 WPos.xz -= frac(unity_ObjectToWorld._m03_m23 / Grid2) * Grid2;
                 
-                //Transition
+                //Transition point to snap to near by 4 unit point for transition
+                //_TransitionParam is also scaled before passed in!
                 float DistX = abs(WPos.x - _CenterPos.x) - abs(_TransitionParam.x);
                 float DistZ = abs(WPos.z - _CenterPos.z) - abs(_TransitionParam.y);
                 float TransiFactor = clamp(max(DistX, DistZ) / _TransitionParam.z, 0.0f, 1.0f);
@@ -120,19 +130,18 @@
                 if (abs(POffset.y) < MinTransitionRadius)
                     WPos.z += POffset.y * Grid4 * TransiFactor;
                 
-                //Gen UV
+                //Gen LOD UV used for displaceMap and Normal Map
                 float2 UV = (WPos.xz - _CenterPos.xz) / _LODSize + 0.5f;
                 float2 UV_n = (WPos.xz - _CenterPos.xz) / _LODSize * 0.5f + 0.5f;
 
                 //StaticUV for detail tex, current scale and transiton fixed!
                 float2 S_UV = (WPos.xz - _CenterPos.xz) * 0.5f ;
                 
-
                 //sample displacement tex
                 float3 col = tex2Dlod(_LODDisTex, float4(UV,0,0)).rgb;
                 float3 col_n = tex2Dlod(_NextLODDisTex, float4(UV_n, 0, 0)).rgb;
 
-                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.8f)*5.0f, 0, 1);
+                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.5f)*5.0f, 0, 1);
                 float LODBlendFactor = max(LODUVblend.x, LODUVblend.y);
                 col = lerp(col, col_n, LODBlendFactor);
                 
@@ -175,8 +184,8 @@
                 float3 _Tangent = normalize(cross(_Normal, _Binormal));
 
                 //Detail normalmap
-                float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.02f)));
-                float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.04f + float2(0.5f, 0.5f))));
+                float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.01f)));
+                float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.02f + float2(0.5f, 0.5f))));
 
                 float3 _NormalD = normalize(_NormalD01 + _NormalD02);
 
