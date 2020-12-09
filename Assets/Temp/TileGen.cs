@@ -27,7 +27,11 @@ public class TileGen : MonoBehaviour
 
     public int OceanScale = 1;
 
+    //Camera
     private Camera MainCam;
+    private float ArcTanHalfFOV = 2.0f;
+    private float CameraHeight0 = 10.0f;
+
 
     //WaveData for debug
     private float[] WaveLengths = new float[WaveCount];
@@ -182,32 +186,68 @@ public class TileGen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+        AdjustOceanForCamera();
+
+        RenderOceanDIsNorRTs();
+
+    }
+
+    void AdjustOceanForCamera()
+    {
+        if (MainCam.transform.hasChanged)
+        {
+            Debug.Log("Changed!!");
+            MainCam.transform.hasChanged = false;
+            int CameraHeightLevel = Mathf.FloorToInt(Mathf.Sqrt(Mathf.Abs(MainCam.transform.position.y) / CameraHeight0)) + 1;
+
+            ScaleOcean(CameraHeightLevel);
+
+            float CameraFEstimateDist = MainCam.transform.position.y * ArcTanHalfFOV;
+            Vector3 Cal_OceanCenter = MainCam.transform.forward * CameraFEstimateDist + MainCam.transform.position;
+
+            Vector3 CurPos = gameObject.transform.position;
+            gameObject.transform.position = new Vector3(Cal_OceanCenter.x, CurPos.y, Cal_OceanCenter.z);
+
+            foreach (Material TileMat in LODMats)
+            {
+                TileMat.SetVector("_CenterPos", Cal_OceanCenter);
+            }
+
+        }
+    }
+
+
+    void ScaleOcean(int in_OceanScale)
+    {
+        OceanScale = in_OceanScale;
+        gameObject.transform.localScale = new Vector3(in_OceanScale, in_OceanScale, in_OceanScale);
+        foreach (Material TileMat in LODMats)
+        {
+            TileMat.SetInt("_OceanScale", in_OceanScale);
+        }
+    }
+
+    void RenderOceanDIsNorRTs()
+    {
         //Generating displacement&Normal rendertexure with compute shader
         ComputeBuffer WaveBuffer = new ComputeBuffer(WaveCount, 20);
 
-        /*
-        for (int i = 0; i < WaveCount; i++)
-        {
-            WDs[i].WaveLength = WaveLengths[i];
-            WDs[i].Amplitude = Amplitudes[i] * AnimWaveScale;
-            WDs[i].Speed = Mathf.Sqrt(9.8f / 2.0f / 3.14159f * WaveLengths[i]);
-            WDs[i].Direction = new Vector2((float)Mathf.Cos(Mathf.Deg2Rad * DirAngleDegs[i]), (float)Mathf.Sin(Mathf.Deg2Rad * DirAngleDegs[i]));
-        }*/
-        
-        //WaveBuffer.SetData(WDs);
-        //ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
-        ShapeShader.SetFloats("CenterPos", new float[] {gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z});
-        
+        ShapeShader.SetFloats("CenterPos", new float[] { gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z });
+
 
         for (int i = 0; i < LODDisplaceMaps.Length; i++)
         {
             //trying to reduce the WaveCount computed for far LODs
-            ShapeShader.SetInt("WaveCount", WaveCount - i * 6);
+            //ShapeShader.SetInt("WaveCount", WaveCount - i * 6);
+            //WaveBuffer.SetData(WDs.Skip(i*6).ToArray());
 
-            WaveBuffer.SetData(WDs.Skip(i*6).ToArray());
+            ShapeShader.SetInt("WaveCount", WaveCount);
+            WaveBuffer.SetData(WDs);
             ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
 
-            ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2,i));
+            ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2, i) * OceanScale);
             ShapeShader.SetInt("LODIndex", i);
             ShapeShader.SetFloat("_Time", Time.time);
             ShapeShader.SetTexture(KIndex, "Displace", LODDisplaceMaps[i]);
@@ -215,16 +255,7 @@ public class TileGen : MonoBehaviour
             ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
         }
         WaveBuffer.Release();
-
-        //Updata LOD center position for the LODMaterials(transition vertex need the relative position)
-        foreach (Material TileMat in LODMats)
-        {
-            TileMat.SetVector("_CenterPos", gameObject.transform.position);
-        }
-        
     }
-
-   
 
     Mesh GenerateTile(TileType type, float GridSize, int GridCount)
     {

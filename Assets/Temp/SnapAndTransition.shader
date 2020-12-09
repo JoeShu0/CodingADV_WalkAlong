@@ -17,7 +17,7 @@
 
         //runtime params
         //scale LODs
-        _LODScale("LODScale", Float) = 1.0
+        _OceanScale("LODScale", Int) = 1
         //Water Center
         _CenterPos("CenterPos", Vector) = (0.0,0.0,0.0,0.0)
         
@@ -84,12 +84,14 @@
             sampler2D _NextLODNTex;
             float4 _NextLODNTex_ST;
 
+            float4 _CenterPos;
 
             float _GridSize;
             float4 _TransitionParam;
-            float4 _CenterPos;
             float _LODSize;
             //float _AddUVScale;
+
+            int _OceanScale;
 
             float _FresnelB;
             float _FresnelMul;
@@ -109,9 +111,9 @@
             {
                 v2f o;
                 
-                float Grid = _GridSize;
-                float Grid2 = _GridSize * 2.0f;
-                float Grid4 = _GridSize * 4.0f;
+                float Grid = _GridSize * _OceanScale;
+                float Grid2 = Grid * 2.0f;
+                float Grid4 = Grid * 4.0f;
 
                 //get Point world position(scaled by parent!)
                 float4 WPos = mul(unity_ObjectToWorld, v.vertex);
@@ -119,7 +121,8 @@
                 WPos.xz -= frac(unity_ObjectToWorld._m03_m23 / Grid2) * Grid2;
                 
                 //Transition point to snap to near by 4 unit point for transition
-                //_TransitionParam is also scaled before passed in!
+                //_TransitionParam need to be scaled !
+                _TransitionParam *= _OceanScale;
                 float DistX = abs(WPos.x - _CenterPos.x) - abs(_TransitionParam.x);
                 float DistZ = abs(WPos.z - _CenterPos.z) - abs(_TransitionParam.y);
                 float TransiFactor = clamp(max(DistX, DistZ) / _TransitionParam.z, 0.0f, 1.0f);
@@ -131,6 +134,7 @@
                     WPos.z += POffset.y * Grid4 * TransiFactor;
                 
                 //Gen LOD UV used for displaceMap and Normal Map
+                _LODSize *= _OceanScale;
                 float2 UV = (WPos.xz - _CenterPos.xz) / _LODSize + 0.5f;
                 float2 UV_n = (WPos.xz - _CenterPos.xz) / _LODSize * 0.5f + 0.5f;
 
