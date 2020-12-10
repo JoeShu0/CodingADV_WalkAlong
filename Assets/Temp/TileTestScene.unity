@@ -17129,16 +17129,16 @@ MonoBehaviour:
   AnimWindDirDegs: 0
   WaveWindAngleRange: 120
   WaveLengthRange: {x: 128, y: 0.1}
-  SteepnessRange: {x: 0.02, y: 0.001}
   AnimWaveAmpMul:
-  - 1.75
-  - 1.26
-  - 0.84
-  - 0.56
-  - 0.38
-  - 0.24
-  - 0.11
-  - 0.02
+  - 1.21
+  - 1.12
+  - 1.04
+  - 0.93
+  - 0.81
+  - 0.71
+  - 0.55
+  - 0.42
+  - 0.23
   OceanScale: 1
 --- !u!4 &1237870400
 Transform:

@@ -19,8 +19,7 @@ public class TileGen : MonoBehaviour
     public float AnimWindDirDegs = 0.0f;
     public float WaveWindAngleRange = 90.0f;
 
-    public Vector2 WaveLengthRange = new Vector2(128.0f, 0.1f);
-    public Vector2 SteepnessRange = new Vector2(0.5f, 0.01f);
+    public Vector2 WaveLengthRange = new Vector2(128.0f, 0.25f);
 
     [Range(0.0f, 2.0f)]
     public float[] AnimWaveAmpMul = new float[8];
@@ -64,10 +63,10 @@ public class TileGen : MonoBehaviour
 
 
     //Backlogs
-    /* 1. Add a parameter to controll the height without change ammplitude #does not workout!! normal is not changed
-     * 2. change both displace and height into batched compute
+    /* 
+     * 
      * 3. Try only compute the suitable wave length for each LOD and add them to the higher LOD# set back to just reduce the wavecuont for LODs
-     * 4. make the water plane scale with the camera height
+     * 
      */
 
 
@@ -237,12 +236,13 @@ public class TileGen : MonoBehaviour
 
         ShapeShader.SetFloats("CenterPos", new float[] { gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z });
 
+        
 
-        for (int i = 0; i < LODDisplaceMaps.Length; i++)
+        for (int i = LODDisplaceMaps.Length-1; i >= 0; i--)
         {
             //trying to reduce the WaveCount computed for far LODs
-            ShapeShader.SetInt("WaveCount", WaveCount - i * 6);
-             WaveBuffer.SetData(WDs.Skip(i*6).ToArray());
+            ShapeShader.SetInt("WaveCount", 8);
+            WaveBuffer.SetData(WDs.Skip(i*8).Take(8).ToArray());
 
             //ShapeShader.SetInt("WaveCount", WaveCount);
             //WaveBuffer.SetData(WDs);
@@ -251,6 +251,12 @@ public class TileGen : MonoBehaviour
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2, i) * OceanScale);
             ShapeShader.SetInt("LODIndex", i);
             ShapeShader.SetFloat("_Time", Time.time);
+            
+            if (i != LODDisplaceMaps.Length - 1)
+            {
+                ShapeShader.SetTexture(KIndex, "BaseDisplace", LODDisplaceMaps[i+1]);
+                ShapeShader.SetTexture(KIndex, "BaseNormal", LODNormalMaps[i+1]);
+            }
             ShapeShader.SetTexture(KIndex, "Displace", LODDisplaceMaps[i]);
             ShapeShader.SetTexture(KIndex, "Normal", LODNormalMaps[i]);
             ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
@@ -496,7 +502,7 @@ public class TileGen : MonoBehaviour
         //Generate waves using Log ditribution, No steepness difference in diff wavelength!!!.
         //feels unnature, but it is OK for neow
 
-        int GroupCount = Mathf.FloorToInt(Mathf.Log(128, 2)) + 1;
+        int GroupCount = Mathf.FloorToInt(Mathf.Log(Mathf.FloorToInt(WaveLengthRange.x), 2)) + 1;
         int WavePerGroup = Mathf.FloorToInt(WaveCount / GroupCount);
 
         int index = 0;
@@ -506,7 +512,7 @@ public class TileGen : MonoBehaviour
         for (int i = 0; i < GroupCount; i++)
         {
             float Max_WaveLength = Mathf.Pow(2, i);
-            float Min_WaveLength = i == 0 ? 0.25f : Mathf.Pow(2, i - 1);
+            float Min_WaveLength = i == 0 ? WaveLengthRange.y : Mathf.Pow(2, i - 1);
             for (int n = 0; n < WavePerGroup; n++)
             {
                 index = i * WavePerGroup + n;

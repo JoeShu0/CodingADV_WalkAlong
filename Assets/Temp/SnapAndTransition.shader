@@ -199,13 +199,19 @@
                 //Detail normalmap
                 float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.01f)));
                 float3 _NormalD02 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, -_Time.y) * 0.02f + float2(0.5f, 0.5f))));
+                //Far Scaled Detail
+                float3 _NormalD10 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy * 0.05f)));
 
                 float3 _NormalD = normalize(_NormalD01 + _NormalD02);
 
-                _NormalD = _Tangent * _NormalD.x + _Binormal * _NormalD.y + _Normal * _NormalD.z;
+
+                float3 _NormalLOD0 = _Tangent * _NormalD.x + _Binormal * _NormalD.y + _Normal * _NormalD.z;
+                float3 _NormalLOD1 = _NormalD10 = _Tangent * _NormalD10.x + _Binormal * _NormalD10.y + _Normal * _NormalD10.z;
+                float3 _NormalLOD2 = _Normal;
                 
                 //Temp Detail normal and normal fade
-                _Normal = lerp(_NormalD, _Normal, clamp((i.depth - 100.0f) / 500.0f, 0, 1));
+                _Normal = lerp(_NormalLOD0, _NormalLOD1, clamp((i.depth - 20.0f) / 200.0f, 0, 1));
+                _Normal = lerp(_Normal, _NormalLOD2, clamp((i.depth - 300.0f) / 500.0f, 0, 1));
                 _Normal = lerp(_Normal, float3(0,1,0), clamp((i.depth - 1000.0f) / 8000.0f, 0, 1));
 
                 
