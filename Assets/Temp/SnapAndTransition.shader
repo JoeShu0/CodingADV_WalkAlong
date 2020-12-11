@@ -148,6 +148,7 @@
 
                 float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.5f)*5.0f, 0, 1);
                 float LODBlendFactor = max(LODUVblend.x, LODUVblend.y);
+                //LODBlendFactor = 0.0f;
                 col = lerp(col, col_n, LODBlendFactor);
                 
                 //blend area debug
@@ -191,6 +192,7 @@
                 float3 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
 
                 _Normal = normalize(lerp(_Normal, _NNormal, i.StaticUV.z));
+                //_Normal = normalize(lerp(_Normal, _NNormal, 0.0f));
 
                 //try recon binormal and tangent using x->tangent
                 float3 _Binormal = normalize(cross(float3(1,0,0), _Normal));
@@ -235,7 +237,7 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
-                //return float4(_NormalD,0.0f);
+                //return float4(_Normal,0.0f);
                 //return _Depth;
                 return col;
                 //return float4(0.5f,0.5f,0.5f,1.0f);

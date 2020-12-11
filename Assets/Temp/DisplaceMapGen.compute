@@ -3,8 +3,10 @@
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
-RWTexture2D<float4> BaseDisplace;
-RWTexture2D<float4> BaseNormal;
+Texture2D<float4> BaseDisplace;
+SamplerState samplerBaseDisplace;
+Texture2D<float4> BaseNormal;
+SamplerState samplerBaseNormal;
 
 RWTexture2D<float4> Displace;
 RWTexture2D<float4> Normal;
@@ -48,15 +50,22 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
     float3 displace = float3(0.0f,0.0f,0.0f);
     float3 tangent = float3(1.0f, 0.0f, 0.0f);
     float3 binormal = float3(0.0f, 0.0f, 1.0f);
-    float3 normal = float3(0.0f, 0.0f, 0.0f);
+    float3 normal = float3(0.0f, 1.0f, 0.0f);
+
+    float3 _Normal = float3(0.0f, 0.0f, 0.0f);
 
     if (LODIndex < 7)
     {
-        float2 HalfCoord = float2(float(coord.x) * 0.5f, float(coord.y) * 0.5f);
-        //normal += BaseNormal[int2(coord * 0.5f)].xyz;
-        displace += BaseDisplace[HalfCoord].xyz;
+        float2 UV = float2(float(coord.x +0.5f)/512.0f * 0.5f +0.25f, float(coord.y+0.5f)/512.0f*0.5f+0.25f);
+        _Normal = BaseNormal.SampleLevel(samplerBaseNormal, UV, 0);
+        displace += BaseDisplace.SampleLevel(samplerBaseDisplace, UV, 0);
+            //BaseDisplace[HalfCoord].xyz;
         //normal += BaseNormal[coord].xyz;
         //displace += BaseDisplace[coord].xyz;
+    }
+    else
+    {
+        _Normal = float3(0.0f, 1.0f, 0.0f);
     }
 
     for(int i=0;i<WaveCount;i++)
@@ -108,13 +117,20 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
         Displace += float3(WavesBatchBuffer[i].x, WavesBatchBuffer[i].y, WavesBatchBuffer[i].z);
     }
     */
+
+    //try recon binormal and tangent using x->tangent
+    float3 _Binormal = normalize(cross(float3(1, 0, 0), _Normal));
+    float3 _Tangent = normalize(cross(_Normal, _Binormal));
     
-    normal += normalize(cross(binormal, tangent));
+    float3 C_normal = normalize(cross(binormal, tangent));
+    float3 N_Normal = _Tangent * C_normal.x + _Binormal * C_normal.z + _Normal * C_normal.y;
+
+
     tangent = normalize(tangent);
     
     GerstnerOut ReturnData;
     ReturnData.displacement = displace;
-    ReturnData.normalVector = normal;
+    ReturnData.normalVector = N_Normal;
     ReturnData.tangentVector = tangent;
 
     return ReturnData;

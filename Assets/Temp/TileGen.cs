@@ -135,6 +135,7 @@ public class TileGen : MonoBehaviour
 
         //Initialize rendertextures
         InitLODRTs(LODDisplaceMaps, LODNormalMaps, RTSize);
+        Debug.Log(LODDisplaceMaps[0].antiAliasing);
 
         //Initialize AnimWave compute shader
         KIndex = ShapeShader.FindKernel("CSMain");
@@ -251,11 +252,16 @@ public class TileGen : MonoBehaviour
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2, i) * OceanScale);
             ShapeShader.SetInt("LODIndex", i);
             ShapeShader.SetFloat("_Time", Time.time);
-            
+
             if (i != LODDisplaceMaps.Length - 1)
             {
-                ShapeShader.SetTexture(KIndex, "BaseDisplace", LODDisplaceMaps[i+1]);
-                ShapeShader.SetTexture(KIndex, "BaseNormal", LODNormalMaps[i+1]);
+                ShapeShader.SetTexture(KIndex, "BaseDisplace", LODDisplaceMaps[i + 1]);
+                ShapeShader.SetTexture(KIndex, "BaseNormal", LODNormalMaps[i + 1]);
+            }
+            else
+            {
+                ShapeShader.SetTexture(KIndex, "BaseDisplace", LODDisplaceMaps[i]);
+                ShapeShader.SetTexture(KIndex, "BaseNormal", LODNormalMaps[i]);
             }
             ShapeShader.SetTexture(KIndex, "Displace", LODDisplaceMaps[i]);
             ShapeShader.SetTexture(KIndex, "Normal", LODNormalMaps[i]);
@@ -483,7 +489,10 @@ public class TileGen : MonoBehaviour
                 LODDisplaceMaps[i].Release();
             LODDisplaceMaps[i] = new RenderTexture(RTSize, RTSize, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             LODDisplaceMaps[i].enableRandomWrite = true;
+            LODDisplaceMaps[i].antiAliasing = 1;
+            //LODDisplaceMaps[i].bindTextureMS = true;
             LODDisplaceMaps[i].wrapMode = TextureWrapMode.Clamp;
+            LODDisplaceMaps[i].filterMode = FilterMode.Trilinear;
             LODDisplaceMaps[i].Create();
 
             if (LODNormalMaps[i] != null)
@@ -491,6 +500,7 @@ public class TileGen : MonoBehaviour
             LODNormalMaps[i] = new RenderTexture(RTSize, RTSize, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             LODNormalMaps[i].enableRandomWrite = true;
             LODNormalMaps[i].wrapMode = TextureWrapMode.Clamp;
+            LODNormalMaps[i].filterMode = FilterMode.Trilinear;
             LODNormalMaps[i].Create();
         }  
     }
