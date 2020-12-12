@@ -21,7 +21,7 @@ public class TileGen : MonoBehaviour
 
     public Vector2 WaveLengthRange = new Vector2(128.0f, 0.25f);
 
-    [Range(0.0f, 2.0f)]
+    [Range(0.0f, 3.0f)]
     public float[] AnimWaveAmpMul = new float[8];
 
     public int OceanScale = 1;
@@ -81,7 +81,7 @@ public class TileGen : MonoBehaviour
     static int RTSize = 512;
     //WaveCount should be mul of 4 Since we are packing it into vectors
     //And We are getting each LOD to compute diff wave length so we fix the WaveCount to 64=8*8
-    static int WaveCount = 64;
+    static int WaveCount = 128;
     //LODMaterials
     private Material[] LODMats = new Material[LODCount];
     //LOD game object
@@ -242,8 +242,9 @@ public class TileGen : MonoBehaviour
         for (int i = LODDisplaceMaps.Length-1; i >= 0; i--)
         {
             //trying to reduce the WaveCount computed for far LODs
-            ShapeShader.SetInt("WaveCount", 8);
-            WaveBuffer.SetData(WDs.Skip(i*8).Take(8).ToArray());
+            int WaveCountPLOD = WaveCount / LODCount;
+            ShapeShader.SetInt("WaveCount", WaveCountPLOD);
+            WaveBuffer.SetData(WDs.Skip(i* WaveCountPLOD).Take(WaveCountPLOD).ToArray());
 
             //ShapeShader.SetInt("WaveCount", WaveCount);
             //WaveBuffer.SetData(WDs);
@@ -530,7 +531,7 @@ public class TileGen : MonoBehaviour
                 if (index < WaveCount)
                 {
                     WaveLengths[index] = Mathf.Lerp(Min_WaveLength, Max_WaveLength, UnityEngine.Random.Range(0.1f, 1.0f));
-                    Amplitudes[index] = WaveLengths[index] * 0.006f * AnimWaveAmpMul[i];
+                    Amplitudes[index] = WaveLengths[index] * 0.005f * AnimWaveAmpMul[i];
                     DirAngleDegs[index] = UnityEngine.Random.Range(-1.0f, 1.0f) * WaveWindAngle + WindAngle;
                     //DirX[index] = (float)Mathf.Cos(Mathf.Deg2Rad * DirAngleDegs[index]);
                     //DirZ[index] = (float)Mathf.Sin(Mathf.Deg2Rad * DirAngleDegs[index]);

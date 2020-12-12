@@ -17128,16 +17128,17 @@ MonoBehaviour:
   WaterDetailNormal: {fileID: 2800000, guid: 889e574f9d7c9684daa36f20fbd8ce1c, type: 3}
   AnimWindDirDegs: 0
   WaveWindAngleRange: 120
-  WaveLengthRange: {x: 128, y: 0.1}
+  WaveLengthRange: {x: 256, y: 0.1}
   AnimWaveAmpMul:
-  - 2
-  - 2
-  - 2
-  - 2
-  - 2
-  - 2
-  - 2
-  - 2
+  - 1.49
+  - 1.45
+  - 1.31
+  - 1.08
+  - 0.81
+  - 0.52
+  - 0.26
+  - 0.08
+  - 0.02
   OceanScale: 1
 --- !u!4 &1237870400
 Transform:
