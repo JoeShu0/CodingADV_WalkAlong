@@ -53,12 +53,13 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
     float3 normal = float3(0.0f, 1.0f, 0.0f);
 
     float3 _Normal = float3(0.0f, 0.0f, 0.0f);
-
+    /*
     if (LODIndex < 7)
     {
         float2 UV = float2(float(coord.x +0.5f)/512.0f * 0.5f +0.25f, float(coord.y+0.5f)/512.0f*0.5f+0.25f);
-        _Normal = BaseNormal.SampleLevel(samplerBaseNormal, UV, 0);
-        displace += BaseDisplace.SampleLevel(samplerBaseDisplace, UV, 0);
+        _Normal = normal;
+        //_Normal = BaseNormal.SampleLevel(samplerBaseNormal, UV, 0);
+        //displace += BaseDisplace.SampleLevel(samplerBaseDisplace, UV, 0);
             //BaseDisplace[HalfCoord].xyz;
         //normal += BaseNormal[coord].xyz;
         //displace += BaseDisplace[coord].xyz;
@@ -67,7 +68,7 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
     {
         _Normal = float3(0.0f, 1.0f, 0.0f);
     }
-
+    */
     for(int i=0;i<WaveCount;i++)
     {
         
@@ -81,17 +82,17 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
 
         float Wx = _Amplitude * cos(f) * _Direction.x;
         float Wz = _Amplitude * cos(f) * _Direction.y;
-        float Wy = _Amplitude * sin(f) * 1.0f;
+        float Wy = _Amplitude * sin(f) * 0.8f;
 
         displace += float3(Wx, Wy, Wz);
 
         tangent += float3( - _Direction.x * _Direction.x*(_Steepness * sin(f)),
-                                _Direction.x * (_Steepness * cos(f)),
+                                _Direction.x * (_Steepness * cos(f)) * 0.8f,
                                 - _Direction.x * _Direction.y * (_Steepness * sin(f)));
 
         binormal += float3(-_Direction.x * _Direction.y * (_Steepness * sin(f)),
-                                _Direction.y * (_Steepness * cos(f)),
-                                 - _Direction.x * _Direction.x * (_Steepness * sin(f)));
+                                _Direction.y * (_Steepness * cos(f)) * 0.8f,
+                                 - _Direction.y * _Direction.y * (_Steepness * sin(f)));
 
     }
     /*
@@ -119,18 +120,19 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
     */
 
     //try recon binormal and tangent using x->tangent
+    /*
     float3 _Binormal = normalize(cross(float3(1, 0, 0), _Normal));
     float3 _Tangent = normalize(cross(_Normal, _Binormal));
-    
+    */
     float3 C_normal = normalize(cross(binormal, tangent));
-    float3 N_Normal = _Tangent * C_normal.x + _Binormal * C_normal.z + _Normal * C_normal.y;
+    //float3 N_Normal = _Tangent * C_normal.x + _Binormal * C_normal.z + _Normal * C_normal.y;
 
 
     tangent = normalize(tangent);
     
     GerstnerOut ReturnData;
     ReturnData.displacement = displace;
-    ReturnData.normalVector = N_Normal;
+    ReturnData.normalVector = C_normal;
     ReturnData.tangentVector = tangent;
 
     return ReturnData;

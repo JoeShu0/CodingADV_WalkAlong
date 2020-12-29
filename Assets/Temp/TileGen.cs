@@ -76,7 +76,7 @@ public class TileGen : MonoBehaviour
     //Min grid size
     static float GridSize = 0.2f;
     //grid count for each tile in standard, have to be the mul of 4 since the snapping requires it
-    static int GridCountPerTile = 40;
+    static int GridCountPerTile = 80;
     //RTSize effect rendertexture size (displace and normal) for each LOD, lower it will effect normalmap quality
     static int RTSize = 512;
     //WaveCount should be mul of 4 Since we are packing it into vectors
@@ -243,11 +243,12 @@ public class TileGen : MonoBehaviour
         {
             //trying to reduce the WaveCount computed for far LODs
             int WaveCountPLOD = WaveCount / LODCount;
-            ShapeShader.SetInt("WaveCount", WaveCountPLOD);
-            WaveBuffer.SetData(WDs.Skip(i* WaveCountPLOD).Take(WaveCountPLOD).ToArray());
+            //ShapeShader.SetInt("WaveCount", WaveCountPLOD);
+            //WaveBuffer.SetData(WDs.Skip(i* WaveCountPLOD).Take(WaveCountPLOD).ToArray());
 
-            //ShapeShader.SetInt("WaveCount", WaveCount);
+            ShapeShader.SetInt("WaveCount", WaveCount - WaveCountPLOD * i);
             //WaveBuffer.SetData(WDs);
+            WaveBuffer.SetData(WDs.Skip(i * WaveCountPLOD).ToArray());
             ShapeShader.SetBuffer(KIndex, "WavesBuffer", WaveBuffer);
 
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2, i) * OceanScale);
