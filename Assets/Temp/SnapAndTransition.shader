@@ -188,15 +188,16 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the normal texture
-                float3 _Normal = tex2D(_LODNTex, i.uv.rg);
-                float3 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
+                float4 _Normal = tex2D(_LODNTex, i.uv.rg);
+                float4 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
+                float _Foam = tex2D(_LODNTex, i.uv.rg).a;
 
                 _Normal = normalize(lerp(_Normal, _NNormal, i.StaticUV.z));
                 //_Normal = normalize(lerp(_Normal, _NNormal, 0.0f));
 
                 //try recon binormal and tangent using x->tangent
-                float3 _Binormal = normalize(cross(float3(1,0,0), _Normal));
-                float3 _Tangent = normalize(cross(_Normal, _Binormal));
+                float3 _Binormal = normalize(cross(float3(1,0,0), _Normal.rgb));
+                float3 _Tangent = normalize(cross(_Normal.rgb, _Binormal));
 
                 //Detail normalmap
                 float3 _NormalD01 = normalize(UnpackNormal(tex2D(_DetailN, i.StaticUV.xy + float2(_Time.y, _Time.y) * 0.01f)));
@@ -212,14 +213,14 @@
                 float3 _NormalLOD2 = _Normal;
                 
                 //Temp Detail normal and normal fade
-                _Normal = lerp(_NormalLOD0, _NormalLOD1, clamp((i.depth - 20.0f) / 200.0f, 0, 1));
-                _Normal = lerp(_Normal, _NormalLOD2, clamp((i.depth - 300.0f) / 500.0f, 0, 1));
-                _Normal = lerp(_Normal, float3(0,1,0), clamp((i.depth - 1000.0f) / 8000.0f, 0, 1));
+                float3 F_Normal = lerp(_NormalLOD0, _NormalLOD1, clamp((i.depth - 20.0f) / 200.0f, 0, 1));
+                F_Normal = lerp(F_Normal, _NormalLOD2, clamp((i.depth - 300.0f) / 500.0f, 0, 1));
+                F_Normal = lerp(F_Normal, float3(0,1,0), clamp((i.depth - 1000.0f) / 8000.0f, 0, 1));
 
                 
                 //_WorldSpaceCameraPos
                 
-                float3 reflectDir = normalize(reflect(-i.CameraDir, _Normal.xyz));
+                float3 reflectDir = normalize(reflect(-i.CameraDir, F_Normal.xyz));
 
                 float4 skyData = texCUBE(_SkyTex, reflectDir);
                 //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
@@ -229,7 +230,7 @@
                 float4 SunReflect = float4(0.0f, 0.0f, 1.0f, 1.0f);
                 SunReflect = pow(saturate(dot(normalize(-_SunDir), reflectDir)), 50);
 
-                float fresnel = _FresnelB + _FresnelMul*pow(1-dot(normalize(i.CameraDir.xyz), _Normal), _FresnelPow);
+                float fresnel = _FresnelB + _FresnelMul*pow(1-dot(normalize(i.CameraDir.xyz), F_Normal), _FresnelPow);
                 col.rgb += lerp(col.rgb, skyData.rgb, fresnel) * _FresnelCol.a;
 
                 col.rgb += SunReflect.rgb;
@@ -237,8 +238,8 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
-                //return float4(_Normal,0.0f);
-                //return _Depth;
+                //return float4(_NNormal,0.0f);
+                return -_Foam+0.3f;
                 return col;
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }

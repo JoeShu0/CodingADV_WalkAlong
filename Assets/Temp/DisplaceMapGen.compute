@@ -48,11 +48,17 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
     float PI =3.14159265f; 
 
     float3 displace = float3(0.0f,0.0f,0.0f);
-    float3 tangent = float3(1.0f, 0.0f, 0.0f);
-    float3 binormal = float3(0.0f, 0.0f, 1.0f);
-    float3 normal = float3(0.0f, 1.0f, 0.0f);
+    //float3 tangent = float3(1.0f, 0.0f, 0.0f);
+    //float3 binormal = float3(0.0f, 0.0f, 1.0f);
+    //float3 normal = float3(0.0f, 1.0f, 0.0f);
 
-    float3 _Normal = float3(0.0f, 0.0f, 0.0f);
+    //float3 _Normal = float3(0.0f, 0.0f, 0.0f);
+
+    float Dxx = 0.0f;
+    float Dyy = 0.0f;
+    float Dxy = 0.0f;
+    float Dzx = 0.0f;
+    float Dzy = 0.0f;
     /*
     if (LODIndex < 7)
     {
@@ -82,18 +88,21 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
 
         float Wx = _Amplitude * cos(f) * _Direction.x;
         float Wz = _Amplitude * cos(f) * _Direction.y;
-        float Wy = _Amplitude * sin(f) * 0.8f;
+        float Wy = _Amplitude * sin(f) *1.0f;
 
         displace += float3(Wx, Wy, Wz);
 
-        tangent += float3( - _Direction.x * _Direction.x*(_Steepness * sin(f)),
-                                _Direction.x * (_Steepness * cos(f)) * 0.8f,
-                                - _Direction.x * _Direction.y * (_Steepness * sin(f)));
+        Dxx += -_Direction.x * _Direction.x * (_Steepness * sin(f));
+        Dyy += -_Direction.y * _Direction.y * (_Steepness * sin(f));
+        Dxy += -_Direction.x * _Direction.y * (_Steepness * sin(f));
+        Dzx += _Direction.x * (_Steepness * cos(f));
+        Dzy += _Direction.y * (_Steepness * cos(f));
 
-        binormal += float3(-_Direction.x * _Direction.y * (_Steepness * sin(f)),
-                                _Direction.y * (_Steepness * cos(f)) * 0.8f,
-                                 - _Direction.y * _Direction.y * (_Steepness * sin(f)));
+        //tangent += float3(Dxx, _Direction.x * (_Steepness * cos(f)) * 1.0f, Dxy);
 
+        //binormal += float3(Dxy, _Direction.y * (_Steepness * cos(f)) * 1.0f, Dyy);
+        
+        //JacobianDet += (1 + Dxx) * (1 + Dyy) - (1 + Dxy) * (1 + Dxy);
     }
     /*
     //fixed wave attenuation
@@ -124,7 +133,10 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
     float3 _Binormal = normalize(cross(float3(1, 0, 0), _Normal));
     float3 _Tangent = normalize(cross(_Normal, _Binormal));
     */
-    float3 C_normal = normalize(cross(binormal, tangent));
+    float3 tangent = normalize(float3(1.0f, 0.0f, 0.0f)+float3(Dxx, Dzx, Dxy));
+    float3 binormal = normalize(float3(0.0f, 0.0f, 1.0f)+float3(Dxy, Dzy, Dyy));
+    float3 normal = normalize(cross(binormal, tangent));
+    float JacobianDet = (1 + Dxx) * (1 + Dyy) - (1 + Dxy) * (1 + Dxy);
     //float3 N_Normal = _Tangent * C_normal.x + _Binormal * C_normal.z + _Normal * C_normal.y;
 
 
@@ -132,8 +144,8 @@ GerstnerOut GetWaveSum(float3 OriginalWPos, int2 coord)
     
     GerstnerOut ReturnData;
     ReturnData.displacement = displace;
-    ReturnData.normalVector = C_normal;
-    ReturnData.tangentVector = tangent;
+    ReturnData.normalVector = normal;
+    ReturnData.tangentVector = float3(JacobianDet, 0.0f,0.0f);
 
     return ReturnData;
 }
@@ -155,8 +167,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float3 Normalout = outputWaveVectors.normalVector;
     float3 Tangentout = outputWaveVectors.tangentVector;
 
-    Displace[id.xy] = float4(Displacement,1.0f);
-    Normal[id.xy] = float4(Normalout,1.0f);
+    Displace[id.xy] = float4(Displacement, Tangentout.x);
+    Normal[id.xy] = float4(Normalout, Tangentout.x);
 
     //debug
     //Displace[id.xy] = _WaveLengths[10];
