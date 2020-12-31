@@ -146,7 +146,7 @@
                 float3 col = tex2Dlod(_LODDisTex, float4(UV,0,0)).rgb;
                 float3 col_n = tex2Dlod(_NextLODDisTex, float4(UV_n, 0, 0)).rgb;
 
-                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f -0.5f)*5.0f, 0, 1);
+                float2 LODUVblend = clamp((abs(UV - 0.5f) / 0.5f - 0.75f)*5.0f, 0, 1);
                 float LODBlendFactor = max(LODUVblend.x, LODUVblend.y);
                 //LODBlendFactor = 0.0f;
                 col = lerp(col, col_n, LODBlendFactor);
@@ -239,8 +239,8 @@
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
                 //return float4(_NNormal,0.0f);
-                return -_Foam+0.3f;
-                return col;
+                //return _Foam;
+                return col+ max(0.0f,_Foam);
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }
             ENDCG

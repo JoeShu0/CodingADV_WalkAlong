@@ -13,8 +13,10 @@ public class TileGen : MonoBehaviour
 {
     public Shader tileShader;
     public ComputeShader ShapeShader;
+
     public Texture SkyTex;
     public Texture WaterDetailNormal;
+    public Texture WaterFoamNoise;
 
     public float AnimWindDirDegs = 0.0f;
     public float WaveWindAngleRange = 90.0f;
@@ -267,6 +269,9 @@ public class TileGen : MonoBehaviour
             }
             ShapeShader.SetTexture(KIndex, "Displace", LODDisplaceMaps[i]);
             ShapeShader.SetTexture(KIndex, "Normal", LODNormalMaps[i]);
+
+            ShapeShader.SetTexture(KIndex, "NoiseFoam", WaterFoamNoise);
+
             ShapeShader.Dispatch(KIndex, threadGroupX, threadGroupY, 1);
         }
         WaveBuffer.Release();

@@ -8,6 +8,9 @@ SamplerState samplerBaseDisplace;
 Texture2D<float4> BaseNormal;
 SamplerState samplerBaseNormal;
 
+Texture2D<float4> NoiseFoam;
+SamplerState samplerNoiseFoam;
+
 RWTexture2D<float4> Displace;
 RWTexture2D<float4> Normal;
 float3 CenterPos;
@@ -167,8 +170,13 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float3 Normalout = outputWaveVectors.normalVector;
     float3 Tangentout = outputWaveVectors.tangentVector;
 
-    Displace[id.xy] = float4(Displacement, Tangentout.x);
-    Normal[id.xy] = float4(Normalout, Tangentout.x);
+    float2 UV = float2(float(id.x + 0.5f) / 512.0f *1.0f, float(id.y + 0.5f) / 512.0f*1.0f) + _Time/100.0f;
+    float _FoamNoise = NoiseFoam.SampleLevel(samplerNoiseFoam, UV, 0);
+
+    float FoamMask = -Tangentout.x - _FoamNoise + 0.1f;
+
+    Displace[id.xy] = float4(Displacement,0.0f);
+    Normal[id.xy] = float4(Normalout, FoamMask);
 
     //debug
     //Displace[id.xy] = _WaveLengths[10];

@@ -17126,19 +17126,20 @@ MonoBehaviour:
   ShapeShader: {fileID: 7200000, guid: 9542cdf7a1499cf479a89df699c6a03d, type: 3}
   SkyTex: {fileID: 8900000, guid: 6ac1f8102791dd941a456230f0d369bf, type: 3}
   WaterDetailNormal: {fileID: 2800000, guid: 889e574f9d7c9684daa36f20fbd8ce1c, type: 3}
-  AnimWindDirDegs: 0
-  WaveWindAngleRange: 120
+  WaterFoamNoise: {fileID: 2800000, guid: 82be8b9670b797842aed824015f71a2d, type: 3}
+  AnimWindDirDegs: 50
+  WaveWindAngleRange: 30
   WaveLengthRange: {x: 256, y: 0.1}
   AnimWaveAmpMul:
-  - 2.48
-  - 2.33
-  - 2.08
-  - 1.59
-  - 1.1
-  - 0.64
-  - 0.23
+  - 1.47
+  - 1.33
+  - 1.38
+  - 1.52
+  - 1.52
+  - 1.32
+  - 0.9
+  - 0.4
   - 0.07
-  - 0
   OceanScale: 1
 --- !u!4 &1237870400
 Transform:
