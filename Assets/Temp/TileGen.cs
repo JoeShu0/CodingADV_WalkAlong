@@ -16,6 +16,8 @@ public class TileGen : MonoBehaviour
 
     public Texture SkyTex;
     public Texture WaterDetailNormal;
+    public Texture WaterFoam;
+    public Texture WaterFoamU;
     public Texture WaterFoamNoise;
 
     public float AnimWindDirDegs = 0.0f;
@@ -179,7 +181,8 @@ public class TileGen : MonoBehaviour
             }
             LODMats[i].SetTexture("_SkyTex", SkyTex);
             LODMats[i].SetTexture("_DetailN", WaterDetailNormal);
-
+            LODMats[i].SetTexture("_FoamTex", WaterFoam); 
+            LODMats[i].SetTexture("_FoamTexU", WaterFoamU);
 
             LODMats[i].SetVector("_SunDir", new Vector4(LightDir.x, LightDir.y, LightDir.z, 0.0f)); 
         }

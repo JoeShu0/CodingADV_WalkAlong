@@ -186,7 +186,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float FoamMask = -Tangentout.x - _FoamNoise + 0.1f;
 
     Displace[id.xy] = float4(Displacement,0.0f);
-    Normal[id.xy] = float4(Normalout, 0.1f*(1.0f-Tangentout.x) + Normal[id.xy].w * 0.9f);
+    Normal[id.xy] = float4(Normalout, 0.1f*(1.2f-Tangentout.x) + Normal[id.xy].w * 0.9f);
 
     //debug
     //Displace[id.xy] = _WaveLengths[10];

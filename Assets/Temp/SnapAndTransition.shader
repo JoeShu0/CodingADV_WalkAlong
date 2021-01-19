@@ -7,6 +7,9 @@
         _SkyTex ("ReflectTex", Cube) = "white" {}
         _SunDir("DirectionalightDir", Vector) = (0.0,-1.0,0.0,0.0)
 
+        _FoamTex("FoamTex", 2D) = "white" {}
+        _FoamUTex("FoamTex", 2D) = "white" {}
+
         _DetailN("DetailNormal", 2D) = "white" {}
 
         _LODDisTex("LODDisTexture", 2D) = "white" {}
@@ -74,6 +77,12 @@
 
             uniform samplerCUBE _SkyTex;
             float4 _SunDir;
+
+            sampler2D _FoamTex;
+            float4 _FoamTex_ST;
+
+            sampler2D _FoamTexU;
+            float4 _FoamTexU_ST;
 
             sampler2D _LODDisTex;
             float4 _LODDisTex_ST;
@@ -190,7 +199,10 @@
                 // sample the normal texture
                 float4 _Normal = tex2D(_LODNTex, i.uv.rg);
                 float4 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
-                float _Foam = tex2D(_LODNTex, i.uv.rg).a;
+                float _FoamMask = tex2D(_LODNTex, i.uv.rg).a;
+                //float _FoamMaskU = tex2Dlod(_LODNTex, i.uv.rg, 1).a;
+                float _Foam = tex2D(_FoamTex, i.StaticUV.xy*0.25f).a;
+                float _FoamU = tex2D(_FoamTexU, i.StaticUV.xy * 0.25f).r;
 
                 _Normal = normalize(lerp(_Normal, _NNormal, i.StaticUV.z));
                 //_Normal = normalize(lerp(_Normal, _NNormal, 0.0f));
@@ -225,7 +237,12 @@
                 float4 skyData = texCUBE(_SkyTex, reflectDir);
                 //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
                 
-                float4 col = float4(0.02f, 0.02f, 0.15f, 1.0f);
+                float4 baseCol = float4(0.02f, 0.02f, 0.15f, 1.0f);
+                float4 foamCol = float4(1.0f, 1.0f,1.0f, 1.0f);
+                float4 foamColU = float4(0.08f, 0.08f, 0.15f, 1.0f);
+
+                float4 col = lerp(baseCol, foamColU, saturate(_Foam * _FoamMask));
+                //col = lerp(col, foamColU, saturate(_Foam * _FoamMask));
 
                 float4 SunReflect = float4(0.0f, 0.0f, 1.0f, 1.0f);
                 SunReflect = pow(saturate(dot(normalize(-_SunDir), reflectDir)), 50);
@@ -238,9 +255,9 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
-                //return float4(_NNormal,0.0f);
-                //return _Foam;
-                return lerp(col, col+0.5f, max(0.0f,_Foam));
+                return col;
+                //return _Foam* _FoamMask;
+                //return lerp(col, 1.0f, saturate(_Foam*_FoamMask));
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }
             ENDCG
