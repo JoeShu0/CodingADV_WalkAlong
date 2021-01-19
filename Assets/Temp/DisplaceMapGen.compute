@@ -17,6 +17,7 @@ float3 CenterPos;
 float LODSize;
 int LODIndex;
 float _Time;
+float _deltaTime;
 int WaveCount;
 
 const int LODCount = 8;
@@ -183,10 +184,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float2 UV = float2(float(id.x + 0.5f) / 512.0f *1.0f, float(id.y + 0.5f) / 512.0f*1.0f) + _Time/100.0f;
     float _FoamNoise = NoiseFoam.SampleLevel(samplerNoiseFoam, UV, 0);
 
-    float FoamMask = -Tangentout.x - _FoamNoise + 0.1f;
+    float FoamMask = 0.1f*(1.0f - Tangentout.x)+ Normal[id.xy].a*0.9f;
 
     Displace[id.xy] = float4(Displacement,0.0f);
-    Normal[id.xy] = float4(Normalout, 0.1f*(1.2f-Tangentout.x) + Normal[id.xy].w * 0.9f);
+    
+    Normal[id.xy] = float4(Normalout, FoamMask);
 
     //debug
     //Displace[id.xy] = _WaveLengths[10];

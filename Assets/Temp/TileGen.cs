@@ -259,6 +259,8 @@ public class TileGen : MonoBehaviour
             ShapeShader.SetFloat("LODSize", GridSize * GridCountPerTile * 4 * Mathf.Pow(2, i) * OceanScale);
             ShapeShader.SetInt("LODIndex", i);
             ShapeShader.SetFloat("_Time", Time.time);
+            ShapeShader.SetFloat("_deltaTime", Time.deltaTime);
+            //Debug.Log(Time.deltaTime);
 
             if (i != LODDisplaceMaps.Length - 1)
             {
