@@ -240,7 +240,7 @@
                 //return float4(reflectDir,1.0f);
                 //return float4(_NNormal,0.0f);
                 //return _Foam;
-                return col+ max(0.0f,_Foam);
+                return lerp(col, col+0.5f, max(0.0f,_Foam));
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }
             ENDCG
