@@ -201,7 +201,7 @@
                 float4 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
                 float _FoamMask = tex2D(_LODNTex, i.uv.rg).a;
                 //float _FoamMaskU = tex2Dlod(_LODNTex, i.uv.rg, 1).a;
-                float _Foam = tex2D(_FoamTex, i.StaticUV.xy*1.0f).a;
+                float _Foam = tex2D(_FoamTex, i.StaticUV.xy*0.25f).a;
                 float _FoamU = tex2D(_FoamTexU, i.StaticUV.xy * 0.25f).r;
 
                 _Normal = normalize(lerp(_Normal, _NNormal, i.StaticUV.z));
@@ -241,8 +241,9 @@
                 float4 foamCol = float4(1.0f, 1.0f, 1.0f, 1.0f);
                 float4 foamColU = float4(0.25f, 0.55f, 0.85f, 1.0f);
 
-                float4 col = lerp(baseCol, foamColU, saturate(_FoamU * _FoamMask));
-                col = lerp(col, foamCol, saturate(_Foam * (_FoamMask-0.05f)));
+                float4 col = lerp(baseCol, foamColU, saturate(_FoamU * (_FoamMask+0.1f)));
+                col = lerp(col, foamCol, saturate(_Foam * (_FoamMask)));
+                //col = lerp(col, foamCol, saturate(_Foam * (1.0f)));
 
                 float4 SunReflect = float4(0.0f, 0.0f, 1.0f, 1.0f);
                 SunReflect = pow(saturate(dot(normalize(-_SunDir), reflectDir)), 50);
@@ -256,7 +257,7 @@
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 //return float4(reflectDir,1.0f);
                 return col;
-                //return _Foam* _FoamMask;
+                //return _FoamMask;
                 //return lerp(col, 1.0f, saturate(_Foam*_FoamMask));
                 //return float4(0.5f,0.5f,0.5f,1.0f);
             }
