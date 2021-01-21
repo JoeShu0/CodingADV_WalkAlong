@@ -75,7 +75,7 @@
     <Compile Include="Assets\Temp\WaveEquation\CPUWaveEquation.cs" />
     <Compile Include="Assets\Temp\WaveEquation\WaveEquaTest.cs" />
     <None Include="Assets\Temp\SnapAndTransition.shader" />
-    <None Include="Assets\Temp\ShowNormal.shader" />
+    <None Include="Assets\Temp\TestShader\ShowNormal.shader" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColorShader.shader" />
     <None Include="Assets\Temp\DisplaceMapGen.compute" />
     <None Include="Assets\HydraulicErosion\Shaders\TerrainColor.shader" />

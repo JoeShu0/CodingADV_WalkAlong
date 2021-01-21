@@ -6,6 +6,7 @@
 
         _SkyTex ("ReflectTex", Cube) = "white" {}
         _SunDir("DirectionalightDir", Vector) = (0.0,-1.0,0.0,0.0)
+        _SunColorI("DirectionalightColorIntensity", Vector) = (1.0,1.0,1.0,1.0)
 
         _FoamTex("FoamTex", 2D) = "white" {}
         _FoamUTex("FoamTex", 2D) = "white" {}
@@ -18,6 +19,10 @@
         _LODNTex("LODNTexture", 2D) = "white" {}
         _NextLODNTex("NextLODNTexture", 2D) = "white" {}
 
+        _BaseColor("baseCol",Vector) = (0.02, 0.02, 0.15, 1.0)
+        _SSSCol("sssCol",Vector) = (0.8, 0.55, 0.5, 1.0)
+        _FoamColU("FoamColU",Vector) = (0.8, 0.55, 0.5, 1.0)
+            
         //runtime params
         //scale LODs
         _OceanScale("LODScale", Int) = 1
@@ -66,7 +71,7 @@
                 float4 WPos: TEXCOORD1;
                 float4 StaticUV : TEXCOORD2;
                 float4 CameraDir : TEXCOORD3;
-                float depth : TEXCOORD4;
+                float4 DisPdepth : TEXCOORD4;
             };
 
             sampler2D _MainTex;
@@ -77,6 +82,7 @@
 
             uniform samplerCUBE _SkyTex;
             float4 _SunDir;
+            float4 _SunColorI;
 
             sampler2D _FoamTex;
             float4 _FoamTex_ST;
@@ -93,6 +99,10 @@
             float4 _LODNTex_ST;
             sampler2D _NextLODNTex;
             float4 _NextLODNTex_ST;
+
+            float4 _BaseColor;
+            float4 _SSSCol;
+            float4 _FoamColU;
 
             float4 _CenterPos;
 
@@ -188,7 +198,7 @@
                 //o.depth = COMPUTE_DEPTH_01; Same as depth texture
                 float _depth;
                 COMPUTE_EYEDEPTH(_depth);
-                o.depth = _depth;
+                o.DisPdepth = float4(col.r,col.g,col.b, _depth);
 
 
                 return o;
@@ -201,8 +211,8 @@
                 float4 _NNormal = tex2D(_NextLODNTex, i.uv.ba);
                 float _FoamMask = tex2D(_LODNTex, i.uv.rg).a;
                 //float _FoamMaskU = tex2Dlod(_LODNTex, i.uv.rg, 1).a;
-                float _Foam = tex2D(_FoamTex, i.StaticUV.xy*0.25f).a;
-                float _FoamU = tex2D(_FoamTexU, i.StaticUV.xy * 0.25f).r;
+                float _Foam = tex2D(_FoamTex, i.StaticUV.xy*0.5f).a;
+                float _FoamU = tex2D(_FoamTexU, i.StaticUV.xy * 1.0f).r;
 
                 _Normal = normalize(lerp(_Normal, _NNormal, i.StaticUV.z));
                 //_Normal = normalize(lerp(_Normal, _NNormal, 0.0f));
@@ -225,9 +235,9 @@
                 float3 _NormalLOD2 = _Normal;
                 
                 //Temp Detail normal and normal fade
-                float3 F_Normal = lerp(_NormalLOD0, _NormalLOD1, clamp((i.depth - 20.0f) / 200.0f, 0, 1));
-                F_Normal = lerp(F_Normal, _NormalLOD2, clamp((i.depth - 300.0f) / 500.0f, 0, 1));
-                F_Normal = lerp(F_Normal, float3(0,1,0), clamp((i.depth - 1000.0f) / 8000.0f, 0, 1));
+                float3 F_Normal = lerp(_NormalLOD0, _NormalLOD1, clamp((i.DisPdepth.a - 20.0f) / 200.0f, 0, 1));
+                F_Normal = lerp(F_Normal, _NormalLOD2, clamp((i.DisPdepth.a - 300.0f) / 500.0f, 0, 1));
+                F_Normal = lerp(F_Normal, float3(0,1,0), clamp((i.DisPdepth.a - 1000.0f) / 8000.0f, 0, 1));
 
                 
                 //_WorldSpaceCameraPos
@@ -237,21 +247,28 @@
                 float4 skyData = texCUBE(_SkyTex, reflectDir);
                 //half3 reflectColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
                 
+                float4 col = _BaseColor;
+
+                //add fake SSS
+                float4 SSCol = float4(0.8f, 0.55f, 0.5f, 1.0f);
+                float TLight = saturate( dot(normalize(_SunDir), normalize(i.CameraDir)));
+                float FakeSSS = saturate( dot(normalize(_SunDir), normalize(_Normal))+0.55f);
+                //float SSSintensity = length(i.DisPdepth.rb);
+                col += _SSSCol * TLight * FakeSSS;// *(_FoamMask + 1.0f);
+
+                //Add foam
                 float4 baseCol = float4(0.02f, 0.02f, 0.15f, 1.0f);
-                float4 foamCol = float4(1.0f, 1.0f, 1.0f, 1.0f);
+                float4 foamCol = float4(1.0f, 1.0f, 1.0f, 1.0f) * _SunColorI.a;
                 float4 foamColU = float4(0.25f, 0.55f, 0.85f, 1.0f);
-
-                float4 col = lerp(baseCol, foamColU, saturate(_FoamU * (_FoamMask+0.1f)));
+                col += saturate(_FoamU * (_FoamMask + 0.1f)) * _FoamColU;
                 col = lerp(col, foamCol, saturate(_Foam * (_FoamMask)));
-                //col = lerp(col, foamCol, saturate(_Foam * (1.0f)));
 
-                float4 SunReflect = float4(0.0f, 0.0f, 1.0f, 1.0f);
-                SunReflect = pow(saturate(dot(normalize(-_SunDir), reflectDir)), 50);
 
+                //Add basic reflection
+                float SunReflect = pow(saturate(dot(normalize(-_SunDir), reflectDir)), 50);
                 float fresnel = _FresnelB + _FresnelMul*pow(1-dot(normalize(i.CameraDir.xyz), F_Normal), _FresnelPow);
                 col.rgb += lerp(col.rgb, skyData.rgb, fresnel) * _FresnelCol.a;
-
-                col.rgb += SunReflect.rgb;
+                col.rgb += SunReflect * _SunColorI.rgb * _SunColorI.a;
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);

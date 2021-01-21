@@ -14,6 +14,10 @@ public class TileGen : MonoBehaviour
     public Shader tileShader;
     public ComputeShader ShapeShader;
 
+    public Color BaseColor;
+    public Color SSSCol;
+    public Color FoamColU;
+
     public Texture SkyTex;
     public Texture WaterDetailNormal;
     public Texture WaterFoam;
@@ -116,7 +120,7 @@ public class TileGen : MonoBehaviour
         //string[] STileType = (string[])Enum.GetValues(typeof(TileType));
         //get a refernce to the directional light 
         DirectionalLight = GameObject.FindObjectOfType<Light>();
-        Vector3 LightDir = DirectionalLight.transform.forward;
+        
 
         //generate all th tile types 
         for (int i = 0; i < (int)TileType.Count; i++)
@@ -184,7 +188,7 @@ public class TileGen : MonoBehaviour
             LODMats[i].SetTexture("_FoamTex", WaterFoam); 
             LODMats[i].SetTexture("_FoamTexU", WaterFoamU);
 
-            LODMats[i].SetVector("_SunDir", new Vector4(LightDir.x, LightDir.y, LightDir.z, 0.0f)); 
+            
         }
 
     }
@@ -192,12 +196,27 @@ public class TileGen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        UpdateOceanShaderParams();
 
         AdjustOceanForCamera();
 
         RenderOceanDIsNorRTs();
 
+    }
+
+    void UpdateOceanShaderParams()
+    {
+        Vector3 LightDir = DirectionalLight.transform.forward;
+        Color LightCol = DirectionalLight.color;
+        float LightI = DirectionalLight.intensity;
+        for (int i = 0; i < LODDisplaceMaps.Length; i++)
+        {
+            LODMats[i].SetVector("_SunDir", new Vector4(LightDir.x, LightDir.y, LightDir.z, 0.0f));
+            LODMats[i].SetVector("_BaseColor", BaseColor);
+            LODMats[i].SetVector("_SSSCol", SSSCol);
+            LODMats[i].SetVector("_FoamColU", FoamColU);
+            LODMats[i].SetVector("_SunColorI", new Vector4(LightCol.r, LightCol.g, LightCol.b, LightI));
+        }
     }
 
     void AdjustOceanForCamera()

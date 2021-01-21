@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: bec23a14423926748a458ba731e11bb0, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -37,8 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45134008, g: 0.5009485, b: 0.57295483, a: 1}
+  m_Sun: {fileID: 314406984}
+  m_IndirectSpecularColor: {r: 0.2803309, g: 0.33292618, b: 0.40845656, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1627,13 +1627,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119639704}
-  m_LocalRotation: {x: 0.19999117, y: 0.2936202, z: -0.05763917, w: 0.932989}
+  m_LocalRotation: {x: 0.18471709, y: 0.4716385, z: -0.0959037, w: 0.8568776}
   m_LocalPosition: {x: -1.635, y: 5.3, z: 0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 24.018002, y: 35.071003, z: 0.62}
+  m_LocalEulerAnglesHint: {x: 24.018002, y: 57.79, z: 0.62}
 --- !u!1 &126910505
 GameObject:
   m_ObjectHideFlags: 0
@@ -4725,8 +4725,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 1, g: 0.89768827, b: 0.7311321, a: 1}
+  m_Intensity: 0.65
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4782,13 +4782,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314406983}
-  m_LocalRotation: {x: 0.1306335, y: -0.65974194, z: 0.2528609, w: 0.6955119}
+  m_LocalRotation: {x: 0.016198386, y: -0.6723557, z: 0.1305343, w: 0.7284479}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 31.022001, y: -83.61201, z: 12.081}
+  m_LocalEulerAnglesHint: {x: 11.486001, y: -84.416, z: 9.894}
 --- !u!1 &321175543
 GameObject:
   m_ObjectHideFlags: 0
@@ -17124,24 +17124,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileShader: {fileID: 4800000, guid: 41fb7b7f058091d498331ea4e8d83afd, type: 3}
   ShapeShader: {fileID: 7200000, guid: 9542cdf7a1499cf479a89df699c6a03d, type: 3}
+  BaseColor: {r: 0.005918473, g: 0.0374095, b: 0.066037714, a: 0}
+  SSSCol: {r: 0.16981131, g: 0.117727645, b: 0.032840863, a: 0}
+  FoamColU: {r: 0.2551175, g: 0.28144667, b: 0.46226418, a: 0}
   SkyTex: {fileID: 8900000, guid: 6ac1f8102791dd941a456230f0d369bf, type: 3}
   WaterDetailNormal: {fileID: 2800000, guid: 889e574f9d7c9684daa36f20fbd8ce1c, type: 3}
   WaterFoam: {fileID: 2800000, guid: d3840ff6604fca941b8de165145c1315, type: 3}
   WaterFoamU: {fileID: 2800000, guid: 3762a99c974b8d243a371cb8d8441948, type: 3}
   WaterFoamNoise: {fileID: 2800000, guid: 82be8b9670b797842aed824015f71a2d, type: 3}
-  AnimWindDirDegs: 90
-  WaveWindAngleRange: 120
+  AnimWindDirDegs: 45
+  WaveWindAngleRange: 100
   WaveLengthRange: {x: 256, y: 0.1}
   AnimWaveAmpMul:
-  - 1.14
-  - 1.28
-  - 1.42
-  - 1.63
-  - 1.79
-  - 1.88
-  - 1.88
-  - 1.49
-  - 0.86
+  - 1.06
+  - 1.35
+  - 1.51
+  - 1.45
+  - 1.23
+  - 0.82
+  - 0.37
+  - 0.13
+  - 0.04
   OceanScale: 1
 --- !u!4 &1237870400
 Transform:
@@ -18850,7 +18853,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344744153}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.5548835, y: 1.28, z: -5.09}
+  m_LocalPosition: {x: -4.75, y: 4.15, z: -17.86}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -20483,7 +20486,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1474466511}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.593, y: 1.398, z: 4.38}
+  m_LocalPosition: {x: 0.79, y: 1.398, z: 4.38}
   m_LocalScale: {x: 0.5, y: 1.8, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
