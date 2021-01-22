@@ -272,7 +272,7 @@
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
-                //return float4(reflectDir,1.0f);
+                //return (i.DisPdepth.a-50.0f)/10.0f;
                 return col;
                 //return _FoamMask;
                 //return lerp(col, 1.0f, saturate(_Foam*_FoamMask));
