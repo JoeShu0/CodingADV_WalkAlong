@@ -74,6 +74,7 @@
     <Compile Include="Assets\Temp\TileObjGen.cs" />
     <Compile Include="Assets\Temp\WaveEquation\CPUWaveEquation.cs" />
     <Compile Include="Assets\Temp\WaveEquation\WaveEquaTest.cs" />
+    <Compile Include="Assets\TwoWheelRobot\Bike.cs" />
     <None Include="Assets\Temp\MultiPassTest\transparent.shader" />
     <None Include="Assets\Temp\SnapAndTransition.shader" />
     <None Include="Assets\Temp\TestShader\ShowNormal.shader" />
